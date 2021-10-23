@@ -5,6 +5,9 @@ import haxe.Unserializer;
 
 class Serial
 {
+	/**
+	 * Serialize a value to a string
+	 */
 	public static function serialize(value:Dynamic):String
 	{
 		var ser = new Serializer();
@@ -14,6 +17,9 @@ class Serial
 		return ser.toString();
 	}
 
+	/**
+	 * Deserialize a string to a value of type T
+	 */
 	@:generic
 	public static function deserialize<T>(serialized:String):T
 	{

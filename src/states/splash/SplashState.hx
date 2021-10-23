@@ -5,8 +5,6 @@ import core.GameState;
 import h2d.Layers;
 import states.menu.MenuState;
 
-using common.util.TextExtensions;
-
 class SplashState extends GameState
 {
 	var text:h2d.Text;
@@ -25,14 +23,14 @@ class SplashState extends GameState
 		text = new h2d.Text(hxd.res.DefaultFont.get(), root);
 		text.setScale(3);
 		text.text = "Odyssey";
-		text.color = new h3d.Vector(.4, .6, 1);
+		text.color = new h3d.Vector(.4, .9, 1);
 
 		scene.add(root, 0);
 	}
 
 	override function update(frame:Frame)
 	{
-		text.center(scene);
+		text.alignCenter(scene);
 
 		if (frame.elapsed >= duration)
 		{

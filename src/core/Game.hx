@@ -2,11 +2,14 @@ package core;
 
 class Game
 {
+	public var TSIZE:Int = 8;
+
 	public static var instance:Game;
 
 	var states:GameStateManager;
 
 	public var state(get, never):GameState;
+	public var backgroundColor(get, set):Int;
 	public var frame(default, null):Frame;
 	public var app(default, null):hxd.App;
 
@@ -43,5 +46,15 @@ class Game
 	{
 		frame.update();
 		state._update(frame);
+	}
+
+	function get_backgroundColor():Int
+	{
+		return app.engine.backgroundColor;
+	}
+
+	function set_backgroundColor(value:Int):Int
+	{
+		return app.engine.backgroundColor = value;
 	}
 }

@@ -26,7 +26,12 @@ class Frame
 	/**
 	 * The seconds since the game has been running
 	 */
-	public var elapsed(default, null):Float;
+	public var elapsed(default, null):Float = 0;
+
+	/**
+	 * The number of frames since the game start
+	 */
+	public var tick(default, null):Int = 0;
 
 	inline function get_fps()
 	{
@@ -49,6 +54,7 @@ class Frame
 	@:allow(core.Game)
 	function update()
 	{
+		tick++;
 		elapsed += hxd.Timer.dt;
 	}
 }

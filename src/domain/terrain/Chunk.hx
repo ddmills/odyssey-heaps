@@ -1,39 +1,91 @@
 package domain.terrain;
 
 import common.struct.Grid;
+import core.Game;
 import h2d.TileGroup;
+import rand.ChunkGen;
 
 class Chunk
 {
-	var terrain:Grid<TerrainType>;
+	public var terrain(default, null):Grid<TerrainType>;
+	public var isLoaded(default, null):Bool;
+
+	var tiles:TileGroup;
 	var size:Int;
-	var chunkX:Int;
-	var chunkY:Int;
+	var chunkId:Int;
 
-	public var x(get, null):Int;
-	public var y(get, null):Int;
+	public var cx(default, null):Int;
+	public var cy(default, null):Int;
+	public var wx(get, null):Int;
+	public var wy(get, null):Int;
+	public var px(get, null):Int;
+	public var py(get, null):Int;
 
-	function get_x()
+	inline function get_wx()
 	{
-		return chunkX * size * 8;
+		return cx * size;
 	}
 
-	function get_y()
+	inline function get_wy()
 	{
-		return chunkY * size * 8;
+		return cy * size;
 	}
 
-	public function new(chunkX:Int, chunkY:Int, size:Int, terrain:Grid<TerrainType>)
+	inline function get_px()
 	{
+		return wx * Game.instance.TSIZE;
+	}
+
+	inline function get_py()
+	{
+		return wy * Game.instance.TSIZE;
+	}
+
+	public function new(chunkId:Int, chunkX:Int, chunkY:Int, size:Int)
+	{
+		this.chunkId = chunkId;
 		this.size = size;
-		this.terrain = terrain;
-		this.chunkX = chunkX;
-		this.chunkY = chunkY;
+
+		cx = chunkX;
+		cy = chunkY;
+		terrain = new Grid<TerrainType>(size, size);
 	}
 
 	public function setTerrainTile(x:Int, y:Int, value:TerrainType)
 	{
 		terrain.set(x, y, value);
+	}
+
+	public function load(parent:h2d.Object)
+	{
+		if (isLoaded)
+		{
+			return;
+		}
+
+		terrain = ChunkGen.generateTerrain(cx, cy, size);
+
+		tiles = toTileGroup();
+
+		parent.addChild(tiles);
+
+		tiles.x = px;
+		tiles.y = py;
+
+		isLoaded = true;
+	}
+
+	public function unload()
+	{
+		if (!isLoaded)
+		{
+			return;
+		}
+
+		tiles.clear();
+		tiles.remove();
+		tiles = null;
+		isLoaded = false;
 	}
 
 	public function toTileGroup():TileGroup
@@ -44,14 +96,12 @@ class Chunk
 		var t3 = sheet.sub(24, 0, 8, 8);
 
 		var tiles = new h2d.TileGroup();
-		tiles.x = x;
-		tiles.y = y;
 
 		for (t in terrain)
 		{
 			var tile = t.value == WATER ? t1 : t3;
-			var x = 8 * t.x;
-			var y = 8 * t.y;
+			var x = Game.instance.TSIZE * t.x;
+			var y = Game.instance.TSIZE * t.y;
 
 			tiles.add(x, y, tile);
 		}
