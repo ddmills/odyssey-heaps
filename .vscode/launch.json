@@ -1,0 +1,26 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "HashLink",
+			"request": "launch",
+			"type": "hl",
+			"cwd": "${workspaceFolder}",
+			"preLaunchTask": {
+				"type": "haxe",
+				"args": "active configuration"
+			}
+		},
+		{
+			"name": "Launch Chrome against localhost",
+			"request": "launch",
+			"type": "chrome",
+			"url": "file://${workspaceFolder}/index.html",
+			"webRoot": "${workspaceFolder}",
+			"preLaunchTask": {
+				"type" : "haxe",
+				"args" : "active configuration"
+			}
+		}
+	]
+}

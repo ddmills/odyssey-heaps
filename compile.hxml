@@ -1,0 +1,6 @@
+-cp src
+-lib heaps
+-lib hldx
+-hl output.hl
+-D windowSize=1366x768
+-main Main
