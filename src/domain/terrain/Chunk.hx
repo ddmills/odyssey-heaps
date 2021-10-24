@@ -81,10 +81,9 @@ class Chunk
 			var tile = t.value == WATER ? t1 : t2;
 			var pix = Game.instance.world.worldToPx(t.x, t.y);
 
-			var realX = pix.x - Game.instance.TILE_W_HALF;
-			// var realX = pix.x - Game.instance.TILE_W_HALF;
+			var offsetX = pix.x - Game.instance.TILE_W_HALF;
 
-			tiles.add(realX, pix.y, tile);
+			tiles.add(offsetX, pix.y, tile);
 		}
 
 		return tiles;

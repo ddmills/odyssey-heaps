@@ -14,6 +14,7 @@ class World
 	public var game(get, null):Game;
 	public var chunks(default, null):ChunkManager;
 	public var bg(default, null):h2d.Object;
+	public var container(default, null):h2d.Object;
 
 	inline function get_game():Game
 	{
@@ -23,7 +24,9 @@ class World
 	public function new()
 	{
 		chunks = new ChunkManager(chunkCountX, chunkCountY, chunkSize);
+		container = new Layers();
 		bg = new Layers();
+		container.addChild(bg);
 	}
 
 	function get_mapWidth():Int
@@ -55,8 +58,8 @@ class World
 	public function screenToPx(sx:Float, sy:Float)
 	{
 		return {
-			x: Math.floor(sx - bg.x),
-			y: Math.floor(sy - bg.y),
+			x: Math.floor(sx - container.x),
+			y: Math.floor(sy - container.y),
 		};
 	}
 

@@ -37,8 +37,8 @@ class PlayState extends GameState
 			my = Math.round(event.relY);
 		}
 
-		root.addChild(world.bg);
-		world.bg.addChild(cursor);
+		root.addChild(world.container);
+		world.container.addChild(cursor);
 		// root.addChild(cursor);
 		root.addChild(fpsText);
 		root.addChild(interactive);
@@ -48,8 +48,8 @@ class PlayState extends GameState
 
 	override function update(frame:Frame)
 	{
-		world.bg.x -= frame.tmod / 4;
-		world.bg.y -= frame.tmod / 6;
+		world.container.x -= frame.tmod / 4;
+		world.container.y -= frame.tmod / 2;
 
 		var p = world.screenToPx(mx, my);
 		var w = world.pxToWorld(p.x, p.y);
@@ -63,7 +63,7 @@ class PlayState extends GameState
 
 		var txt = Math.round(frame.fps).toString();
 
-		txt += ' w=${w.x},${w.y} c=${c.x},${c.y} p=${p.x},${p.y}';
+		txt += ' w=${w.x},${w.y} c=${c.x},${c.y} p=${p.x},${p.y} s=${mx},${my}';
 
 		var cpx = world.worldToPx(w.x, w.y);
 		cursor.x = cpx.x - game.TILE_W_HALF;
