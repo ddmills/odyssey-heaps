@@ -22,7 +22,7 @@ class PlayState extends GameState
 		root = new Layers();
 
 		var sheet = hxd.Res.img.iso64.toTile();
-		var cursorTile = sheet.sub(game.TILE_W * 3, 0, game.TILE_W, game.TILE_H);
+		var cursorTile = sheet.sub(game.TILE_W * 3, game.TILE_H, game.TILE_W, game.TILE_H);
 		cursor = new h2d.Bitmap(cursorTile);
 
 		fpsText = new h2d.Text(hxd.res.DefaultFont.get());
@@ -37,9 +37,8 @@ class PlayState extends GameState
 			my = Math.round(event.relY);
 		}
 
-		root.addChild(world.container);
 		world.container.addChild(cursor);
-		// root.addChild(cursor);
+		root.addChild(world.container);
 		root.addChild(fpsText);
 		root.addChild(interactive);
 
@@ -52,8 +51,8 @@ class PlayState extends GameState
 		world.container.y -= frame.tmod / 2;
 
 		var p = world.screenToPx(mx, my);
-		var w = world.pxToWorld(p.x, p.y);
-		var c = world.pxToChunk(p.x, p.y);
+		var w = p.toWorld();
+		var c = p.toChunk();
 		var chunk = world.chunks.getChunkByPx(p.x, p.y);
 
 		if (chunk != null && !chunk.isLoaded)
@@ -65,12 +64,11 @@ class PlayState extends GameState
 
 		txt += ' w=${w.x},${w.y} c=${c.x},${c.y} p=${p.x},${p.y} s=${mx},${my}';
 
-		var cpx = world.worldToPx(w.x, w.y);
+		var cpx = w.toPx();
 		cursor.x = cpx.x - game.TILE_W_HALF;
 		cursor.y = cpx.y;
 
 		fpsText.text = txt;
-		// fpsText.text = Math.round(frame.fps).toString();
 
 		fpsText.alignBottom(scene, game.TILE_H);
 		fpsText.alignLeft(scene, game.TILE_H);

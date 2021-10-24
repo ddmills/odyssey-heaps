@@ -1,5 +1,6 @@
 package domain;
 
+import common.struct.Coordinate;
 import core.Game;
 import domain.terrain.ChunkManager;
 import h2d.Layers;
@@ -39,66 +40,51 @@ class World
 		return chunkCountY * chunkSize;
 	}
 
-	public function worldToPx(wx:Int, wy:Int)
+	public function worldToPx(wx:Float, wy:Float):Coordinate
 	{
-		return {
-			x: (wx - wy) * game.TILE_W_HALF,
-			y: (wx + wy) * game.TILE_H_HALF,
-		};
+		return new Coordinate((wx - wy) * game.TILE_W_HALF, (wx + wy) * game.TILE_H_HALF, PIXEL);
 	}
 
-	public function pxToWorld(px:Float, py:Float)
+	public function pxToWorld(px:Float, py:Float):Coordinate
 	{
-		return {
-			x: Math.floor((px / game.TILE_W_HALF + py / game.TILE_H_HALF) / 2),
-			y: Math.floor((py / game.TILE_H_HALF - px / game.TILE_W_HALF) / 2),
-		}
+		var wx = Math.floor((px / game.TILE_W_HALF + py / game.TILE_H_HALF) / 2);
+		var wy = Math.floor((py / game.TILE_H_HALF - px / game.TILE_W_HALF) / 2);
+
+		return new Coordinate(wx, wy, WORLD);
 	}
 
-	public function screenToPx(sx:Float, sy:Float)
+	public function screenToPx(sx:Float, sy:Float):Coordinate
 	{
-		return {
-			x: Math.floor(sx - container.x),
-			y: Math.floor(sy - container.y),
-		};
+		return new Coordinate(Math.floor(sx - container.x), Math.floor(sy - container.y), PIXEL);
 	}
 
-	public function screenToWorld(sx:Float, sy:Float)
+	public function screenToWorld(sx:Float, sy:Float):Coordinate
 	{
 		var p = screenToPx(sx, sy);
 		return pxToWorld(p.x, p.y);
 	}
 
-	public function pxToChunk(px:Float, py:Float)
+	public function pxToChunk(px:Float, py:Float):Coordinate
 	{
 		var world = pxToWorld(px, py);
 
-		return {
-			x: Math.floor(world.x / chunkSize),
-			y: Math.floor(world.y / chunkSize),
-		}
+		return new Coordinate(Math.floor(world.x / chunkSize), Math.floor(world.y / chunkSize), CHUNK);
 	}
 
-	public function chunkToPx(cx:Int, cy:Int)
+	public function chunkToPx(cx:Float, cy:Float):Coordinate
 	{
 		var world = chunkToWorld(cx, cy);
 
 		return worldToPx(world.x, world.y);
 	}
 
-	public function worldToChunk(worldX:Float, worldY:Float)
+	public function worldToChunk(worldX:Float, worldY:Float):Coordinate
 	{
-		return {
-			x: Math.floor(worldX / chunkSize),
-			y: Math.floor(worldY / chunkSize),
-		}
+		return new Coordinate(Math.floor(worldX / chunkSize), Math.floor(worldY / chunkSize), CHUNK);
 	}
 
-	public function chunkToWorld(chunkX:Int, chunkY:Int)
+	public function chunkToWorld(chunkX:Float, chunkY:Float):Coordinate
 	{
-		return {
-			x: chunkX * chunkSize,
-			y: chunkY * chunkSize,
-		}
+		return new Coordinate(chunkX * chunkSize, chunkY * chunkSize, WORLD);
 	}
 }

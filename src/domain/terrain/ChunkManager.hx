@@ -35,7 +35,7 @@ class ChunkManager
 	{
 		var coords = Game.instance.world.pxToChunk(px, py);
 
-		return getChunk(coords.x, coords.y);
+		return getChunk(Math.floor(coords.x), Math.floor(coords.y));
 	}
 
 	public function boundsUpdate(px:Float, py:Float, pw:Float, ph:Float)

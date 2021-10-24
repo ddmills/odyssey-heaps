@@ -3,6 +3,7 @@ package domain.terrain;
 import common.struct.Grid;
 import core.Game;
 import h2d.TileGroup;
+import h2d.col.Point;
 import rand.ChunkGen;
 
 class Chunk
@@ -68,17 +69,16 @@ class Chunk
 	public function toTileGroup():TileGroup
 	{
 		var width = Game.instance.TILE_W;
-		var height = Game.instance.TILE_H;
+		var height = Game.instance.TILE_H * 2;
 		var sheet = hxd.Res.img.iso64.toTile();
-		var t1 = sheet.sub(width, 0, width, height);
-		var t2 = sheet.sub(width * 2, 0, width, height);
-		var t3 = sheet.sub(width * 3, 0, width, height);
+		var water = sheet.sub(width, 0, width, height);
+		var land = sheet.sub(width * 2, 0, width, height);
 
 		var tiles = new h2d.TileGroup();
 
 		for (t in terrain)
 		{
-			var tile = t.value == WATER ? t1 : t2;
+			var tile = t.value == WATER ? water : land;
 			var pix = Game.instance.world.worldToPx(t.x, t.y);
 
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
