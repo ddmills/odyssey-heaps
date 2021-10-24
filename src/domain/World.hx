@@ -4,6 +4,7 @@ import common.struct.Coordinate;
 import core.Game;
 import domain.terrain.ChunkManager;
 import h2d.Layers;
+import rand.ChunkGen;
 
 class World
 {
@@ -16,6 +17,7 @@ class World
 	public var chunks(default, null):ChunkManager;
 	public var bg(default, null):h2d.Object;
 	public var container(default, null):h2d.Object;
+	public var chunkGen(default, null):ChunkGen;
 
 	inline function get_game():Game
 	{
@@ -24,6 +26,7 @@ class World
 
 	public function new()
 	{
+		chunkGen = new ChunkGen(1);
 		chunks = new ChunkManager(chunkCountX, chunkCountY, chunkSize);
 		container = new Layers();
 		bg = new Layers();

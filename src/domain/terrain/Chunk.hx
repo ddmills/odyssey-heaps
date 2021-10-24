@@ -40,7 +40,7 @@ class Chunk
 			return;
 		}
 
-		terrain = ChunkGen.generateTerrain(cx, cy, size);
+		terrain = Game.instance.world.chunkGen.generateTerrain(cx, cy, size);
 
 		tiles = toTileGroup();
 

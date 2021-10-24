@@ -47,8 +47,8 @@ class PlayState extends GameState
 
 	override function update(frame:Frame)
 	{
-		world.container.x -= frame.tmod / 4;
-		world.container.y -= frame.tmod / 2;
+		// world.container.x -= frame.tmod; // / 4;
+		world.container.y -= frame.tmod; // / 2;
 
 		var p = world.screenToPx(mx, my);
 		var w = p.toWorld();
