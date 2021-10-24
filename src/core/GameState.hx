@@ -1,5 +1,7 @@
 package core;
 
+import domain.World;
+
 /**
  * Only one game state can be active at a time
  */
@@ -9,7 +11,13 @@ class GameState
 	public var isDestroyed(default, null):Bool;
 	public var isCreated(default, null):Bool;
 	public var scene(default, null):h2d.Scene;
-	public var game(default, null):core.Game;
+	public var game(default, null):Game;
+	public var world(get, null):World;
+
+	inline function get_world():World
+	{
+		return game.world;
+	}
 
 	@:allow(core.GameStateManager)
 	private function _destroy()

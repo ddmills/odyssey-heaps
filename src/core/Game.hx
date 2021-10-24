@@ -1,5 +1,7 @@
 package core;
 
+import domain.World;
+
 class Game
 {
 	public var TSIZE:Int = 8;
@@ -12,12 +14,14 @@ class Game
 	public var backgroundColor(get, set):Int;
 	public var frame(default, null):Frame;
 	public var app(default, null):hxd.App;
+	public var world(default, null):World;
 
 	private function new(app:hxd.App, initialState:GameState)
 	{
 		instance = this;
 		this.app = app;
 		frame = new Frame();
+		world = new World();
 		states = new GameStateManager();
 		setState(initialState);
 	}
