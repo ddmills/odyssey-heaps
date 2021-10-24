@@ -4,7 +4,11 @@ import domain.World;
 
 class Game
 {
-	public var TSIZE:Int = 8;
+	public var TILE_W:Int = 64;
+	public var TILE_H:Int = 32;
+
+	public var TILE_W_HALF(get, never):Int;
+	public var TILE_H_HALF(get, never):Int;
 
 	public static var instance:Game;
 
@@ -60,5 +64,15 @@ class Game
 	function set_backgroundColor(value:Int):Int
 	{
 		return app.engine.backgroundColor = value;
+	}
+
+	inline function get_TILE_W_HALF():Int
+	{
+		return Math.floor(TILE_W / 2);
+	}
+
+	inline function get_TILE_H_HALF():Int
+	{
+		return Math.floor(TILE_H / 2);
 	}
 }

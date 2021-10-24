@@ -31,13 +31,6 @@ class ChunkManager
 		return chunks.get(cx, cy);
 	}
 
-	public inline function getChunkByWorld(wx:Int, wy:Int):Chunk
-	{
-		var coords = Game.instance.world.worldToChunk(wx, wy);
-
-		return chunks.get(coords.x, coords.y);
-	}
-
 	public inline function getChunkByPx(px:Float, py:Float):Chunk
 	{
 		var coords = Game.instance.world.pxToChunk(px, py);

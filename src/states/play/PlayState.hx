@@ -13,11 +13,17 @@ class PlayState extends GameState
 	var mx:Int;
 	var my:Int;
 
+	var cursor:h2d.Bitmap;
+
 	public function new() {}
 
 	override function create()
 	{
 		root = new Layers();
+
+		var sheet = hxd.Res.img.iso64.toTile();
+		var cursorTile = sheet.sub(game.TILE_W * 3, 0, game.TILE_W, game.TILE_H);
+		cursor = new h2d.Bitmap(cursorTile);
 
 		fpsText = new h2d.Text(hxd.res.DefaultFont.get());
 		fpsText.setScale(2);
@@ -32,6 +38,8 @@ class PlayState extends GameState
 		}
 
 		root.addChild(world.bg);
+		world.bg.addChild(cursor);
+		// root.addChild(cursor);
 		root.addChild(fpsText);
 		root.addChild(interactive);
 
@@ -40,24 +48,31 @@ class PlayState extends GameState
 
 	override function update(frame:Frame)
 	{
-		world.bg.x -= frame.tmod;
-		world.bg.y -= frame.tmod;
+		world.bg.x -= frame.tmod / 4;
+		world.bg.y -= frame.tmod / 6;
 
-		// var wx = Math.floor((mx - map.x) / game.TSIZE);
-		// var wy = Math.floor((my - map.y) / game.TSIZE);
-
-		var px = mx - world.bg.x;
-		var py = my - world.bg.y;
-
-		var chunk = game.world.chunks.getChunkByPx(px, py);
+		var p = world.screenToPx(mx, my);
+		var w = world.pxToWorld(p.x, p.y);
+		var c = world.pxToChunk(p.x, p.y);
+		var chunk = world.chunks.getChunkByPx(p.x, p.y);
 
 		if (chunk != null && !chunk.isLoaded)
 		{
 			chunk.load(world.bg);
 		}
 
-		fpsText.text = Math.round(frame.fps).toString();
-		fpsText.alignBottom(scene, game.TSIZE);
-		fpsText.alignLeft(scene, game.TSIZE);
+		var txt = Math.round(frame.fps).toString();
+
+		txt += ' w=${w.x},${w.y} c=${c.x},${c.y} p=${p.x},${p.y}';
+
+		var cpx = world.worldToPx(w.x, w.y);
+		cursor.x = cpx.x - game.TILE_W_HALF;
+		cursor.y = cpx.y;
+
+		fpsText.text = txt;
+		// fpsText.text = Math.round(frame.fps).toString();
+
+		fpsText.alignBottom(scene, game.TILE_H);
+		fpsText.alignLeft(scene, game.TILE_H);
 	}
 }
