@@ -13,10 +13,16 @@ class GameState
 	public var scene(default, null):h2d.Scene;
 	public var game(default, null):Game;
 	public var world(get, null):World;
+	public var camera(get, null):Camera;
 
 	inline function get_world():World
 	{
 		return game.world;
+	}
+
+	inline function get_camera():Camera
+	{
+		return game.camera;
 	}
 
 	@:allow(core.GameStateManager)

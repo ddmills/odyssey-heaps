@@ -4,8 +4,8 @@ import domain.World;
 
 class Game
 {
-	public var TILE_W:Int = 64;
-	public var TILE_H:Int = 32;
+	public var TILE_W:Int = 32;
+	public var TILE_H:Int = 16;
 
 	public var TILE_W_HALF(get, never):Int;
 	public var TILE_H_HALF(get, never):Int;
@@ -19,6 +19,7 @@ class Game
 	public var frame(default, null):Frame;
 	public var app(default, null):hxd.App;
 	public var world(default, null):World;
+	public var camera(default, null):Camera;
 
 	private function new(app:hxd.App, initialState:GameState)
 	{
@@ -27,6 +28,7 @@ class Game
 		frame = new Frame();
 		world = new World();
 		states = new GameStateManager();
+		camera = new Camera();
 		setState(initialState);
 	}
 

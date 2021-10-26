@@ -10,6 +10,11 @@ class CoordinateExtensions
 		return '${c.x},${c.y}';
 	}
 
+	static public inline function floor(c:Coordinate):Coordinate
+	{
+		return new Coordinate(c.x.floor(), c.y.floor(), c.space);
+	}
+
 	static public inline function toWorld(c:Coordinate):Coordinate
 	{
 		var world = Game.instance.world;
@@ -20,6 +25,8 @@ class CoordinateExtensions
 				return world.pxToWorld(c.x, c.y);
 			case CHUNK:
 				return world.chunkToWorld(c.x, c.y);
+			case SCREEN:
+				return world.screenToWorld(c.x, c.y);
 			case WORLD:
 				return c;
 		}
@@ -35,6 +42,8 @@ class CoordinateExtensions
 				return c;
 			case CHUNK:
 				return world.chunkToPx(c.x, c.y);
+			case SCREEN:
+				return world.screenToPx(c.x, c.y);
 			case WORLD:
 				return world.worldToPx(c.x, c.y);
 		}
@@ -48,10 +57,12 @@ class CoordinateExtensions
 		{
 			case PIXEL:
 				return world.pxToChunk(c.x, c.y);
-			case CHUNK:
-				return c;
+			case SCREEN:
+				return world.screenToChunk(c.x, c.y);
 			case WORLD:
 				return world.worldToChunk(c.x, c.y);
+			case CHUNK:
+				return c;
 		}
 	}
 }

@@ -70,7 +70,7 @@ class Chunk
 	{
 		var width = Game.instance.TILE_W;
 		var height = Game.instance.TILE_H * 2;
-		var sheet = hxd.Res.img.iso64.toTile();
+		var sheet = hxd.Res.img.iso32.toTile();
 		var water = sheet.sub(width, 0, width, height);
 		var land = sheet.sub(width * 2, 0, width, height);
 
@@ -82,8 +82,9 @@ class Chunk
 			var pix = Game.instance.world.worldToPx(t.x, t.y);
 
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
+			var offsetY = pix.y - Game.instance.TILE_H;
 
-			tiles.add(offsetX, pix.y, tile);
+			tiles.add(offsetX, offsetY, tile);
 		}
 
 		return tiles;

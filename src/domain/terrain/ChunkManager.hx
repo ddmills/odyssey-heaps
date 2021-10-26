@@ -3,7 +3,7 @@ package domain.terrain;
 import common.struct.Grid;
 import core.Game;
 
-class ChunkManager
+class ChunkManager implements OverloadMacro.IOverloaded
 {
 	var chunks:Grid<Chunk>;
 
@@ -26,7 +26,12 @@ class ChunkManager
 		return chunks.getAt(chunkIdx);
 	}
 
-	public inline function getChunk(cx:Int, cy:Int):Chunk
+	public overload extern inline function getChunk(cx:Float, cy:Float):Chunk
+	{
+		return getChunk(cx.floor(), cy.floor());
+	}
+
+	public overload extern inline function getChunk(cx:Int, cy:Int):Chunk
 	{
 		return chunks.get(cx, cy);
 	}

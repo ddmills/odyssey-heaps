@@ -28,7 +28,7 @@ class ChunkGen
 			var y = (chunkY * size + i.y) / zoom;
 			var n = perlin.perlin(seed, x, y, 4);
 			var v = (n + 1) / 2;
-			var tile = v < .5 ? WATER : SAND;
+			var tile = v < .66 ? WATER : SAND;
 
 			terrain.setIdx(i.idx, tile);
 		}

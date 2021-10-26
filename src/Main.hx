@@ -14,7 +14,7 @@ class Main extends hxd.App
 	override function init()
 	{
 		game = Game.Create(this, new SplashState(1));
-		game.backgroundColor = 0x1f1e1d;
+		game.backgroundColor = 0x1b1f23;
 	}
 
 	override function update(dt:Float)

@@ -8,7 +8,7 @@ import rand.ChunkGen;
 
 class World
 {
-	public var chunkSize(default, null):Int = 16;
+	public var chunkSize(default, null):Int = 64;
 	public var chunkCountX(default, null):Int = 128;
 	public var chunkCountY(default, null):Int = 128;
 	public var mapWidth(get, null):Int;
@@ -50,15 +50,18 @@ class World
 
 	public function pxToWorld(px:Float, py:Float):Coordinate
 	{
-		var wx = Math.floor((px / game.TILE_W_HALF + py / game.TILE_H_HALF) / 2);
-		var wy = Math.floor((py / game.TILE_H_HALF - px / game.TILE_W_HALF) / 2);
+		var wx = (px / game.TILE_W_HALF + py / game.TILE_H_HALF) / 2;
+		var wy = (py / game.TILE_H_HALF - px / game.TILE_W_HALF) / 2;
 
 		return new Coordinate(wx, wy, WORLD);
 	}
 
 	public function screenToPx(sx:Float, sy:Float):Coordinate
 	{
-		return new Coordinate(Math.floor(sx - container.x), Math.floor(sy - container.y), PIXEL);
+		var camWorld = worldToPx(game.camera.x, game.camera.y);
+		var x = (sx + camWorld.x) / game.camera.zoom;
+		var y = (sy + camWorld.y) / game.camera.zoom;
+		return new Coordinate(x, y, PIXEL);
 	}
 
 	public function screenToWorld(sx:Float, sy:Float):Coordinate
@@ -67,17 +70,21 @@ class World
 		return pxToWorld(p.x, p.y);
 	}
 
+	public function screenToChunk(sx:Float, sy:Float):Coordinate
+	{
+		var w = screenToWorld(sx, sy);
+		return worldToChunk(w.x, w.y);
+	}
+
 	public function pxToChunk(px:Float, py:Float):Coordinate
 	{
 		var world = pxToWorld(px, py);
-
-		return new Coordinate(Math.floor(world.x / chunkSize), Math.floor(world.y / chunkSize), CHUNK);
+		return new Coordinate(world.x / chunkSize, world.y / chunkSize, CHUNK);
 	}
 
 	public function chunkToPx(cx:Float, cy:Float):Coordinate
 	{
 		var world = chunkToWorld(cx, cy);
-
 		return worldToPx(world.x, world.y);
 	}
 

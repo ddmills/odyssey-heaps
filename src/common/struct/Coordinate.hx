@@ -5,6 +5,7 @@ enum Space
 	PIXEL;
 	WORLD;
 	CHUNK;
+	SCREEN;
 }
 
 class Coordinate
