@@ -97,4 +97,9 @@ class World
 	{
 		return new Coordinate(chunkX * chunkSize, chunkY * chunkSize, WORLD);
 	}
+
+	public function add(entity:Entity)
+	{
+		container.addChild(entity.ob);
+	}
 }

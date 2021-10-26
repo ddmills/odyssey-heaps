@@ -3,6 +3,7 @@ package states.play;
 import common.struct.Coordinate;
 import core.Frame;
 import core.GameState;
+import domain.Entity;
 import h2d.Interactive;
 import h2d.Layers;
 
@@ -12,8 +13,7 @@ class PlayState extends GameState
 	var root:h2d.Object;
 	var interactive:h2d.Interactive;
 	var mouse:Coordinate;
-
-	var cursor:h2d.Bitmap;
+	var cursor:Entity;
 
 	public function new() {}
 
@@ -24,7 +24,8 @@ class PlayState extends GameState
 
 		var sheet = hxd.Res.img.iso32.toTile();
 		var cursorTile = sheet.sub(game.TILE_W * 3, game.TILE_H, game.TILE_W, game.TILE_H);
-		cursor = new h2d.Bitmap(cursorTile);
+		cursor = new Entity(new h2d.Bitmap(cursorTile), game.TILE_W_HALF);
+		world.add(cursor);
 
 		fpsText = new h2d.Text(hxd.res.DefaultFont.get());
 		fpsText.setScale(2);
@@ -37,7 +38,6 @@ class PlayState extends GameState
 			mouse = new Coordinate(event.relX, event.relY, SCREEN);
 		}
 
-		world.container.addChild(cursor);
 		root.addChild(world.container);
 		root.addChild(fpsText);
 		root.addChild(interactive);
@@ -45,6 +45,7 @@ class PlayState extends GameState
 		scene.add(root, 0);
 
 		game.camera.zoom = 2;
+		game.camera.x = -10;
 	}
 
 	override function update(frame:Frame)
@@ -57,13 +58,15 @@ class PlayState extends GameState
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
 
+		cursor.x = w.x;
+		cursor.y = w.y;
+
 		var chunk = world.chunks.getChunk(c.x, c.y);
 
 		if (chunk != null && !chunk.isLoaded)
 		{
 			chunk.load(world.bg);
 		}
-		var cpx = w.toPx();
 
 		var txt = '';
 		txt += '\ncam=${camera.x.round()},${camera.y.round()}';
@@ -72,9 +75,6 @@ class PlayState extends GameState
 		txt += '\nworld=${w.toString()}';
 		txt += '\npixel=${p.x.floor()},${p.y.floor()}';
 		txt += '\n' + frame.fps.round().toString();
-
-		cursor.x = cpx.x - game.TILE_W_HALF;
-		cursor.y = cpx.y;
 
 		fpsText.text = txt;
 

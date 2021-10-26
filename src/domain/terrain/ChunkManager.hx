@@ -3,7 +3,7 @@ package domain.terrain;
 import common.struct.Grid;
 import core.Game;
 
-class ChunkManager implements OverloadMacro.IOverloaded
+class ChunkManager
 {
 	var chunks:Grid<Chunk>;
 
