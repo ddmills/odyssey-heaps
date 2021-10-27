@@ -15,6 +15,7 @@ class PlayState extends GameState
 	var mouse:Coordinate;
 	var cursor:Entity;
 	var building:Entity;
+	var sloop:Entity;
 
 	public function new() {}
 
@@ -27,11 +28,15 @@ class PlayState extends GameState
 		cursor = new Entity(new h2d.Bitmap(tiles[3]));
 		building = new Entity(new h2d.Bitmap(tiles[0]));
 
-		building.x = 5;
-		building.y = 5;
+		var sloopTiles = hxd.Res.img.sloop.toTile().split(8);
+		sloop = new Entity(new h2d.Anim(sloopTiles, 8));
+
+		building.x = 280;
+		building.y = 280;
 
 		world.add(cursor);
 		world.add(building);
+		world.add(sloop);
 
 		fpsText = new h2d.Text(hxd.res.DefaultFont.get());
 		fpsText.setScale(2);
@@ -51,8 +56,8 @@ class PlayState extends GameState
 		scene.add(root, 0);
 
 		game.camera.zoom = 2;
-		game.camera.x = -20;
-		game.camera.y = 20;
+		game.camera.x = 23;
+		game.camera.y = 23;
 	}
 
 	override function update(frame:Frame)
@@ -65,8 +70,8 @@ class PlayState extends GameState
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
 
-		cursor.x = w.x;
-		cursor.y = w.y;
+		sloop.x = w.x;
+		sloop.y = w.y;
 
 		world.entities.ysort(0);
 
