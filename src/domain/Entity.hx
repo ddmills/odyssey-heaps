@@ -7,15 +7,16 @@ class Entity
 	public var world(get, null):World;
 	public var x(default, set):Float;
 	public var y(default, set):Float;
-	public var height(default, set):Float;
 
 	public var ob(default, null):h2d.Object;
 	public var offsetX(default, null):Float;
+	public var offsetY(default, null):Float;
 
-	public function new(ob:h2d.Object, offsetX:Float)
+	public function new(ob:h2d.Object)
 	{
 		this.ob = ob;
-		this.offsetX = offsetX;
+		offsetX = Game.instance.TILE_W_HALF;
+		offsetY = Game.instance.TILE_H;
 	}
 
 	function get_world():World
@@ -27,7 +28,7 @@ class Entity
 	{
 		var c = world.worldToPx(v, y);
 		ob.x = c.x - offsetX;
-		ob.y = c.y;
+		ob.y = c.y - offsetY;
 		x = v;
 		return v;
 	}
@@ -36,13 +37,8 @@ class Entity
 	{
 		var c = world.worldToPx(x, v);
 		ob.x = c.x - offsetX;
-		ob.y = c.y;
+		ob.y = c.y - offsetY;
 		y = v;
 		return v;
-	}
-
-	function set_height(value:Float):Float
-	{
-		throw new haxe.exceptions.NotImplementedException();
 	}
 }

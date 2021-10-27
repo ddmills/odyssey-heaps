@@ -21,8 +21,8 @@ class SplashState extends GameState
 		root = new Layers();
 
 		text = new h2d.Text(hxd.res.DefaultFont.get(), root);
-		text.setScale(3);
-		text.text = "Odyssey";
+		// text.setScale(2);
+		text.text = "ODYSSEY";
 		text.color = new h3d.Vector(.4, .9, 1);
 
 		scene.add(root, 0);

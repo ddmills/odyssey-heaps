@@ -8,7 +8,7 @@ import rand.ChunkGen;
 
 class World
 {
-	public var chunkSize(default, null):Int = 64;
+	public var chunkSize(default, null):Int = 32;
 	public var chunkCountX(default, null):Int = 128;
 	public var chunkCountY(default, null):Int = 128;
 	public var mapWidth(get, null):Int;
@@ -16,7 +16,8 @@ class World
 	public var game(get, null):Game;
 	public var chunks(default, null):ChunkManager;
 	public var bg(default, null):h2d.Object;
-	public var container(default, null):h2d.Object;
+	public var entities(default, null):h2d.Layers;
+	public var container(default, null):h2d.Layers;
 	public var chunkGen(default, null):ChunkGen;
 
 	inline function get_game():Game
@@ -29,8 +30,12 @@ class World
 		chunkGen = new ChunkGen(1);
 		chunks = new ChunkManager(chunkCountX, chunkCountY, chunkSize);
 		container = new Layers();
+
 		bg = new Layers();
-		container.addChild(bg);
+		entities = new Layers();
+
+		container.addChildAt(bg, 0);
+		container.addChildAt(entities, 1);
 	}
 
 	function get_mapWidth():Int
@@ -100,6 +105,6 @@ class World
 
 	public function add(entity:Entity)
 	{
-		container.addChild(entity.ob);
+		entities.addChild(entity.ob);
 	}
 }

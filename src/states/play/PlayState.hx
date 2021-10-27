@@ -14,6 +14,7 @@ class PlayState extends GameState
 	var interactive:h2d.Interactive;
 	var mouse:Coordinate;
 	var cursor:Entity;
+	var building:Entity;
 
 	public function new() {}
 
@@ -22,10 +23,15 @@ class PlayState extends GameState
 		mouse = new Coordinate(0, 0, SCREEN);
 		root = new Layers();
 
-		var sheet = hxd.Res.img.iso32.toTile();
-		var cursorTile = sheet.sub(game.TILE_W * 3, game.TILE_H, game.TILE_W, game.TILE_H);
-		cursor = new Entity(new h2d.Bitmap(cursorTile), game.TILE_W_HALF);
+		var tiles = hxd.Res.img.iso32.toTile().split(4);
+		cursor = new Entity(new h2d.Bitmap(tiles[3]));
+		building = new Entity(new h2d.Bitmap(tiles[0]));
+
+		building.x = 5;
+		building.y = 5;
+
 		world.add(cursor);
+		world.add(building);
 
 		fpsText = new h2d.Text(hxd.res.DefaultFont.get());
 		fpsText.setScale(2);
@@ -45,13 +51,14 @@ class PlayState extends GameState
 		scene.add(root, 0);
 
 		game.camera.zoom = 2;
-		game.camera.x = -10;
+		game.camera.x = -20;
+		game.camera.y = 20;
 	}
 
 	override function update(frame:Frame)
 	{
-		// game.camera.x += .1 * frame.tmod;
-		// game.camera.y += .1 * frame.tmod;
+		// game.camera.x += .04 * frame.tmod;
+		// game.camera.y += .04 * frame.tmod;
 		// game.camera.zoom -= .002 * frame.tmod;
 
 		var p = mouse.toPx().floor();
@@ -60,6 +67,8 @@ class PlayState extends GameState
 
 		cursor.x = w.x;
 		cursor.y = w.y;
+
+		world.entities.ysort(0);
 
 		var chunk = world.chunks.getChunk(c.x, c.y);
 
