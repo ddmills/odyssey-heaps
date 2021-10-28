@@ -65,4 +65,9 @@ class CoordinateExtensions
 				return c;
 		}
 	}
+
+	static public inline function lerp(c:Coordinate, target:Coordinate, time:Float):Coordinate
+	{
+		return new Coordinate(c.x.lerp(target.x, time), c.y.lerp(target.y, time), c.space);
+	}
 }

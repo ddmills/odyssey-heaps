@@ -1,5 +1,6 @@
 package domain;
 
+import common.struct.Coordinate;
 import core.Game;
 
 class Entity
@@ -7,6 +8,7 @@ class Entity
 	public var world(get, null):World;
 	public var x(default, set):Float;
 	public var y(default, set):Float;
+	public var pos(get, set):Coordinate;
 
 	public var ob(default, null):h2d.Object;
 	public var offsetX(default, null):Float;
@@ -40,5 +42,18 @@ class Entity
 		ob.y = c.y - offsetY;
 		y = v;
 		return v;
+	}
+
+	function get_pos():Coordinate
+	{
+		return new Coordinate(x, y, WORLD);
+	}
+
+	function set_pos(v:Coordinate):Coordinate
+	{
+		var w = v.toWorld();
+		set_x(w.x);
+		set_y(w.y);
+		return w;
 	}
 }

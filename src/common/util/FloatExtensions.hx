@@ -21,4 +21,9 @@ class FloatExtensions
 	{
 		return Math.round(n);
 	}
+
+	static public inline function lerp(n:Float, target:Float, time:Float):Float
+	{
+		return n + time * (target - n);
+	}
 }

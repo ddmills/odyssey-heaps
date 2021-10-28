@@ -4,6 +4,7 @@ import common.struct.Coordinate;
 import core.Frame;
 import core.GameState;
 import domain.Entity;
+import domain.entities.Ship;
 import h2d.Interactive;
 import h2d.Layers;
 
@@ -13,9 +14,11 @@ class PlayState extends GameState
 	var root:h2d.Object;
 	var interactive:h2d.Interactive;
 	var mouse:Coordinate;
+	var click:Coordinate;
 	var cursor:Entity;
 	var building:Entity;
-	var sloop:Entity;
+	var sloop:Ship;
+	var target:Coordinate;
 
 	public function new() {}
 
@@ -28,8 +31,7 @@ class PlayState extends GameState
 		cursor = new Entity(new h2d.Bitmap(tiles[3]));
 		building = new Entity(new h2d.Bitmap(tiles[0]));
 
-		var sloopTiles = hxd.Res.img.sloop.toTile().split(8);
-		sloop = new Entity(new h2d.Anim(sloopTiles, 8));
+		sloop = new Ship();
 
 		building.x = 280;
 		building.y = 280;
@@ -47,6 +49,11 @@ class PlayState extends GameState
 		interactive.onMove = function(event:hxd.Event)
 		{
 			mouse = new Coordinate(event.relX, event.relY, SCREEN);
+		}
+
+		interactive.onClick = function(event:hxd.Event)
+		{
+			click = new Coordinate(event.relX, event.relY, SCREEN);
 		}
 
 		root.addChild(world.container);
@@ -70,8 +77,16 @@ class PlayState extends GameState
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
 
-		sloop.x = w.x;
-		sloop.y = w.y;
+		if (click != null)
+		{
+			target = click.toWorld().floor();
+			click = null;
+		}
+
+		if (target != null)
+		{
+			sloop.pos = sloop.pos.lerp(target, frame.tmod * .1);
+		}
 
 		world.entities.ysort(0);
 
