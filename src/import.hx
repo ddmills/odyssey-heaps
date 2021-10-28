@@ -1,3 +1,4 @@
+using common.util.CardinalExtensions;
 using common.util.CoordinateExtensions;
 using common.util.FloatExtensions;
 using common.util.IntExtensions;

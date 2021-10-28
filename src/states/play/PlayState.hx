@@ -1,6 +1,8 @@
 package states.play;
 
+import common.struct.Cardinal;
 import common.struct.Coordinate;
+import common.util.Bresenham;
 import core.Frame;
 import core.GameState;
 import domain.Entity;
@@ -18,7 +20,8 @@ class PlayState extends GameState
 	var cursor:Entity;
 	var building:Entity;
 	var sloop:Ship;
-	var target:Coordinate;
+	var path:Array<{x:Int, y:Int}>;
+	var curPathIdx:Int;
 
 	public function new() {}
 
@@ -33,8 +36,11 @@ class PlayState extends GameState
 
 		sloop = new Ship();
 
-		building.x = 280;
-		building.y = 280;
+		sloop.x = 28;
+		sloop.y = 13;
+
+		building.x = 30;
+		building.y = 15;
 
 		world.add(cursor);
 		world.add(building);
@@ -77,15 +83,37 @@ class PlayState extends GameState
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
 
+		cursor.pos = w;
+
 		if (click != null)
 		{
-			target = click.toWorld().floor();
+			var goal = click.toWorld().floor();
+			path = Bresenham.getLine(sloop.x.floor(), sloop.y.floor(), goal.x.floor(), goal.y.floor());
+			curPathIdx = 1;
 			click = null;
 		}
 
-		if (target != null)
+		if (path != null && curPathIdx < path.length)
 		{
-			sloop.pos = sloop.pos.lerp(target, frame.tmod * .1);
+			var goal = path[curPathIdx];
+			var target = new Coordinate(goal.x, goal.y, WORLD);
+
+			var angle = target.sub(sloop.pos).angle();
+			var cardinal = Cardinal.fromDegrees(angle.toDegrees());
+			sloop.cardinal = cardinal;
+
+			var direction = target.sub(sloop.pos).normalized();
+
+			sloop.x += direction.x * frame.tmod * .05;
+			sloop.y += direction.y * frame.tmod * .05;
+
+			var distance = sloop.pos.manhattan(target);
+
+			if (distance < .1)
+			{
+				sloop.pos = target;
+				curPathIdx++;
+			}
 		}
 
 		world.entities.ysort(0);

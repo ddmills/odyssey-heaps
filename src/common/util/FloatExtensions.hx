@@ -26,4 +26,19 @@ class FloatExtensions
 	{
 		return n + time * (target - n);
 	}
+
+	static public inline function abs(n:Float):Float
+	{
+		return Math.abs(n);
+	}
+
+	static public inline function toDegrees(n:Float):Float
+	{
+		return n * (180 / Math.PI);
+	}
+
+	static public inline function toRadians(n:Float):Float
+	{
+		return n / (180 / Math.PI);
+	}
 }

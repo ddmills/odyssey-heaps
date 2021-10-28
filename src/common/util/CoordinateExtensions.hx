@@ -2,6 +2,7 @@ package common.util;
 
 import common.struct.Coordinate;
 import core.Game;
+import h2d.col.Point;
 
 class CoordinateExtensions
 {
@@ -66,8 +67,55 @@ class CoordinateExtensions
 		}
 	}
 
-	static public inline function lerp(c:Coordinate, target:Coordinate, time:Float):Coordinate
+	static public inline function lerp(a:Coordinate, b:Coordinate, time:Float):Coordinate
 	{
-		return new Coordinate(c.x.lerp(target.x, time), c.y.lerp(target.y, time), c.space);
+		return new Coordinate(a.x.lerp(b.x, time), a.y.lerp(b.y, time), a.space);
+	}
+
+	static public inline function sub(a:Coordinate, b:Coordinate):Coordinate
+	{
+		return new Coordinate(a.x - b.x, a.y - b.y, a.space);
+	}
+
+	static public inline function add(a:Coordinate, b:Coordinate):Coordinate
+	{
+		return new Coordinate(a.x + b.x, a.y + b.y, a.space);
+	}
+
+	static public inline function manhattan(a:Coordinate, b:Coordinate):Float
+	{
+		return (a.x - b.x).abs() + (a.y - b.y).abs();
+	}
+
+	static public inline function angle(a:Coordinate):Float
+	{
+		var atan2 = Math.atan2(a.y, a.x);
+		var up = atan2 - 3.92699081698;
+		var val = up < 0 ? Math.PI * 2 + up : up;
+
+		return val;
+	}
+
+	public static inline function lengthSq(a:Coordinate):Float
+	{
+		return a.x * a.x + a.y * a.y;
+	}
+
+	static public inline function normalized(a:Coordinate):{x:Float, y:Float}
+	{
+		var k = lengthSq(a);
+		if (k < hxd.Math.EPSILON)
+		{
+			k = 0;
+		}
+		else
+		{
+			k = hxd.Math.invSqrt(k);
+		}
+
+		return {
+			x: a.x * k,
+			y: a.y * k,
+		};
 	}
 }

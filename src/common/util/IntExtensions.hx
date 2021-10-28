@@ -16,4 +16,9 @@ class IntExtensions
 	{
 		return n % 2 == 1;
 	}
+
+	static public inline function abs(n:Int):Int
+	{
+		return n <= 0 ? -n : n;
+	}
 }
