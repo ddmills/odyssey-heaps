@@ -67,6 +67,23 @@ class CoordinateExtensions
 		}
 	}
 
+	static public inline function toScreen(c:Coordinate):Coordinate
+	{
+		var world = Game.instance.world;
+
+		switch c.space
+		{
+			case PIXEL:
+				return world.pxToScreen(c.x, c.y);
+			case CHUNK:
+				return world.chunkToScreen(c.x, c.y);
+			case SCREEN:
+				return c;
+			case WORLD:
+				return world.worldToScreen(c.x, c.y);
+		}
+	}
+
 	static public inline function lerp(a:Coordinate, b:Coordinate, time:Float):Coordinate
 	{
 		return new Coordinate(a.x.lerp(b.x, time), a.y.lerp(b.y, time), a.space);

@@ -50,7 +50,7 @@ class PlayState extends GameState
 		fpsText.setScale(2);
 		fpsText.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
 
-		interactive = new Interactive(scene.camera.viewportWidth, scene.camera.viewportHeight);
+		interactive = new Interactive(camera.width, camera.height);
 
 		interactive.onMove = function(event:hxd.Event)
 		{
@@ -66,11 +66,19 @@ class PlayState extends GameState
 		root.addChild(fpsText);
 		root.addChild(interactive);
 
+		hxd.Window.getInstance().addResizeEvent(onResize);
+
 		scene.add(root, 0);
 
 		game.camera.zoom = 2;
-		game.camera.x = 23;
-		game.camera.y = 23;
+		game.camera.x = 0;
+		game.camera.y = 0;
+	}
+
+	function onResize()
+	{
+		interactive.width = camera.width;
+		interactive.height = camera.height;
 	}
 
 	override function update(frame:Frame)
@@ -82,6 +90,7 @@ class PlayState extends GameState
 		var p = mouse.toPx().floor();
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
+		var s = p.toScreen().floor();
 
 		cursor.pos = w;
 
@@ -130,12 +139,18 @@ class PlayState extends GameState
 		txt += '\nzoom=${camera.zoom}';
 		txt += '\nchunk=${c.toString()}';
 		txt += '\nworld=${w.toString()}';
-		txt += '\npixel=${p.x.floor()},${p.y.floor()}';
+		txt += '\npixel=${p.toString()}';
+		txt += '\nscreen=${s.toString()}';
 		txt += '\n' + frame.fps.round().toString();
 
 		fpsText.text = txt;
 
 		fpsText.alignBottom(scene, game.TILE_H);
 		fpsText.alignLeft(scene, game.TILE_H);
+	}
+
+	override function destroy()
+	{
+		hxd.Window.getInstance().removeResizeEvent(onResize);
 	}
 }

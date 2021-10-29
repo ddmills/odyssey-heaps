@@ -64,9 +64,19 @@ class World
 	public function screenToPx(sx:Float, sy:Float):Coordinate
 	{
 		var camWorld = worldToPx(game.camera.x, game.camera.y);
-		var x = (sx + camWorld.x) / game.camera.zoom;
-		var y = (sy + camWorld.y) / game.camera.zoom;
-		return new Coordinate(x, y, PIXEL);
+		var px = (sx + camWorld.x) / game.camera.zoom;
+		var py = (sy + camWorld.y) / game.camera.zoom;
+		return new Coordinate(px, py, PIXEL);
+	}
+
+	public function pxToScreen(px:Float, py:Float):Coordinate
+	{
+		var camWorld = worldToPx(game.camera.x, game.camera.y);
+
+		var sx = (px * game.camera.zoom) - camWorld.x;
+		var sy = (py * game.camera.zoom) - camWorld.y;
+
+		return new Coordinate(sx, sy, SCREEN);
 	}
 
 	public function screenToWorld(sx:Float, sy:Float):Coordinate
@@ -93,14 +103,26 @@ class World
 		return worldToPx(world.x, world.y);
 	}
 
-	public function worldToChunk(worldX:Float, worldY:Float):Coordinate
+	public function worldToChunk(wx:Float, wy:Float):Coordinate
 	{
-		return new Coordinate(Math.floor(worldX / chunkSize), Math.floor(worldY / chunkSize), CHUNK);
+		return new Coordinate(Math.floor(wx / chunkSize), Math.floor(wy / chunkSize), CHUNK);
+	}
+
+	public function worldToScreen(wx:Float, wy:Float):Coordinate
+	{
+		var px = worldToPx(wx, wy);
+		return pxToScreen(px.x, px.y);
 	}
 
 	public function chunkToWorld(chunkX:Float, chunkY:Float):Coordinate
 	{
 		return new Coordinate(chunkX * chunkSize, chunkY * chunkSize, WORLD);
+	}
+
+	public function chunkToScreen(cx:Float, cy:Float):Coordinate
+	{
+		var px = chunkToPx(cx, cy);
+		return pxToScreen(px.x, px.y);
 	}
 
 	public function add(entity:Entity)

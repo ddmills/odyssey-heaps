@@ -6,6 +6,7 @@ import core.Game;
 class Entity
 {
 	public var world(get, null):World;
+	public var game(get, null):Game;
 	public var x(default, set):Float;
 	public var y(default, set):Float;
 	public var pos(get, set):Coordinate;
@@ -21,7 +22,12 @@ class Entity
 		offsetY = Game.instance.TILE_H;
 	}
 
-	function get_world():World
+	inline function get_game():Game
+	{
+		return Game.instance;
+	}
+
+	inline function get_world():World
 	{
 		return Game.instance.world;
 	}
