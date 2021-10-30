@@ -20,4 +20,12 @@ class Coordinate
 		this.y = y;
 		this.space = space;
 	}
+
+	public static function FromPoints(points:Array<{x:Int, y:Int}>, space:Space):Array<Coordinate>
+	{
+		return Lambda.map(points, function(p)
+		{
+			return new Coordinate(p.x, p.y, space);
+		});
+	}
 }

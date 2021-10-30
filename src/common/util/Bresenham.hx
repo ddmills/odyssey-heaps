@@ -40,4 +40,84 @@ class Bresenham
 
 		return result;
 	}
+
+	public static function getCircle(x0:Int, y0:Int, r:Int, fill:Bool = false):Array<{x:Int, y:Int}>
+	{
+		var pm = new Map<String, {x:Int, y:Int}>();
+		var points = new Array<{x:Int, y:Int}>();
+		var balance:Int = -r;
+		var dx:Int = 0;
+		var dy:Int = r;
+
+		function addPoint(p:{x:Int, y:Int})
+		{
+			var k = '${p.x},${p.y}';
+			if (pm.get(k) == null)
+			{
+				points.push(p);
+				pm.set(k, p);
+			}
+		}
+
+		while (dx <= dy)
+		{
+			if (fill)
+			{
+				var p0 = x0 - dx;
+				var p1 = x0 - dy;
+				var w0 = dx + dx + 1;
+				var w1 = dy + dy + 1;
+
+				hline(p0, y0 + dy, w0, function(p)
+				{
+					addPoint(p);
+				});
+				hline(p0, y0 - dy, w0, function(p)
+				{
+					addPoint(p);
+				});
+				hline(p1, y0 + dx, w1, function(p)
+				{
+					addPoint(p);
+				});
+				hline(p1, y0 - dx, w1, function(p)
+				{
+					addPoint(p);
+				});
+			}
+			else
+			{
+				addPoint({x: x0 + dx, y: y0 + dy});
+				addPoint({x: x0 - dx, y: y0 + dy});
+				addPoint({x: x0 - dx, y: y0 - dy});
+				addPoint({x: x0 + dx, y: y0 - dy});
+				addPoint({x: x0 + dy, y: y0 + dx});
+				addPoint({x: x0 - dy, y: y0 + dx});
+				addPoint({x: x0 - dy, y: y0 - dx});
+				addPoint({x: x0 + dy, y: y0 - dx});
+			}
+
+			dx++;
+			balance += dx + dx;
+
+			if (balance >= 0)
+			{
+				dy--;
+				balance -= dy + dy;
+			}
+		}
+
+		return points;
+	}
+
+	private static function hline(x:Int, y:Int, w:Int, fn:({x:Int, y:Int}) -> Void)
+	{
+		for (i in 0...w)
+		{
+			fn({
+				x: x + i,
+				y: y
+			});
+		}
+	}
 }

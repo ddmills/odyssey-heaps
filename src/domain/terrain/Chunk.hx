@@ -8,7 +8,7 @@ import h2d.TileGroup;
 class Chunk
 {
 	public var terrain(default, null):Grid<TerrainType>;
-	public var exploration(default, null):Grid<ExploreType>;
+	public var exploration(default, null):Grid<Null<Bool>>;
 	public var isLoaded(default, null):Bool;
 
 	var tiles:TileGroup;
@@ -30,7 +30,7 @@ class Chunk
 		cx = chunkX;
 		cy = chunkY;
 		terrain = new Grid<TerrainType>(size, size);
-		exploration = new Grid<ExploreType>(size, size);
+		exploration = new Grid<Null<Bool>>(size, size);
 
 		var explorationSheet = hxd.Res.img.mask32.toTile();
 		explorationTiles = explorationSheet.split(4);
@@ -39,15 +39,18 @@ class Chunk
 		terrainTiles = terrainSheet.split(4);
 	}
 
-	public function setExplore(x:Int, y:Int, value:ExploreType)
+	public function setExplore(x:Int, y:Int, isExplored:Bool, isVisible:Bool)
 	{
+		if (!isLoaded)
+		{
+			return;
+		}
 		var idx = exploration.idx(x, y);
 		if (idx < 0)
 		{
 			return;
 		}
 
-		var isExplored = value == EXPLORED;
 		var child = fog.getChildAt(idx);
 		if (child != null)
 		{
@@ -56,18 +59,32 @@ class Chunk
 
 		if (isExplored)
 		{
-			fog.addChildAt(new h2d.Object(), idx);
+			if (isVisible)
+			{
+				fog.addChildAt(new h2d.Object(), idx);
+			}
+			else
+			{
+				var pix = Game.instance.world.worldToPx(x, y);
+				var offsetX = pix.x - Game.instance.TILE_W_HALF;
+				var offsetY = pix.y;
+				var ob = new Bitmap(explorationTiles[3]);
+				ob.x = offsetX;
+				ob.y = offsetY;
+
+				fog.addChildAt(ob, idx);
+			}
 		}
 		else
 		{
 			var pix = Game.instance.world.worldToPx(x, y);
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
 			var offsetY = pix.y;
-			var ob = new Bitmap(explorationTiles[3]);
+			var ob = new Bitmap(explorationTiles[0]);
 			ob.x = offsetX;
 			ob.y = offsetY;
 
-			tiles.addChildAt(ob, idx);
+			fog.addChildAt(ob, idx);
 		}
 	}
 
@@ -79,7 +96,7 @@ class Chunk
 		}
 
 		terrain = Game.instance.world.chunkGen.generateTerrain(cx, cy, size);
-		exploration.fill(UNEXPLORED);
+		exploration.fill(false);
 
 		tiles = buildTerrainTileGroup();
 		fog = buildFogObject();
@@ -132,14 +149,12 @@ class Chunk
 
 	public function buildFogObject():h2d.Object
 	{
-		var unexploredTile = explorationTiles[3];
+		var unexploredTile = explorationTiles[0];
 		var tiles = new h2d.Object();
 
 		for (t in exploration)
 		{
-			var isExplored = t.value == EXPLORED;
-
-			if (!isExplored)
+			if (!t.value)
 			{
 				var pix = Game.instance.world.worldToPx(t.x, t.y);
 				var offsetX = pix.x - Game.instance.TILE_W_HALF;

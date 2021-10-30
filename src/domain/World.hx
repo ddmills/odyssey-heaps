@@ -24,6 +24,8 @@ class World
 	public var container(default, null):h2d.Layers;
 	public var chunkGen(default, null):ChunkGen;
 
+	var visible:Array<Coordinate>;
+
 	inline function get_game():Game
 	{
 		return Game.instance;
@@ -34,6 +36,7 @@ class World
 		chunkGen = new ChunkGen(1);
 		chunks = new ChunkManager(chunkCountX, chunkCountY, chunkSize);
 		container = new Layers();
+		visible = new Array<Coordinate>();
 
 		bg = new Layers();
 		entities = new Layers();
@@ -136,6 +139,33 @@ class World
 		entities.addChild(entity.ob);
 	}
 
+	public function setVisible(values:Array<Coordinate>)
+	{
+		for (value in visible)
+		{
+			var c = value.toChunk();
+			var chunk = chunks.getChunk(c.x, c.y);
+			if (chunk != null)
+			{
+				var local = value.toChunkLocal(chunk.cx, chunk.cy);
+
+				chunk.setExplore(local.x.floor(), local.y.floor(), true, false);
+			}
+		}
+		for (value in values)
+		{
+			var c = value.toChunk();
+			var chunk = chunks.getChunk(c.x, c.y);
+			if (chunk != null)
+			{
+				var local = value.toChunkLocal(chunk.cx, chunk.cy);
+
+				chunk.setExplore(local.x.floor(), local.y.floor(), true, true);
+			}
+		}
+		visible = values;
+	}
+
 	public function explore(coord:Coordinate)
 	{
 		var c = coord.toChunk();
@@ -143,7 +173,7 @@ class World
 		if (chunk != null)
 		{
 			var local = coord.toChunkLocal(c.x, c.y);
-			chunk.setExplore(local.x.floor(), local.y.floor(), EXPLORED);
+			chunk.setExplore(local.x.floor(), local.y.floor(), true, false);
 		}
 	}
 }

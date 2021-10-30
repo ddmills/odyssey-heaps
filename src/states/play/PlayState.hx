@@ -136,7 +136,9 @@ class PlayState extends GameState
 
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
-		world.explore(w);
+		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 4, true);
+		var vis = Coordinate.FromPoints(visCircle, WORLD);
+		world.setVisible(vis);
 
 		var txt = '';
 		txt += '\npixel ${p.toString()}';
