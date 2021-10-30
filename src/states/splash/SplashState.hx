@@ -19,10 +19,9 @@ class SplashState extends GameState
 	override function create()
 	{
 		root = new Layers();
-
-		text = new h2d.Text(hxd.res.DefaultFont.get(), root);
-		// text.setScale(2);
-		text.text = "ODYSSEY";
+		text = new h2d.Text(hxd.Res.fnt.bizcat.toFont(), root);
+		text.setScale(2);
+		text.text = "Odyssey";
 		text.color = new h3d.Vector(.4, .9, 1);
 
 		scene.add(root, 0);

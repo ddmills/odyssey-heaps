@@ -46,12 +46,17 @@ class PlayState extends GameState
 		world.add(building);
 		world.add(sloop);
 
-		fpsText = new h2d.Text(hxd.res.DefaultFont.get());
-		fpsText.setScale(2);
+		fpsText = new h2d.Text(hxd.Res.fnt.bizcat.toFont());
+		fpsText.setScale(1);
 		fpsText.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
+		fpsText.dropShadow = {
+			dx: 1,
+			dy: 1,
+			color: 0x000000,
+			alpha: .5
+		};
 
 		interactive = new Interactive(camera.width, camera.height);
-
 		interactive.onMove = function(event:hxd.Event)
 		{
 			mouse = new Coordinate(event.relX, event.relY, SCREEN);
@@ -83,8 +88,6 @@ class PlayState extends GameState
 
 	override function update(frame:Frame)
 	{
-		// game.camera.zoom -= .002 * frame.tmod;
-
 		var p = mouse.toPx().floor();
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
@@ -135,12 +138,9 @@ class PlayState extends GameState
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
 		var txt = '';
-		txt += '\ncam=${camera.x.round()},${camera.y.round()}';
-		txt += '\nzoom=${camera.zoom}';
-		txt += '\nchunk=${c.toString()}';
-		txt += '\nworld=${w.toString()}';
-		txt += '\npixel=${p.toString()}';
-		txt += '\nscreen=${s.toString()}';
+		txt += '\npixel ${p.toString()}';
+		txt += '\nworld ${w.toString()}';
+		txt += '\nchunk ${c.toString()}';
 		txt += '\n' + frame.fps.round().toString();
 
 		fpsText.text = txt;
