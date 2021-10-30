@@ -2,7 +2,6 @@ package common.util;
 
 import common.struct.Coordinate;
 import core.Game;
-import h2d.col.Point;
 
 class CoordinateExtensions
 {
@@ -14,6 +13,24 @@ class CoordinateExtensions
 	static public inline function floor(c:Coordinate):Coordinate
 	{
 		return new Coordinate(c.x.floor(), c.y.floor(), c.space);
+	}
+
+	static public inline function toSpace(c:Coordinate, space:Space):Coordinate
+	{
+		var px = c.toPx();
+		var world = Game.instance.world;
+
+		switch space
+		{
+			case PIXEL:
+				return px;
+			case CHUNK:
+				return world.pxToChunk(px.x, px.y);
+			case SCREEN:
+				return world.pxToScreen(px.x, px.y);
+			case WORLD:
+				return world.pxToWorld(px.x, px.y);
+		}
 	}
 
 	static public inline function toWorld(c:Coordinate):Coordinate
@@ -86,22 +103,30 @@ class CoordinateExtensions
 
 	static public inline function lerp(a:Coordinate, b:Coordinate, time:Float):Coordinate
 	{
-		return new Coordinate(a.x.lerp(b.x, time), a.y.lerp(b.y, time), a.space);
+		var projected = b.toSpace(a.space);
+
+		return new Coordinate(a.x.lerp(projected.x, time), a.y.lerp(projected.y, time), a.space);
 	}
 
 	static public inline function sub(a:Coordinate, b:Coordinate):Coordinate
 	{
-		return new Coordinate(a.x - b.x, a.y - b.y, a.space);
+		var projected = b.toSpace(a.space);
+
+		return new Coordinate(a.x - projected.x, a.y - projected.y, a.space);
 	}
 
 	static public inline function add(a:Coordinate, b:Coordinate):Coordinate
 	{
-		return new Coordinate(a.x + b.x, a.y + b.y, a.space);
+		var projected = b.toSpace(a.space);
+
+		return new Coordinate(a.x + projected.x, a.y + projected.y, a.space);
 	}
 
 	static public inline function manhattan(a:Coordinate, b:Coordinate):Float
 	{
-		return (a.x - b.x).abs() + (a.y - b.y).abs();
+		var projected = b.toSpace(a.space);
+
+		return (a.x - projected.x).abs() + (a.y - projected.y).abs();
 	}
 
 	static public inline function angle(a:Coordinate):Float

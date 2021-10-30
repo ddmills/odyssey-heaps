@@ -83,8 +83,6 @@ class PlayState extends GameState
 
 	override function update(frame:Frame)
 	{
-		// game.camera.x += .04 * frame.tmod;
-		// game.camera.y += .04 * frame.tmod;
 		// game.camera.zoom -= .002 * frame.tmod;
 
 		var p = mouse.toPx().floor();
@@ -133,6 +131,8 @@ class PlayState extends GameState
 		{
 			chunk.load(world.bg);
 		}
+
+		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
 		var txt = '';
 		txt += '\ncam=${camera.x.round()},${camera.y.round()}';
