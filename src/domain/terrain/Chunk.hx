@@ -68,7 +68,8 @@ class Chunk
 				var pix = Game.instance.world.worldToPx(x, y);
 				var offsetX = pix.x - Game.instance.TILE_W_HALF;
 				var offsetY = pix.y;
-				var ob = new Bitmap(explorationTiles[3]);
+				var ob = new Bitmap(explorationTiles[0]);
+				ob.alpha = .5;
 				ob.x = offsetX;
 				ob.y = offsetY;
 
@@ -81,6 +82,7 @@ class Chunk
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
 			var offsetY = pix.y;
 			var ob = new Bitmap(explorationTiles[0]);
+
 			ob.x = offsetX;
 			ob.y = offsetY;
 

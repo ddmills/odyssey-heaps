@@ -36,8 +36,8 @@ class PlayState extends GameState
 
 		sloop = new Ship();
 
-		sloop.x = 1;
-		sloop.y = 1;
+		sloop.x = 61;
+		sloop.y = 43;
 
 		building.x = 30;
 		building.y = 15;
@@ -75,7 +75,7 @@ class PlayState extends GameState
 
 		scene.add(root, 0);
 
-		game.camera.zoom = 3;
+		game.camera.zoom = 2;
 		game.camera.x = -1;
 		game.camera.y = 0;
 	}
@@ -137,6 +137,13 @@ class PlayState extends GameState
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
 		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 4, true);
+		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 6, true);
+
+		for (point in exploreCircle)
+		{
+			world.explore(new Coordinate(point.x, point.y, WORLD));
+		}
+
 		var vis = Coordinate.FromPoints(visCircle, WORLD);
 		world.setVisible(vis);
 
