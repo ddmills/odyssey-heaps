@@ -10,7 +10,8 @@ class Ship extends Entity
 
 	public function new()
 	{
-		var sloopTiles = hxd.Res.img.sloop.toTile().split(8);
+		var sloopTiles = hxd.Res.img.sloop_png.toTile().split(8);
+		offsetY = sloopTiles[0].height;
 
 		anim = new h2d.Anim(sloopTiles, 0);
 		set_cardinal(WEST);

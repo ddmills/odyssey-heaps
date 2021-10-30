@@ -19,7 +19,7 @@ class Entity
 	{
 		this.ob = ob;
 		offsetX = Game.instance.TILE_W_HALF;
-		offsetY = Game.instance.TILE_H;
+		offsetY = 0;
 	}
 
 	inline function get_game():Game

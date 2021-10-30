@@ -2,8 +2,11 @@ package domain;
 
 import common.struct.Coordinate;
 import core.Game;
+import domain.terrain.Chunk;
 import domain.terrain.ChunkManager;
+import h2d.Bitmap;
 import h2d.Layers;
+import h2d.TileGroup;
 import rand.ChunkGen;
 
 class World
@@ -15,7 +18,8 @@ class World
 	public var mapHeight(get, null):Int;
 	public var game(get, null):Game;
 	public var chunks(default, null):ChunkManager;
-	public var bg(default, null):h2d.Object;
+	public var bg(default, null):h2d.Layers;
+	public var fog(default, null):h2d.Layers;
 	public var entities(default, null):h2d.Layers;
 	public var container(default, null):h2d.Layers;
 	public var chunkGen(default, null):ChunkGen;
@@ -33,9 +37,11 @@ class World
 
 		bg = new Layers();
 		entities = new Layers();
+		fog = new Layers();
 
 		container.addChildAt(bg, 0);
 		container.addChildAt(entities, 1);
+		container.addChildAt(fog, 2);
 	}
 
 	function get_mapWidth():Int
@@ -128,5 +134,16 @@ class World
 	public function add(entity:Entity)
 	{
 		entities.addChild(entity.ob);
+	}
+
+	public function explore(coord:Coordinate)
+	{
+		var c = coord.toChunk();
+		var chunk = chunks.getChunk(c.x, c.y);
+		if (chunk != null)
+		{
+			var local = coord.toChunkLocal(c.x, c.y);
+			chunk.setExplore(local.x.floor(), local.y.floor(), EXPLORED);
+		}
 	}
 }

@@ -42,10 +42,4 @@ class ChunkManager
 
 		return getChunk(Math.floor(coords.x), Math.floor(coords.y));
 	}
-
-	public function boundsUpdate(px:Float, py:Float, pw:Float, ph:Float)
-	{
-		// load chunks in bounds
-		// get chunk in TL
-	}
 }

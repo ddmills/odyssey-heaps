@@ -36,8 +36,8 @@ class PlayState extends GameState
 
 		sloop = new Ship();
 
-		sloop.x = 28;
-		sloop.y = 13;
+		sloop.x = 1;
+		sloop.y = 1;
 
 		building.x = 30;
 		building.y = 15;
@@ -75,8 +75,8 @@ class PlayState extends GameState
 
 		scene.add(root, 0);
 
-		game.camera.zoom = 2;
-		game.camera.x = 0;
+		game.camera.zoom = 3;
+		game.camera.x = -1;
 		game.camera.y = 0;
 	}
 
@@ -91,7 +91,6 @@ class PlayState extends GameState
 		var p = mouse.toPx().floor();
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
-		var s = p.toScreen().floor();
 
 		cursor.pos = w;
 
@@ -132,15 +131,18 @@ class PlayState extends GameState
 
 		if (chunk != null && !chunk.isLoaded)
 		{
-			chunk.load(world.bg);
+			chunk.load(world.bg, world.fog);
 		}
 
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
+
+		world.explore(w);
 
 		var txt = '';
 		txt += '\npixel ${p.toString()}';
 		txt += '\nworld ${w.toString()}';
 		txt += '\nchunk ${c.toString()}';
+		txt += '\nlocal ${w.toChunkLocal(c.x.floor(), c.y.floor()).toString()}';
 		txt += '\n' + frame.fps.round().toString();
 
 		fpsText.text = txt;

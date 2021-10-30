@@ -101,6 +101,12 @@ class CoordinateExtensions
 		}
 	}
 
+	static public inline function toChunkLocal(a:Coordinate, chunkX:Float, chunkY:Float):Coordinate
+	{
+		var chunk = a.toChunk().floor();
+		return a.sub(chunk);
+	}
+
 	static public inline function lerp(a:Coordinate, b:Coordinate, time:Float):Coordinate
 	{
 		var projected = b.toSpace(a.space);
