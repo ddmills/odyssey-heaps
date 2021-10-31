@@ -2,11 +2,8 @@ package domain;
 
 import common.struct.Coordinate;
 import core.Game;
-import domain.terrain.Chunk;
 import domain.terrain.ChunkManager;
-import h2d.Bitmap;
 import h2d.Layers;
-import h2d.TileGroup;
 import rand.ChunkGen;
 
 class World
@@ -137,6 +134,11 @@ class World
 	public function add(entity:Entity)
 	{
 		entities.addChild(entity.ob);
+	}
+
+	public function getEntitiesAt(pos:Coordinate):Array<Entity>
+	{
+		return new Array<Entity>();
 	}
 
 	public function setVisible(values:Array<Coordinate>)

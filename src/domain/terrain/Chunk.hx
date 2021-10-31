@@ -47,6 +47,7 @@ class Chunk
 	{
 		if (!isLoaded)
 		{
+			load();
 			return;
 		}
 		var idx = exploration.idx(x, y);
@@ -94,7 +95,7 @@ class Chunk
 		}
 	}
 
-	public function load(bgLayer:h2d.Object, fogLayer:h2d.Object)
+	public function load()
 	{
 		if (isLoaded)
 		{
@@ -107,8 +108,8 @@ class Chunk
 		tiles = buildTerrainTileGroup();
 		fog = buildFogObject();
 
-		bgLayer.addChildAt(tiles, chunkId);
-		fogLayer.addChildAt(fog, chunkId);
+		Game.instance.world.bg.addChildAt(tiles, chunkId);
+		Game.instance.world.fog.addChildAt(fog, chunkId);
 
 		var pix = Game.instance.world.chunkToPx(cx, cy);
 		tiles.x = pix.x;

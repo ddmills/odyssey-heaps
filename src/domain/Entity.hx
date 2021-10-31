@@ -1,6 +1,7 @@
 package domain;
 
 import common.struct.Coordinate;
+import common.util.UniqueId;
 import core.Game;
 
 class Entity
@@ -10,7 +11,8 @@ class Entity
 	public var x(default, set):Float;
 	public var y(default, set):Float;
 	public var pos(get, set):Coordinate;
-
+	public var name:String;
+	public var id(default, null):String;
 	public var ob(default, null):h2d.Object;
 	public var offsetX(default, null):Float;
 	public var offsetY(default, null):Float;
@@ -20,6 +22,9 @@ class Entity
 		this.ob = ob;
 		offsetX = Game.instance.TILE_W_HALF;
 		offsetY = 0;
+		name = 'Unknown';
+		id = UniqueId.Create();
+		Game.instance.entities.register(this);
 	}
 
 	inline function get_game():Game

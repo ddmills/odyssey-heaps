@@ -13,6 +13,7 @@ import h2d.Layers;
 class PlayState extends GameState
 {
 	var fpsText:h2d.Text;
+	var infoText:h2d.Text;
 	var root:h2d.Object;
 	var interactive:h2d.Interactive;
 	var mouse:Coordinate;
@@ -46,9 +47,19 @@ class PlayState extends GameState
 		world.add(building);
 		world.add(sloop);
 
-		fpsText = new h2d.Text(hxd.Res.fnt.bizcat.toFont());
+		var bizcat = hxd.Res.fnt.bizcat.toFont();
+		infoText = new h2d.Text(bizcat);
+		fpsText = new h2d.Text(bizcat);
+		infoText.setScale(1);
 		fpsText.setScale(1);
+		infoText.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
 		fpsText.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
+		infoText.dropShadow = {
+			dx: 1,
+			dy: 1,
+			color: 0x000000,
+			alpha: .5
+		};
 		fpsText.dropShadow = {
 			dx: 1,
 			dy: 1,
@@ -69,6 +80,7 @@ class PlayState extends GameState
 
 		root.addChild(world.container);
 		root.addChild(fpsText);
+		root.addChild(infoText);
 		root.addChild(interactive);
 
 		hxd.Window.getInstance().addResizeEvent(onResize);
@@ -125,19 +137,10 @@ class PlayState extends GameState
 			}
 		}
 
-		world.entities.ysort(0);
-
-		var chunk = world.chunks.getChunk(c.x, c.y);
-
-		if (chunk != null && !chunk.isLoaded)
-		{
-			chunk.load(world.bg, world.fog);
-		}
-
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
-		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 4, true);
-		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 6, true);
+		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 6, true);
+		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
 
 		for (point in exploreCircle)
 		{
@@ -147,17 +150,29 @@ class PlayState extends GameState
 		var vis = Coordinate.FromPoints(visCircle, WORLD);
 		world.setVisible(vis);
 
+		world.entities.ysort(0);
+
 		var txt = '';
+		txt += '\n' + frame.fps.round().toString();
 		txt += '\npixel ${p.toString()}';
 		txt += '\nworld ${w.toString()}';
 		txt += '\nchunk ${c.toString()}';
 		txt += '\nlocal ${w.toChunkLocal(c.x.floor(), c.y.floor()).toString()}';
-		txt += '\n' + frame.fps.round().toString();
 
 		fpsText.text = txt;
 
 		fpsText.alignBottom(scene, game.TILE_H);
 		fpsText.alignLeft(scene, game.TILE_H);
+
+		var entities = world.getEntitiesAt(mouse);
+		var names = Lambda.map(entities, function(e)
+		{
+			return e.name;
+		});
+
+		infoText.text = names.length <= 0 ? 'None (${sloop.id})' : names.join('\n');
+		infoText.alignBottom(scene, game.TILE_H);
+		infoText.alignRight(scene, game.TILE_H);
 	}
 
 	override function destroy()
