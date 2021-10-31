@@ -3,6 +3,7 @@ package domain.terrain;
 import common.struct.Grid;
 import core.Game;
 import h2d.Bitmap;
+import h2d.Tile;
 import h2d.TileGroup;
 
 class Chunk
@@ -13,11 +14,14 @@ class Chunk
 
 	var tiles:TileGroup;
 	var fog:h2d.Object;
-	var size:Int;
+
+	public var size(default, null):Int;
 
 	public var chunkId(default, null):Int;
 	public var cx(default, null):Int;
 	public var cy(default, null):Int;
+	public var wx(get, null):Int;
+	public var wy(get, null):Int;
 
 	var explorationTiles:Array<h2d.Tile>;
 	var terrainTiles:Array<h2d.Tile>;
@@ -97,7 +101,7 @@ class Chunk
 			return;
 		}
 
-		terrain = Game.instance.world.chunkGen.generateTerrain(cx, cy, size);
+		Game.instance.world.chunkGen.generate(this);
 		exploration.fill(false);
 
 		tiles = buildTerrainTileGroup();
@@ -130,14 +134,11 @@ class Chunk
 
 	public function buildTerrainTileGroup():TileGroup
 	{
-		var water = terrainTiles[1];
-		var land = terrainTiles[2];
-
 		var tiles = new h2d.TileGroup();
 
 		for (t in terrain)
 		{
-			var tile = t.value == WATER ? water : land;
+			var tile = getTerrainTile(t.value);
 			var pix = Game.instance.world.worldToPx(t.x, t.y);
 
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
@@ -147,6 +148,22 @@ class Chunk
 		}
 
 		return tiles;
+	}
+
+	function getTerrainTile(type:TerrainType):Tile
+	{
+		var water = terrainTiles[1];
+		var grass = terrainTiles[2];
+		var sand = terrainTiles[0];
+		switch (type)
+		{
+			case WATER:
+				return water;
+			case SAND:
+				return sand;
+			case GRASS:
+				return grass;
+		}
 	}
 
 	public function buildFogObject():h2d.Object
@@ -174,5 +191,15 @@ class Chunk
 		}
 
 		return tiles;
+	}
+
+	function get_wx():Int
+	{
+		return cx * size;
+	}
+
+	function get_wy():Int
+	{
+		return cy * size;
 	}
 }

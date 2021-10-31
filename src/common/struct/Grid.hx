@@ -1,7 +1,6 @@
 package common.struct;
 
-@:generic
-class Grid<T>
+@:generic class Grid<T>
 {
 	public var width(default, set):Int;
 	public var height(default, set):Int;
@@ -97,6 +96,11 @@ class Grid<T>
 	public function fill(value:T)
 	{
 		data = [for (_ in 0...size) value];
+	}
+
+	public function fillFn(fn:(Int) -> T)
+	{
+		data = [for (idx in 0...size) fn(idx)];
 	}
 
 	public function clear()

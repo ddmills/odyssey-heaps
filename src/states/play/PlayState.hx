@@ -113,8 +113,8 @@ class PlayState extends GameState
 
 			var direction = target.sub(sloop.pos).normalized();
 
-			sloop.x += direction.x * frame.tmod * .05;
-			sloop.y += direction.y * frame.tmod * .05;
+			sloop.x += direction.x * frame.tmod * .1;
+			sloop.y += direction.y * frame.tmod * .1;
 
 			var distance = sloop.pos.manhattan(target);
 
