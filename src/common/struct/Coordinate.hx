@@ -8,6 +8,12 @@ enum Space
 	SCREEN;
 }
 
+typedef Point =
+{
+	var x:Int;
+	var y:Int;
+};
+
 class Coordinate
 {
 	public var x:Float;
@@ -21,7 +27,7 @@ class Coordinate
 		this.space = space;
 	}
 
-	public static function FromPoints(points:Array<{x:Int, y:Int}>, space:Space):Array<Coordinate>
+	public static function FromPoints(points:Array<Point>, space:Space):Array<Coordinate>
 	{
 		return Lambda.map(points, function(p)
 		{

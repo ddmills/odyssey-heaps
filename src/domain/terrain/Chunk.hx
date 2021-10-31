@@ -10,6 +10,7 @@ class Chunk
 {
 	public var terrain(default, null):Grid<TerrainType>;
 	public var exploration(default, null):Grid<Null<Bool>>;
+	public var entities(default, null):Grid<Array<String>>;
 	public var isLoaded(default, null):Bool;
 
 	var tiles:TileGroup;
@@ -35,6 +36,12 @@ class Chunk
 		cy = chunkY;
 		terrain = new Grid<TerrainType>(size, size);
 		exploration = new Grid<Null<Bool>>(size, size);
+		entities = new Grid<Array<String>>(size, size);
+
+		entities.fillFn(function(idx)
+		{
+			return new Array<String>();
+		});
 
 		var explorationSheet = hxd.Res.img.mask32.toTile();
 		explorationTiles = explorationSheet.split(4);
@@ -203,4 +210,10 @@ class Chunk
 	{
 		return cy * size;
 	}
+
+	// function setEntityPosition(entity:Entity)
+	// {
+	// 	var local = entity.pos.toChunkLocal(cx, cy);
+	// 	var c = local.toWorld();
+	// }
 }

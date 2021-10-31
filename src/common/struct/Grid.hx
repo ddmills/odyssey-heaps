@@ -2,8 +2,8 @@ package common.struct;
 
 @:generic class Grid<T>
 {
-	public var width(default, set):Int;
-	public var height(default, set):Int;
+	public var width(default, null):Int;
+	public var height(default, null):Int;
 	public var size(get, null):Int;
 
 	private var data:Array<T>;
@@ -11,26 +11,6 @@ package common.struct;
 	function get_size()
 	{
 		return height * width;
-	}
-
-	function set_width(value)
-	{
-		if (value < 0)
-		{
-			throw 'Grid width cannot be less than zero';
-		}
-
-		return width = value;
-	}
-
-	function set_height(value)
-	{
-		if (value < 0)
-		{
-			throw 'Grid height cannot be less than zero';
-		}
-
-		return height = value;
 	}
 
 	public function new(width:Int = 128, height:Int = 128)
