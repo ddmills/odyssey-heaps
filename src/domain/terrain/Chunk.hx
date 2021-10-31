@@ -1,6 +1,7 @@
 package domain.terrain;
 
 import common.struct.Grid;
+import common.struct.GridMap;
 import core.Game;
 import h2d.Bitmap;
 import h2d.Tile;
@@ -10,7 +11,7 @@ class Chunk
 {
 	public var terrain(default, null):Grid<TerrainType>;
 	public var exploration(default, null):Grid<Null<Bool>>;
-	public var entities(default, null):Grid<Array<String>>;
+	public var entities(default, null):GridMap<String>;
 	public var isLoaded(default, null):Bool;
 
 	var tiles:TileGroup;
@@ -34,14 +35,9 @@ class Chunk
 
 		cx = chunkX;
 		cy = chunkY;
-		terrain = new Grid<TerrainType>(size, size);
-		exploration = new Grid<Null<Bool>>(size, size);
-		entities = new Grid<Array<String>>(size, size);
-
-		entities.fillFn(function(idx)
-		{
-			return new Array<String>();
-		});
+		terrain = new Grid(size, size);
+		exploration = new Grid(size, size);
+		entities = new GridMap(size, size);
 
 		var explorationSheet = hxd.Res.img.mask32.toTile();
 		explorationTiles = explorationSheet.split(4);
@@ -211,9 +207,14 @@ class Chunk
 		return cy * size;
 	}
 
-	// function setEntityPosition(entity:Entity)
-	// {
-	// 	var local = entity.pos.toChunkLocal(cx, cy);
-	// 	var c = local.toWorld();
-	// }
+	public function removeEntity(entity:Entity)
+	{
+		entities.remove(entity.id);
+	}
+
+	public function setEntityPosition(entity:Entity)
+	{
+		var local = entity.pos.toChunkLocal(cx, cy).toWorld();
+		entities.set(local.x.floor(), local.y.floor(), entity.id);
+	}
 }

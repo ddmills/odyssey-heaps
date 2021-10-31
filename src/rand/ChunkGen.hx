@@ -1,5 +1,6 @@
 package rand;
 
+import common.struct.Coordinate;
 import common.struct.Grid;
 import core.Game;
 import domain.Entity;
@@ -50,8 +51,8 @@ class ChunkGen
 				if (treev > .5)
 				{
 					var tree = createTree();
-					tree.x = wx;
-					tree.y = wy;
+					tree.pos = new Coordinate(wx, wy, WORLD);
+
 					Game.instance.world.add(tree);
 				}
 			}

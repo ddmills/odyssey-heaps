@@ -21,6 +21,11 @@ class ChunkManager
 		}
 	}
 
+	public inline function getChunkIdx(cx:Float, cy:Float)
+	{
+		return chunks.idx(cx.floor(), cy.floor());
+	}
+
 	public inline function getChunkById(chunkIdx:Int):Chunk
 	{
 		return chunks.getAt(chunkIdx);

@@ -16,8 +16,8 @@ typedef Point =
 
 class Coordinate
 {
-	public var x:Float;
-	public var y:Float;
+	public var x(default, null):Float;
+	public var y(default, null):Float;
 	public var space(default, null):Space;
 
 	public function new(x:Float, y:Float, space:Space)

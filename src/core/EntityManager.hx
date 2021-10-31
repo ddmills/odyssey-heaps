@@ -1,6 +1,5 @@
 package core;
 
-import common.util.UniqueId;
 import domain.Entity;
 
 class EntityManager

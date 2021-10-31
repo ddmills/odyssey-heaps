@@ -3,6 +3,7 @@ package domain;
 import common.struct.Coordinate;
 import common.util.UniqueId;
 import core.Game;
+import domain.terrain.Chunk;
 
 class Entity
 {
@@ -11,6 +12,7 @@ class Entity
 	public var x(default, set):Float;
 	public var y(default, set):Float;
 	public var pos(get, set):Coordinate;
+	public var chunk(get, null):Chunk;
 	public var name:String;
 	public var id(default, null):String;
 	public var ob(default, null):h2d.Object;
@@ -37,7 +39,7 @@ class Entity
 		return Game.instance.world;
 	}
 
-	function set_x(v:Float):Float
+	function set_x(v:Float)
 	{
 		var c = world.worldToPx(v, y);
 		ob.x = c.x - offsetX;
@@ -46,7 +48,7 @@ class Entity
 		return v;
 	}
 
-	function set_y(v:Float):Float
+	function set_y(v:Float)
 	{
 		var c = world.worldToPx(x, v);
 		ob.x = c.x - offsetX;
@@ -55,9 +57,11 @@ class Entity
 		return v;
 	}
 
-	function get_pos():Coordinate
+	function get_chunk():Chunk
 	{
-		return new Coordinate(x, y, WORLD);
+		var idx = pos.toChunkIdx();
+
+		return world.chunks.getChunkById(idx);
 	}
 
 	function set_pos(v:Coordinate):Coordinate
@@ -66,5 +70,10 @@ class Entity
 		set_x(w.x);
 		set_y(w.y);
 		return w;
+	}
+
+	inline function get_pos():Coordinate
+	{
+		return new Coordinate(x, y, WORLD);
 	}
 }

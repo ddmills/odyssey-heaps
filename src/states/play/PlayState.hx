@@ -39,6 +39,7 @@ class PlayState extends GameState
 
 		sloop.x = 61;
 		sloop.y = 43;
+		// sloop.pos = new Coordinate(61, 43, WORLD);
 
 		building.x = 30;
 		building.y = 15;
@@ -156,7 +157,7 @@ class PlayState extends GameState
 		txt += '\n' + frame.fps.round().toString();
 		txt += '\npixel ${p.toString()}';
 		txt += '\nworld ${w.toString()}';
-		txt += '\nchunk ${c.toString()}';
+		txt += '\nchunk ${c.toString()} (${c.toChunkIdx()})';
 		txt += '\nlocal ${w.toChunkLocal(c.x.floor(), c.y.floor()).toString()}';
 
 		fpsText.text = txt;
@@ -170,7 +171,7 @@ class PlayState extends GameState
 			return e.name;
 		});
 
-		infoText.text = names.length <= 0 ? 'None (${sloop.id})' : names.join('\n');
+		infoText.text = names.length <= 0 ? 'None (${sloop.id} - ${sloop.chunk.chunkId})' : names.join('\n');
 		infoText.alignBottom(scene, game.TILE_H);
 		infoText.alignRight(scene, game.TILE_H);
 	}

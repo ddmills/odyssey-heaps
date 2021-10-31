@@ -166,4 +166,11 @@ class CoordinateExtensions
 			y: a.y * k,
 		};
 	}
+
+	static public inline function toChunkIdx(a:Coordinate):Int
+	{
+		var c = a.toChunk();
+
+		return Game.instance.world.chunks.getChunkIdx(c.x, c.y);
+	}
 }

@@ -9,8 +9,8 @@ import rand.ChunkGen;
 class World
 {
 	public var chunkSize(default, null):Int = 32;
-	public var chunkCountX(default, null):Int = 128;
-	public var chunkCountY(default, null):Int = 128;
+	public var chunkCountX(default, null):Int = 64;
+	public var chunkCountY(default, null):Int = 64;
 	public var mapWidth(get, null):Int;
 	public var mapHeight(get, null):Int;
 	public var game(get, null):Game;
