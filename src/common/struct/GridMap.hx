@@ -43,7 +43,14 @@ import common.struct.Coordinate.Point;
 
 	public function get(x:Int, y:Int):Array<T>
 	{
-		return grid.get(x, y).copy();
+		var res = grid.get(x, y);
+
+		if (res == null)
+		{
+			return new Array<T>();
+		}
+
+		return res.copy();
 	}
 
 	public function set(x:Int, y:Int, value:T)

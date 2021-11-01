@@ -7,10 +7,13 @@ import domain.terrain.Chunk;
 
 class Entity
 {
+	var _x:Float;
+	var _y:Float;
+
 	public var world(get, null):World;
 	public var game(get, null):Game;
-	public var x(default, set):Float;
-	public var y(default, set):Float;
+	public var x(get, set):Float;
+	public var y(get, set):Float;
 	public var pos(get, set):Coordinate;
 	public var chunk(get, null):Chunk;
 	public var name:String;
@@ -24,6 +27,8 @@ class Entity
 		this.ob = ob;
 		offsetX = Game.instance.TILE_W_HALF;
 		offsetY = 0;
+		_x = 0;
+		_y = 0;
 		name = 'Unknown';
 		id = UniqueId.Create();
 		Game.instance.entities.register(this);
@@ -39,22 +44,16 @@ class Entity
 		return Game.instance.world;
 	}
 
-	function set_x(v:Float)
+	function set_x(newX:Float)
 	{
-		var c = world.worldToPx(v, y);
-		ob.x = c.x - offsetX;
-		ob.y = c.y - offsetY;
-		x = v;
-		return v;
+		set_pos(new Coordinate(newX, _y, WORLD));
+		return _x;
 	}
 
-	function set_y(v:Float)
+	function set_y(newY:Float)
 	{
-		var c = world.worldToPx(x, v);
-		ob.x = c.x - offsetX;
-		ob.y = c.y - offsetY;
-		y = v;
-		return v;
+		set_pos(new Coordinate(_x, newY, WORLD));
+		return _y;
 	}
 
 	function get_chunk():Chunk
@@ -64,16 +63,49 @@ class Entity
 		return world.chunks.getChunkById(idx);
 	}
 
-	function set_pos(v:Coordinate):Coordinate
+	function set_pos(value:Coordinate):Coordinate
 	{
-		var w = v.toWorld();
-		set_x(w.x);
-		set_y(w.y);
+		var prevChunkIdx = pos.toChunkIdx();
+
+		var p = value.toPx();
+		var w = value.toWorld();
+
+		ob.x = p.x - offsetX;
+		ob.y = p.y - offsetY;
+
+		_x = w.x;
+		_y = w.y;
+
+		var nextChunkIdx = pos.toChunkIdx();
+
+		if (prevChunkIdx != nextChunkIdx)
+		{
+			var prevChunk = world.chunks.getChunkById(prevChunkIdx);
+			if (prevChunk != null)
+			{
+				prevChunk.removeEntity(this);
+			}
+		}
+		var nextChunk = world.chunks.getChunkById(nextChunkIdx);
+		if (nextChunk != null)
+		{
+			nextChunk.setEntityPosition(this);
+		}
 		return w;
 	}
 
 	inline function get_pos():Coordinate
 	{
-		return new Coordinate(x, y, WORLD);
+		return new Coordinate(_x, _y, WORLD);
+	}
+
+	function get_x():Float
+	{
+		return _x;
+	}
+
+	function get_y():Float
+	{
+		return _y;
 	}
 }

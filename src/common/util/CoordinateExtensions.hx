@@ -135,6 +135,22 @@ class CoordinateExtensions
 		return (a.x - projected.x).abs() + (a.y - projected.y).abs();
 	}
 
+	static public inline function distanceSq(a:Coordinate, b:Coordinate, space:Space = WORLD):Float
+	{
+		var pa = a.toSpace(space);
+		var pb = b.toSpace(space);
+
+		var dx = pa.x - pb.x;
+		var dy = pa.y - pb.y;
+
+		return dx * dx + dy * dy;
+	}
+
+	static public inline function distance(a:Coordinate, b:Coordinate, space:Space = WORLD):Float
+	{
+		return Math.sqrt(distanceSq(a, b, space));
+	}
+
 	static public inline function angle(a:Coordinate):Float
 	{
 		var atan2 = Math.atan2(a.y, a.x);
@@ -147,6 +163,14 @@ class CoordinateExtensions
 	public static inline function lengthSq(a:Coordinate):Float
 	{
 		return a.x * a.x + a.y * a.y;
+	}
+
+	/**
+		Returns length (distance to `0,0`) of this Coordinate.
+	**/
+	public inline function length(a:Coordinate):Float
+	{
+		return Math.sqrt(lengthSq(a));
 	}
 
 	static public inline function normalized(a:Coordinate):{x:Float, y:Float}

@@ -19,7 +19,6 @@ class PlayState extends GameState
 	var mouse:Coordinate;
 	var click:Coordinate;
 	var cursor:Entity;
-	var building:Entity;
 	var sloop:Ship;
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
@@ -31,21 +30,15 @@ class PlayState extends GameState
 		mouse = new Coordinate(0, 0, SCREEN);
 		root = new Layers();
 
-		var tiles = hxd.Res.img.iso32.toTile().split(4);
+		var tiles = hxd.Res.img.iso32_png.toTile().split(4);
 		cursor = new Entity(new h2d.Bitmap(tiles[3]));
-		building = new Entity(new h2d.Bitmap(tiles[0]));
 
 		sloop = new Ship();
 
 		sloop.x = 61;
 		sloop.y = 43;
-		// sloop.pos = new Coordinate(61, 43, WORLD);
-
-		building.x = 30;
-		building.y = 15;
 
 		world.add(cursor);
-		world.add(building);
 		world.add(sloop);
 
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
@@ -120,21 +113,44 @@ class PlayState extends GameState
 			var goal = path[curPathIdx];
 			var target = new Coordinate(goal.x, goal.y, WORLD);
 
-			var angle = target.sub(sloop.pos).angle();
-			var cardinal = Cardinal.fromDegrees(angle.toDegrees());
-			sloop.cardinal = cardinal;
-
-			var direction = target.sub(sloop.pos).normalized();
-
-			sloop.x += direction.x * frame.tmod * .1;
-			sloop.y += direction.y * frame.tmod * .1;
-
-			var distance = sloop.pos.manhattan(target);
-
-			if (distance < .1)
+			if (curPathIdx == path.length - 1)
 			{
-				sloop.pos = target;
-				curPathIdx++;
+				sloop.pos = sloop.pos.lerp(target, frame.tmod * .1);
+				var angle = target.sub(sloop.pos).angle();
+				var cardinal = Cardinal.fromDegrees(angle.toDegrees());
+				sloop.cardinal = cardinal;
+				var distanceSq = sloop.pos.distanceSq(target, WORLD);
+
+				if (distanceSq < .01)
+				{
+					sloop.pos = target;
+					curPathIdx++;
+				}
+			}
+			else
+			{
+				var direction = target.sub(sloop.pos).normalized();
+
+				var deltaPerFrame = .08;
+				var dx = direction.x * frame.tmod * deltaPerFrame;
+				var dy = direction.y * frame.tmod * deltaPerFrame;
+				var speedSq = new Coordinate(dx, dy, WORLD).lengthSq();
+				var distanceSq = sloop.pos.distanceSq(target, WORLD);
+
+				if (distanceSq < speedSq)
+				{
+					sloop.pos = target;
+					curPathIdx++;
+				}
+				else
+				{
+					sloop.x += dx;
+					sloop.y += dy;
+
+					var angle = target.sub(sloop.pos).angle();
+					var cardinal = Cardinal.fromDegrees(angle.toDegrees());
+					sloop.cardinal = cardinal;
+				}
 			}
 		}
 
@@ -168,9 +184,8 @@ class PlayState extends GameState
 		var entities = world.getEntitiesAt(mouse);
 		var names = Lambda.map(entities, function(e)
 		{
-			return e.name;
+			return '${e.name} (${e.id})';
 		});
-
 		infoText.text = names.length <= 0 ? 'None (${sloop.id} - ${sloop.chunk.chunkId})' : names.join('\n');
 		infoText.alignBottom(scene, game.TILE_H);
 		infoText.alignRight(scene, game.TILE_H);

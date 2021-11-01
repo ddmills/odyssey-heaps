@@ -42,7 +42,7 @@ class Chunk
 		var explorationSheet = hxd.Res.img.mask32.toTile();
 		explorationTiles = explorationSheet.split(4);
 
-		var terrainSheet = hxd.Res.img.iso32.toTile();
+		var terrainSheet = hxd.Res.img.iso32_png.toTile();
 		terrainTiles = terrainSheet.split(4);
 	}
 
@@ -216,5 +216,10 @@ class Chunk
 	{
 		var local = entity.pos.toChunkLocal(cx, cy).toWorld();
 		entities.set(local.x.floor(), local.y.floor(), entity.id);
+	}
+
+	public function getEntityIdsAt(x:Float, y:Float):Array<String>
+	{
+		return entities.get(x.floor(), y.floor());
 	}
 }

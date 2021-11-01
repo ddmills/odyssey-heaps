@@ -8,7 +8,7 @@ import rand.ChunkGen;
 
 class World
 {
-	public var chunkSize(default, null):Int = 32;
+	public var chunkSize(default, null):Int = 16;
 	public var chunkCountX(default, null):Int = 64;
 	public var chunkCountY(default, null):Int = 64;
 	public var mapWidth(get, null):Int;
@@ -138,7 +138,15 @@ class World
 
 	public function getEntitiesAt(pos:Coordinate):Array<Entity>
 	{
-		return new Array<Entity>();
+		var idx = pos.toChunkIdx();
+		var chunk = chunks.getChunkById(idx);
+		var local = pos.toWorld().toChunkLocal(chunk.cx, chunk.cy);
+		var ids = chunk.getEntityIdsAt(local.x, local.y);
+
+		return Lambda.map(ids, function(id:String)
+		{
+			return game.entities.get(id);
+		});
 	}
 
 	public function setVisible(values:Array<Coordinate>)
