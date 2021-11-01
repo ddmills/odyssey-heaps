@@ -140,6 +140,10 @@ class World
 	{
 		var idx = pos.toChunkIdx();
 		var chunk = chunks.getChunkById(idx);
+		if (chunk == null)
+		{
+			return new Array<Entity>();
+		}
 		var local = pos.toWorld().toChunkLocal(chunk.cx, chunk.cy);
 		var ids = chunk.getEntityIdsAt(local.x, local.y);
 

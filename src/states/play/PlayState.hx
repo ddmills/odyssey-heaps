@@ -43,6 +43,7 @@ class PlayState extends GameState
 
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
 		infoText = new h2d.Text(bizcat);
+		infoText.textAlign = Right;
 		fpsText = new h2d.Text(bizcat);
 		infoText.setScale(1);
 		fpsText.setScale(1);
@@ -82,7 +83,7 @@ class PlayState extends GameState
 		scene.add(root, 0);
 
 		game.camera.zoom = 2;
-		game.camera.x = -1;
+		game.camera.x = 0;
 		game.camera.y = 0;
 	}
 
@@ -186,7 +187,7 @@ class PlayState extends GameState
 		{
 			return '${e.name} (${e.id})';
 		});
-		infoText.text = names.length <= 0 ? 'None (${sloop.id} - ${sloop.chunk.chunkId})' : names.join('\n');
+		infoText.text = names.join('\n');
 		infoText.alignBottom(scene, game.TILE_H);
 		infoText.alignRight(scene, game.TILE_H);
 	}

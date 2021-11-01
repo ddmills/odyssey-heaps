@@ -35,7 +35,14 @@ class TextExtensions
 
 	static public function alignRight(text:h2d.Text, within:h2d.Scene, padding:Float = 0)
 	{
-		text.x = within.width - realWidth(text) - padding;
+		if (text.textAlign == Right)
+		{
+			text.x = within.width - padding;
+		}
+		else
+		{
+			text.x = within.width - realWidth(text) - padding;
+		}
 	}
 
 	static public function alignTop(text:h2d.Text, within:h2d.Scene, padding:Float = 0)
