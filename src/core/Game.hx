@@ -20,7 +20,6 @@ class Game
 	public var frame(default, null):Frame;
 	public var app(default, null):hxd.App;
 	public var world(default, null):World;
-	public var entities(default, null):EntityManager;
 	public var camera(default, null):Camera;
 	public var registry(default, null):Registry;
 
@@ -29,7 +28,6 @@ class Game
 		instance = this;
 		this.app = app;
 		frame = new Frame();
-		entities = new EntityManager();
 		world = new World();
 		states = new GameStateManager();
 		camera = new Camera();

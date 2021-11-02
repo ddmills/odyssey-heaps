@@ -4,11 +4,15 @@ class Registry
 {
 	var cbit:Int;
 	var bits:Map<String, Int>;
+	var queries:Array<Query>;
+	var entityMap:Map<String, Entity>;
 
 	public function new()
 	{
 		cbit = 0;
 		bits = new Map();
+		entityMap = new Map();
+		queries = new Array();
 	}
 
 	public function register<T:Component>(type:Class<Component>):Bool
@@ -24,6 +28,11 @@ class Registry
 		return true;
 	}
 
+	public function getEntity(entityId:String)
+	{
+		return entityMap.get(entityId);
+	}
+
 	public function getBit<T:Component>(type:Class<Component>):Int
 	{
 		var className = Type.getClassName(type);
@@ -31,5 +40,28 @@ class Registry
 		return bits.get(className);
 	}
 
-	public function candidacy(entity:Entity) {}
+	public function candidacy(entity:Entity)
+	{
+		for (query in queries)
+		{
+			query.candidate(entity);
+		}
+	}
+
+	@:allow(domain.Query)
+	function registerQuery(query:Query)
+	{
+		queries.push(query);
+	}
+
+	@:allow(domain.Entity)
+	function registerEntity(entity:Entity)
+	{
+		entityMap.set(entity.id, entity);
+	}
+
+	public function iterator()
+	{
+		return entityMap.iterator();
+	}
 }

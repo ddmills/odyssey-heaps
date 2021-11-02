@@ -6,6 +6,7 @@ import common.util.Bresenham;
 import core.Frame;
 import core.GameState;
 import domain.Entity;
+import domain.Query;
 import domain.components.Moniker;
 import domain.entities.Ship;
 import h2d.Interactive;
@@ -36,12 +37,13 @@ class PlayState extends GameState
 		game.registry.register(Moniker);
 
 		sloop = new Ship();
-
 		sloop.add(new Moniker('Sloop'));
 
-		trace(sloop.has(Moniker));
-		sloop.remove(sloop.get(Moniker));
-		trace(sloop.has(Moniker));
+		var query = new Query({
+			all: [Moniker],
+			none: [],
+			any: []
+		});
 
 		sloop.x = 278;
 		sloop.y = 488;

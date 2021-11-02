@@ -13,12 +13,19 @@ typedef QueryFilter =
 
 class Query
 {
+	public var registry(get, null):Registry;
+
 	var fany:Int;
 	var fall:Int;
 	var fnone:Int;
 
 	var filter:QueryFilter;
 	var cache:Map<String, Entity>;
+
+	inline function get_registry():Registry
+	{
+		return Game.instance.registry;
+	}
 
 	public function new(filter:QueryFilter)
 	{
@@ -27,18 +34,21 @@ class Query
 
 		fany = Lambda.fold(filter.any, function(c, s)
 		{
-			return BitUtil.addBit(s, Game.instance.registry.getBit(c));
+			return BitUtil.addBit(s, registry.getBit(c));
 		}, 0);
 
 		fall = Lambda.fold(filter.all, function(c, s)
 		{
-			return BitUtil.addBit(s, Game.instance.registry.getBit(c));
+			return BitUtil.addBit(s, registry.getBit(c));
 		}, 0);
 
 		fnone = Lambda.fold(filter.none, function(c, s)
 		{
-			return BitUtil.addBit(s, Game.instance.registry.getBit(c));
+			return BitUtil.addBit(s, registry.getBit(c));
 		}, 0);
+
+		registry.registerQuery(this);
+		refresh();
 	}
 
 	public function matches(entity:Entity)
@@ -56,7 +66,7 @@ class Query
 	{
 		var isTracking = cache.exists(entity.id);
 
-		if (!matches(entity))
+		if (matches(entity))
 		{
 			if (!isTracking)
 			{
@@ -68,9 +78,23 @@ class Query
 
 		if (isTracking)
 		{
-			this.cache.remove(entity.id);
+			cache.remove(entity.id);
 		}
 
 		return false;
+	}
+
+	public function refresh()
+	{
+		cache.clear();
+		for (entity in registry)
+		{
+			candidate(entity);
+		}
+	}
+
+	public function iterator()
+	{
+		return cache.iterator();
 	}
 }

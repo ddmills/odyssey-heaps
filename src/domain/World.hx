@@ -149,7 +149,7 @@ class World
 
 		return Lambda.map(ids, function(id:String)
 		{
-			return game.entities.get(id);
+			return game.registry.getEntity(id);
 		});
 	}
 

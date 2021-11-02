@@ -37,7 +37,7 @@ class Entity
 		id = UniqueId.Create();
 		cbits = 0;
 		components = new Map();
-		Game.instance.entities.register(this);
+		registry.registerEntity(this);
 	}
 
 	inline function get_game():Game
