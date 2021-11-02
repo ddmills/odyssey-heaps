@@ -6,6 +6,5 @@ class Tree extends Entity
 	{
 		super(ob);
 		offsetY = game.TILE_H;
-		name = 'Tree';
 	}
 }

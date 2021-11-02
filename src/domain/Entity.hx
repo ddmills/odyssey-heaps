@@ -16,11 +16,12 @@ class Entity
 	public var y(get, set):Float;
 	public var pos(get, set):Coordinate;
 	public var chunk(get, null):Chunk;
-	public var name:String;
 	public var id(default, null):String;
 	public var ob(default, null):h2d.Object;
 	public var offsetX(default, null):Float;
 	public var offsetY(default, null):Float;
+
+	private var components:Map<String, Component>;
 
 	public function new(ob:h2d.Object)
 	{
@@ -29,8 +30,8 @@ class Entity
 		offsetY = 0;
 		_x = 0;
 		_y = 0;
-		name = 'Unknown';
 		id = UniqueId.Create();
+		components = new Map();
 		Game.instance.entities.register(this);
 	}
 
@@ -107,5 +108,34 @@ class Entity
 	function get_y():Float
 	{
 		return _y;
+	}
+
+	public function add(component:Component)
+	{
+		components.set(component.type, component);
+	}
+
+	public function has<T:Component>(type:Class<T>):Bool
+	{
+		var className = Type.getClassName(type);
+		return components.exists(className);
+	}
+
+	public function remove(component:Component)
+	{
+		return components.remove(component.type);
+	}
+
+	public function get<T:Component>(type:Class<T>):T
+	{
+		var className = Type.getClassName(type);
+		var component = components.get(className);
+
+		if (component == null)
+		{
+			return null;
+		}
+
+		return cast component;
 	}
 }

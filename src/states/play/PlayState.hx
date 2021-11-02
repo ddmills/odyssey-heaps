@@ -6,6 +6,7 @@ import common.util.Bresenham;
 import core.Frame;
 import core.GameState;
 import domain.Entity;
+import domain.components.Moniker;
 import domain.entities.Ship;
 import h2d.Interactive;
 import h2d.Layers;
@@ -34,6 +35,12 @@ class PlayState extends GameState
 		cursor = new Entity(new h2d.Bitmap(tiles[3]));
 
 		sloop = new Ship();
+
+		sloop.add(new Moniker('Sloop'));
+
+		var c = sloop.get(Moniker);
+
+		trace(c.displayName);
 
 		sloop.x = 278;
 		sloop.y = 488;
@@ -183,9 +190,14 @@ class PlayState extends GameState
 		fpsText.alignLeft(scene, game.TILE_H);
 
 		var entities = world.getEntitiesAt(mouse);
-		var names = Lambda.map(entities, function(e)
+		var withNames = Lambda.filter(entities, function(e)
 		{
-			return '${e.name} (${e.id})';
+			return e.has(Moniker);
+		});
+		var names = Lambda.map(withNames, function(e)
+		{
+			var moniker = e.get(Moniker);
+			return '${moniker.displayName} (${e.id})';
 		});
 		infoText.text = names.join('\n');
 		infoText.alignBottom(scene, game.TILE_H);

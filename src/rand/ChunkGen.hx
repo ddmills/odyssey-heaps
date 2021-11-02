@@ -4,6 +4,7 @@ import common.struct.Coordinate;
 import common.struct.Grid;
 import core.Game;
 import domain.Entity;
+import domain.components.Moniker;
 import domain.entities.Tree;
 import domain.terrain.Chunk;
 import domain.terrain.TerrainType;
@@ -63,6 +64,7 @@ class ChunkGen
 	function createTree()
 	{
 		var tree = new Tree(new Bitmap(treeTile));
+		tree.add(new Moniker('Tree'));
 		return tree;
 	}
 }

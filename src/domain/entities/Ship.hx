@@ -15,7 +15,6 @@ class Ship extends Entity
 		super(anim);
 		set_cardinal(WEST);
 		offsetY = sloopTiles[0].height / 2;
-		name = 'Sloop';
 	}
 
 	function set_cardinal(value:Cardinal):Cardinal
