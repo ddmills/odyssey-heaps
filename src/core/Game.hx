@@ -1,5 +1,6 @@
 package core;
 
+import domain.Registry;
 import domain.World;
 
 class Game
@@ -21,6 +22,7 @@ class Game
 	public var world(default, null):World;
 	public var entities(default, null):EntityManager;
 	public var camera(default, null):Camera;
+	public var registry(default, null):Registry;
 
 	private function new(app:hxd.App, initialState:GameState)
 	{
@@ -31,6 +33,7 @@ class Game
 		world = new World();
 		states = new GameStateManager();
 		camera = new Camera();
+		registry = new Registry();
 		setState(initialState);
 	}
 

@@ -1,12 +1,15 @@
 package domain;
 
 import common.struct.Coordinate;
+import common.util.BitUtil;
 import common.util.UniqueId;
 import core.Game;
 import domain.terrain.Chunk;
 
 class Entity
 {
+	var cbits:Int;
+
 	var _x:Float;
 	var _y:Float;
 
@@ -16,6 +19,7 @@ class Entity
 	public var y(get, set):Float;
 	public var pos(get, set):Coordinate;
 	public var chunk(get, null):Chunk;
+	public var registry(get, null):Registry;
 	public var id(default, null):String;
 	public var ob(default, null):h2d.Object;
 	public var offsetX(default, null):Float;
@@ -31,6 +35,7 @@ class Entity
 		_x = 0;
 		_y = 0;
 		id = UniqueId.Create();
+		cbits = 0;
 		components = new Map();
 		Game.instance.entities.register(this);
 	}
@@ -112,17 +117,18 @@ class Entity
 
 	public function add(component:Component)
 	{
+		cbits = BitUtil.addBit(cbits, component.bit);
 		components.set(component.type, component);
 	}
 
-	public function has<T:Component>(type:Class<T>):Bool
+	public function has<T:Component>(type:Class<Component>):Bool
 	{
-		var className = Type.getClassName(type);
-		return components.exists(className);
+		return BitUtil.hasBit(cbits, registry.getBit(type));
 	}
 
 	public function remove(component:Component)
 	{
+		cbits = BitUtil.subtractBit(cbits, component.bit);
 		return components.remove(component.type);
 	}
 
@@ -137,5 +143,10 @@ class Entity
 		}
 
 		return cast component;
+	}
+
+	inline function get_registry():Registry
+	{
+		return Game.instance.registry;
 	}
 }

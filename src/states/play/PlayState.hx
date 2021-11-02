@@ -33,14 +33,15 @@ class PlayState extends GameState
 
 		var tiles = hxd.Res.img.iso32_png.toTile().split(4);
 		cursor = new Entity(new h2d.Bitmap(tiles[3]));
+		game.registry.register(Moniker);
 
 		sloop = new Ship();
 
 		sloop.add(new Moniker('Sloop'));
 
-		var c = sloop.get(Moniker);
-
-		trace(c.displayName);
+		trace(sloop.has(Moniker));
+		sloop.remove(sloop.get(Moniker));
+		trace(sloop.has(Moniker));
 
 		sloop.x = 278;
 		sloop.y = 488;
