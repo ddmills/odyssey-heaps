@@ -17,7 +17,7 @@ class BitUtil
 		return (num >> bit) % 2 != 0;
 	}
 
-	public static function bitIntersection(n1:Int, n2:Int):Int
+	public static function intersection(n1:Int, n2:Int):Int
 	{
 		return n1 & n2;
 	}

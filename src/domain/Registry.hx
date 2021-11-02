@@ -30,4 +30,6 @@ class Registry
 
 		return bits.get(className);
 	}
+
+	public function candidacy(entity:Entity) {}
 }

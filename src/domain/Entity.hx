@@ -8,7 +8,7 @@ import domain.terrain.Chunk;
 
 class Entity
 {
-	var cbits:Int;
+	public var cbits(default, null):Int;
 
 	var _x:Float;
 	var _y:Float;
@@ -119,6 +119,7 @@ class Entity
 	{
 		cbits = BitUtil.addBit(cbits, component.bit);
 		components.set(component.type, component);
+		registry.candidacy(this);
 	}
 
 	public function has<T:Component>(type:Class<Component>):Bool
@@ -129,7 +130,8 @@ class Entity
 	public function remove(component:Component)
 	{
 		cbits = BitUtil.subtractBit(cbits, component.bit);
-		return components.remove(component.type);
+		components.remove(component.type);
+		registry.candidacy(this);
 	}
 
 	public function get<T:Component>(type:Class<T>):T
