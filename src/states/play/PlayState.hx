@@ -41,8 +41,6 @@ class PlayState extends GameState
 
 		var query = new Query({
 			all: [Moniker],
-			none: [],
-			any: []
 		});
 
 		sloop.x = 278;

@@ -6,18 +6,18 @@ import domain.Component;
 
 typedef QueryFilter =
 {
-	var all:Array<Class<Component>>;
-	var any:Array<Class<Component>>;
-	var none:Array<Class<Component>>;
+	var ?all:Array<Class<Component>>;
+	var ?any:Array<Class<Component>>;
+	var ?none:Array<Class<Component>>;
 }
 
 class Query
 {
 	public var registry(get, null):Registry;
 
-	var fany:Int;
-	var fall:Int;
-	var fnone:Int;
+	var any:Int;
+	var all:Int;
+	var none:Int;
 
 	var filter:QueryFilter;
 	var cache:Map<String, Entity>;
@@ -32,20 +32,41 @@ class Query
 		this.filter = filter;
 		cache = new Map();
 
-		fany = Lambda.fold(filter.any, function(c, s)
+		if (filter.any != null)
 		{
-			return BitUtil.addBit(s, registry.getBit(c));
-		}, 0);
+			any = Lambda.fold(filter.any, function(c, s)
+			{
+				return BitUtil.addBit(s, registry.getBit(c));
+			}, 0);
+		}
+		else
+		{
+			any = 0;
+		}
 
-		fall = Lambda.fold(filter.all, function(c, s)
+		if (filter.all != null)
 		{
-			return BitUtil.addBit(s, registry.getBit(c));
-		}, 0);
+			all = Lambda.fold(filter.all, function(c, s)
+			{
+				return BitUtil.addBit(s, registry.getBit(c));
+			}, 0);
+		}
+		else
+		{
+			all = 0;
+		}
 
-		fnone = Lambda.fold(filter.none, function(c, s)
+		if (filter.none != null)
 		{
-			return BitUtil.addBit(s, registry.getBit(c));
-		}, 0);
+			none = Lambda.fold(filter.none, function(c, s)
+			{
+				return BitUtil.addBit(s, registry.getBit(c));
+			}, 0);
+		}
+		else
+		{
+			none = 0;
+		}
 
 		registry.registerQuery(this);
 		refresh();
@@ -55,9 +76,9 @@ class Query
 	{
 		var bits = entity.cbits;
 
-		var any = fany == 0 || BitUtil.intersection(bits, fany) > 0;
-		var all = BitUtil.intersection(bits, fall) == fall;
-		var none = BitUtil.intersection(bits, fnone) == 0;
+		var any = any == 0 || BitUtil.intersection(bits, any) > 0;
+		var all = BitUtil.intersection(bits, all) == all;
+		var none = BitUtil.intersection(bits, none) == 0;
 
 		return any && all && none;
 	}
