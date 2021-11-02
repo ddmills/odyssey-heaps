@@ -31,20 +31,19 @@ class ChunkGen
 
 		for (i in chunk.terrain)
 		{
-			var zoom = 24;
+			var zoom = 38;
 			var wx = chunk.cx * chunk.size + i.x;
 			var wy = chunk.cy * chunk.size + i.y;
 			var x = wx / zoom;
 			var y = wy / zoom;
 			var n = perlin.perlin(seed, x, y, 8);
 			var v = (n + 1) / 2;
-			var tile = v < .55 ? WATER : SAND;
-			if (v > .58)
+			var tile = v < .65 ? WATER : SAND;
+			if (v > .67)
 			{
 				tile = GRASS;
 			}
-
-			if (v > .58)
+			if (v > .67)
 			{
 				var treen = perlin.perlin(seed, wx / 4, wy / 4, 9);
 				var treev = (treen + 1) / 2;

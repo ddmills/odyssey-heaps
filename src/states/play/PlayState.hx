@@ -35,8 +35,8 @@ class PlayState extends GameState
 
 		sloop = new Ship();
 
-		sloop.x = 61;
-		sloop.y = 43;
+		sloop.x = 278;
+		sloop.y = 488;
 
 		world.add(cursor);
 		world.add(sloop);
@@ -158,7 +158,7 @@ class PlayState extends GameState
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
 		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 6, true);
-		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
+		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 12, true);
 
 		for (point in exploreCircle)
 		{
