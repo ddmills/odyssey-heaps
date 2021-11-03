@@ -35,8 +35,7 @@ class PlayState extends GameState
 		mouse = new Coordinate(0, 0, SCREEN);
 		root = new Layers();
 
-		var tiles = hxd.Res.img.iso32_png.toTile().split(4);
-		cursor = new Entity(new h2d.Bitmap(tiles[3]));
+		cursor = new Entity(new Bitmap(TileResources.CURSOR));
 		game.registry.register(Moniker);
 
 		sloop = new Ship();

@@ -3,6 +3,7 @@ package domain.terrain;
 import common.struct.Grid;
 import common.struct.GridMap;
 import core.Game;
+import data.TileResources;
 import h2d.Bitmap;
 import h2d.Tile;
 import h2d.TileGroup;
@@ -25,9 +26,6 @@ class Chunk
 	public var wx(get, null):Int;
 	public var wy(get, null):Int;
 
-	var explorationTiles:Array<h2d.Tile>;
-	var terrainTiles:Array<Array<h2d.Tile>>;
-
 	public function new(chunkId:Int, chunkX:Int, chunkY:Int, size:Int)
 	{
 		this.chunkId = chunkId;
@@ -38,12 +36,6 @@ class Chunk
 		terrain = new Grid(size, size);
 		exploration = new Grid(size, size);
 		entities = new GridMap(size, size);
-
-		var explorationSheet = hxd.Res.img.mask32.toTile();
-		explorationTiles = explorationSheet.split(4);
-
-		var terrainSheet = hxd.Res.img.iso32_png.toTile();
-		terrainTiles = terrainSheet.divide(Game.instance.TILE_W, Game.instance.TILE_H);
 	}
 
 	public function setExplore(x:Int, y:Int, isExplored:Bool, isVisible:Bool)
@@ -76,7 +68,7 @@ class Chunk
 				var pix = Game.instance.world.worldToPx(x, y);
 				var offsetX = pix.x - Game.instance.TILE_W_HALF;
 				var offsetY = pix.y;
-				var ob = new Bitmap(explorationTiles[0]);
+				var ob = new Bitmap(TileResources.FOG);
 				ob.alpha = .5;
 				ob.x = offsetX;
 				ob.y = offsetY;
@@ -89,7 +81,7 @@ class Chunk
 			var pix = Game.instance.world.worldToPx(x, y);
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
 			var offsetY = pix.y;
-			var ob = new Bitmap(explorationTiles[0]);
+			var ob = new Bitmap(TileResources.FOG);
 
 			ob.x = offsetX;
 			ob.y = offsetY;
@@ -156,27 +148,21 @@ class Chunk
 
 	function getTerrainTile(type:TerrainType):Tile
 	{
-		var water = terrainTiles[0][1];
-		var grass = terrainTiles[0][2];
-		var sand = terrainTiles[0][0];
-		var shallows = terrainTiles[1][1];
-
 		switch (type)
 		{
 			case WATER:
-				return water;
+				return TileResources.GROUND_WATER;
 			case SHALLOWS:
-				return shallows;
+				return TileResources.GROUND_SHALLOWS;
 			case SAND:
-				return sand;
+				return TileResources.GROUND_SAND;
 			case GRASS:
-				return grass;
+				return TileResources.GROUND_GRASS;
 		}
 	}
 
 	public function buildFogObject():h2d.Object
 	{
-		var unexploredTile = explorationTiles[0];
 		var tiles = new h2d.Object();
 
 		for (t in exploration)
@@ -186,7 +172,7 @@ class Chunk
 				var pix = Game.instance.world.worldToPx(t.x, t.y);
 				var offsetX = pix.x - Game.instance.TILE_W_HALF;
 				var offsetY = pix.y;
-				var ob = new Bitmap(unexploredTile);
+				var ob = new Bitmap(TileResources.FOG);
 				ob.x = offsetX;
 				ob.y = offsetY;
 
