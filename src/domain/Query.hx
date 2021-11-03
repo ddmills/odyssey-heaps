@@ -14,6 +14,7 @@ typedef QueryFilter =
 class Query
 {
 	public var registry(get, null):Registry;
+	public var size(default, null):Int;
 
 	var any:Int;
 	var all:Int;
@@ -31,6 +32,7 @@ class Query
 	{
 		this.filter = filter;
 		cache = new Map();
+		size = 0;
 
 		if (filter.any != null)
 		{
@@ -91,6 +93,7 @@ class Query
 		{
 			if (!isTracking)
 			{
+				size++;
 				cache.set(entity.id, entity);
 			}
 
@@ -99,6 +102,7 @@ class Query
 
 		if (isTracking)
 		{
+			size--;
 			cache.remove(entity.id);
 		}
 
@@ -107,6 +111,7 @@ class Query
 
 	public function refresh()
 	{
+		size = 0;
 		cache.clear();
 		for (entity in registry)
 		{

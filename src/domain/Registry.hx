@@ -7,9 +7,12 @@ class Registry
 	var queries:Array<Query>;
 	var entityMap:Map<String, Entity>;
 
+	public var size(default, null):Int;
+
 	public function new()
 	{
 		cbit = 0;
+		size = 0;
 		bits = new Map();
 		entityMap = new Map();
 		queries = new Array();
@@ -57,6 +60,7 @@ class Registry
 	@:allow(domain.Entity)
 	function registerEntity(entity:Entity)
 	{
+		size++;
 		entityMap.set(entity.id, entity);
 	}
 

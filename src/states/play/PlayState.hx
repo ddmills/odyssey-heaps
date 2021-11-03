@@ -24,6 +24,7 @@ class PlayState extends GameState
 	var sloop:Ship;
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
+	var query:Query;
 
 	public function new() {}
 
@@ -39,7 +40,7 @@ class PlayState extends GameState
 		sloop = new Ship();
 		sloop.add(new Moniker('Sloop'));
 
-		var query = new Query({
+		query = new Query({
 			all: [Moniker],
 		});
 
@@ -184,6 +185,7 @@ class PlayState extends GameState
 		txt += '\nworld ${w.toString()}';
 		txt += '\nchunk ${c.toString()} (${c.toChunkIdx()})';
 		txt += '\nlocal ${w.toChunkLocal(c.x.floor(), c.y.floor()).toString()}';
+		txt += '\nentities ${game.registry.size}';
 
 		fpsText.text = txt;
 
