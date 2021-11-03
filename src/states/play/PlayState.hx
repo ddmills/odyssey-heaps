@@ -5,10 +5,12 @@ import common.struct.Coordinate;
 import common.util.Bresenham;
 import core.Frame;
 import core.GameState;
+import data.TileResources;
 import domain.Entity;
 import domain.Query;
 import domain.components.Moniker;
 import domain.entities.Ship;
+import h2d.Bitmap;
 import h2d.Interactive;
 import h2d.Layers;
 
@@ -39,16 +41,22 @@ class PlayState extends GameState
 
 		sloop = new Ship();
 		sloop.add(new Moniker('Sloop'));
+		sloop.x = 278;
+		sloop.y = 488;
+
+		var settlement = new Entity(new Bitmap(TileResources.SETTLEMENT));
+		settlement.offsetY = game.TILE_H;
+		settlement.add(new Moniker('Settlement'));
+		settlement.x = 272;
+		settlement.y = 485;
 
 		query = new Query({
 			all: [Moniker],
 		});
 
-		sloop.x = 278;
-		sloop.y = 488;
-
 		world.add(cursor);
 		world.add(sloop);
+		world.add(settlement);
 
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
 		infoText = new h2d.Text(bizcat);

@@ -26,7 +26,7 @@ class Chunk
 	public var wy(get, null):Int;
 
 	var explorationTiles:Array<h2d.Tile>;
-	var terrainTiles:Array<h2d.Tile>;
+	var terrainTiles:Array<Array<h2d.Tile>>;
 
 	public function new(chunkId:Int, chunkX:Int, chunkY:Int, size:Int)
 	{
@@ -43,7 +43,7 @@ class Chunk
 		explorationTiles = explorationSheet.split(4);
 
 		var terrainSheet = hxd.Res.img.iso32_png.toTile();
-		terrainTiles = terrainSheet.split(4);
+		terrainTiles = terrainSheet.divide(Game.instance.TILE_W, Game.instance.TILE_H);
 	}
 
 	public function setExplore(x:Int, y:Int, isExplored:Bool, isVisible:Bool)
@@ -156,13 +156,17 @@ class Chunk
 
 	function getTerrainTile(type:TerrainType):Tile
 	{
-		var water = terrainTiles[1];
-		var grass = terrainTiles[2];
-		var sand = terrainTiles[0];
+		var water = terrainTiles[0][1];
+		var grass = terrainTiles[0][2];
+		var sand = terrainTiles[0][0];
+		var shallows = terrainTiles[1][1];
+
 		switch (type)
 		{
 			case WATER:
 				return water;
+			case SHALLOWS:
+				return shallows;
 			case SAND:
 				return sand;
 			case GRASS:

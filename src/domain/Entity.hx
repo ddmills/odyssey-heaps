@@ -22,8 +22,8 @@ class Entity
 	public var registry(get, null):Registry;
 	public var id(default, null):String;
 	public var ob(default, null):h2d.Object;
-	public var offsetX(default, null):Float;
-	public var offsetY(default, null):Float;
+	public var offsetX(default, default):Float;
+	public var offsetY(default, default):Float;
 
 	private var components:Map<String, Component>;
 
