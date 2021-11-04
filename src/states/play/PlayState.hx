@@ -3,6 +3,7 @@ package states.play;
 import common.struct.Cardinal;
 import common.struct.Coordinate;
 import common.util.Bresenham;
+import common.util.FpsGraph;
 import core.Frame;
 import core.GameState;
 import data.TileResources;
@@ -29,6 +30,7 @@ class PlayState extends GameState
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
 	var query:Query;
+	var fpsGraph:FpsGraph;
 
 	public function new() {}
 
@@ -96,6 +98,10 @@ class PlayState extends GameState
 		root.addChild(fpsText);
 		root.addChild(infoText);
 		root.addChild(interactive);
+
+		fpsGraph = new FpsGraph();
+
+		fpsGraph.attach(root);
 
 		hxd.Window.getInstance().addResizeEvent(onResize);
 
@@ -215,6 +221,7 @@ class PlayState extends GameState
 		infoText.text = names.join('\n');
 		infoText.alignBottom(scene, game.TILE_H);
 		infoText.alignRight(scene, game.TILE_H);
+		fpsGraph.update(frame);
 	}
 
 	override function destroy()
