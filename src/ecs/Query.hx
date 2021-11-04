@@ -1,8 +1,7 @@
-package domain;
+package ecs;
 
 import common.util.BitUtil;
 import core.Game;
-import domain.Component;
 
 typedef QueryFilter =
 {

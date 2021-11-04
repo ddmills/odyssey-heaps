@@ -4,6 +4,7 @@ import common.struct.Grid;
 import common.struct.GridMap;
 import core.Game;
 import data.TileResources;
+import ecs.Entity;
 import h2d.Bitmap;
 import h2d.Tile;
 import h2d.TileGroup;

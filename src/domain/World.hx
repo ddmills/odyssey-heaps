@@ -2,8 +2,9 @@ package domain;
 
 import common.struct.Coordinate;
 import core.Game;
-import domain.components.Sprite;
 import domain.terrain.ChunkManager;
+import ecs.Entity;
+import ecs.components.Sprite;
 import h2d.Layers;
 import rand.ChunkGen;
 

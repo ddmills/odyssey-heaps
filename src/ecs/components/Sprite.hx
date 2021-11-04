@@ -1,4 +1,4 @@
-package domain.components;
+package ecs.components;
 
 class Sprite extends Component
 {

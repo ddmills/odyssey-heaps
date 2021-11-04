@@ -1,11 +1,12 @@
-package domain;
+package ecs;
 
 import common.struct.Coordinate;
 import common.util.BitUtil;
 import common.util.UniqueId;
 import core.Game;
-import domain.components.Sprite;
+import domain.World;
 import domain.terrain.Chunk;
+import ecs.components.Sprite;
 
 class Entity
 {

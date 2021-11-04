@@ -1,4 +1,4 @@
-package domain;
+package ecs;
 
 class Registry
 {
@@ -51,13 +51,13 @@ class Registry
 		}
 	}
 
-	@:allow(domain.Query)
+	@:allow(ecs.Query)
 	function registerQuery(query:Query)
 	{
 		queries.push(query);
 	}
 
-	@:allow(domain.Entity)
+	@:allow(ecs.Entity)
 	function registerEntity(entity:Entity)
 	{
 		size++;

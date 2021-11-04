@@ -1,7 +1,7 @@
 package core;
 
-import domain.Registry;
 import domain.World;
+import ecs.Registry;
 
 class Game
 {

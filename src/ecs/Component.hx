@@ -1,4 +1,4 @@
-package domain;
+package ecs;
 
 import core.Game;
 
@@ -33,13 +33,13 @@ abstract class Component
 		return _bit;
 	}
 
-	@:allow(domain.Entity)
+	@:allow(ecs.Entity)
 	function _attach(entity:Entity)
 	{
 		this.entity = entity;
 	}
 
-	@:allow(domain.Entity)
+	@:allow(ecs.Entity)
 	function _detach()
 	{
 		entity = null;

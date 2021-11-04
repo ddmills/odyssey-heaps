@@ -4,11 +4,11 @@ import common.struct.Coordinate;
 import common.struct.Grid;
 import core.Game;
 import data.TileResources;
-import domain.Entity;
-import domain.components.Moniker;
-import domain.components.Sprite;
 import domain.terrain.Chunk;
 import domain.terrain.TerrainType;
+import ecs.Entity;
+import ecs.components.Moniker;
+import ecs.components.Sprite;
 import h2d.Bitmap;
 import hxd.Perlin;
 
