@@ -18,17 +18,17 @@ class Registry
 		queries = new Array();
 	}
 
-	public function register<T:Component>(type:Class<Component>):Bool
+	public function register<T:Component>(type:Class<Component>):Int
 	{
 		var className = Type.getClassName(type);
 		if (bits.exists(className))
 		{
-			return false;
+			return bits.get(className);
 		}
 
 		bits.set(className, ++cbit);
 
-		return true;
+		return cbit;
 	}
 
 	public function getEntity(entityId:String)

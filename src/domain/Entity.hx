@@ -4,6 +4,7 @@ import common.struct.Coordinate;
 import common.util.BitUtil;
 import common.util.UniqueId;
 import core.Game;
+import domain.components.Sprite;
 import domain.terrain.Chunk;
 
 class Entity
@@ -12,6 +13,7 @@ class Entity
 
 	var _x:Float;
 	var _y:Float;
+	var sprite:Sprite;
 
 	public var world(get, null):World;
 	public var game(get, null):Game;
@@ -21,17 +23,11 @@ class Entity
 	public var chunk(get, null):Chunk;
 	public var registry(get, null):Registry;
 	public var id(default, null):String;
-	public var ob(default, null):h2d.Object;
-	public var offsetX(default, default):Float;
-	public var offsetY(default, default):Float;
 
 	private var components:Map<String, Component>;
 
-	public function new(ob:h2d.Object)
+	public function new()
 	{
-		this.ob = ob;
-		offsetX = Game.instance.TILE_W_HALF;
-		offsetY = 0;
 		_x = 0;
 		_y = 0;
 		id = UniqueId.Create();
@@ -76,8 +72,10 @@ class Entity
 		var p = value.toPx();
 		var w = value.toWorld();
 
-		ob.x = p.x - offsetX;
-		ob.y = p.y - offsetY;
+		if (sprite != null)
+		{
+			sprite.updatePos(p.x, p.y);
+		}
 
 		_x = w.x;
 		_y = w.y;
@@ -119,7 +117,14 @@ class Entity
 	{
 		cbits = BitUtil.addBit(cbits, component.bit);
 		components.set(component.type, component);
+		component._attach(this);
 		registry.candidacy(this);
+		if (Std.isOfType(component, Sprite))
+		{
+			sprite = cast component;
+			var p = pos.toPx();
+			sprite.updatePos(p.x, p.y);
+		}
 	}
 
 	public function has<T:Component>(type:Class<Component>):Bool
@@ -131,7 +136,12 @@ class Entity
 	{
 		cbits = BitUtil.subtractBit(cbits, component.bit);
 		components.remove(component.type);
+		component._detach();
 		registry.candidacy(this);
+		if (Std.isOfType(component, Sprite))
+		{
+			sprite = null;
+		}
 	}
 
 	public function get<T:Component>(type:Class<T>):T

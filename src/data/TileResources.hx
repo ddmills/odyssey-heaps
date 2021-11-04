@@ -10,6 +10,7 @@ class TileResources
 	public static var CURSOR:h2d.Tile;
 	public static var TREE:h2d.Tile;
 	public static var FOG:h2d.Tile;
+	public static var SLOOP:h2d.Tile;
 
 	public function new() {}
 
@@ -38,5 +39,7 @@ class TileResources
 		var fogs = fogSheet.divide(4, 1);
 
 		FOG = fogs[0][0];
+
+		SLOOP = hxd.Res.img.sloop_png.toTile();
 	}
 }

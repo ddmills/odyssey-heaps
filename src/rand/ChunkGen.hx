@@ -3,9 +3,10 @@ package rand;
 import common.struct.Coordinate;
 import common.struct.Grid;
 import core.Game;
+import data.TileResources;
 import domain.Entity;
 import domain.components.Moniker;
-import domain.entities.Tree;
+import domain.components.Sprite;
 import domain.terrain.Chunk;
 import domain.terrain.TerrainType;
 import h2d.Bitmap;
@@ -71,7 +72,8 @@ class ChunkGen
 
 	function createTree()
 	{
-		var tree = new Tree(new Bitmap(treeTile));
+		var tree = new Entity();
+		tree.add(new Sprite(new Bitmap(TileResources.TREE), Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		tree.add(new Moniker('Tree'));
 		return tree;
 	}

@@ -8,8 +8,10 @@ import core.GameState;
 import data.TileResources;
 import domain.Entity;
 import domain.Query;
+import domain.components.Direction;
 import domain.components.Moniker;
-import domain.entities.Ship;
+import domain.components.Sprite;
+import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Interactive;
 import h2d.Layers;
@@ -23,7 +25,7 @@ class PlayState extends GameState
 	var mouse:Coordinate;
 	var click:Coordinate;
 	var cursor:Entity;
-	var sloop:Ship;
+	var sloop:Entity;
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
 	var query:Query;
@@ -35,27 +37,28 @@ class PlayState extends GameState
 		mouse = new Coordinate(0, 0, SCREEN);
 		root = new Layers();
 
-		cursor = new Entity(new Bitmap(TileResources.CURSOR));
-		game.registry.register(Moniker);
+		cursor = new Entity();
+		cursor.add(new Sprite(new Bitmap(TileResources.CURSOR), game.TILE_W_HALF));
+		world.add(cursor);
 
-		sloop = new Ship();
+		sloop = new Entity();
 		sloop.add(new Moniker('Sloop'));
+		sloop.add(new Sprite(new Anim(TileResources.SLOOP.split(8), 0), game.TILE_W_HALF, game.TILE_H));
+		sloop.add(new Direction());
 		sloop.x = 278;
 		sloop.y = 488;
+		world.add(sloop);
 
-		var settlement = new Entity(new Bitmap(TileResources.SETTLEMENT));
-		settlement.offsetY = game.TILE_H;
+		var settlement = new Entity();
+		settlement.add(new Sprite(new Bitmap(TileResources.SETTLEMENT), game.TILE_W_HALF, game.TILE_H));
 		settlement.add(new Moniker('Settlement'));
 		settlement.x = 272;
 		settlement.y = 485;
+		world.add(settlement);
 
 		query = new Query({
 			all: [Moniker],
 		});
-
-		world.add(cursor);
-		world.add(sloop);
-		world.add(settlement);
 
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
 		infoText = new h2d.Text(bizcat);
@@ -135,7 +138,7 @@ class PlayState extends GameState
 				sloop.pos = sloop.pos.lerp(target, frame.tmod * .1);
 				var angle = target.sub(sloop.pos).angle();
 				var cardinal = Cardinal.fromDegrees(angle.toDegrees());
-				sloop.cardinal = cardinal;
+				sloop.get(Direction).cardinal = cardinal;
 				var distanceSq = sloop.pos.distanceSq(target, WORLD);
 
 				if (distanceSq < .01)
@@ -166,15 +169,15 @@ class PlayState extends GameState
 
 					var angle = target.sub(sloop.pos).angle();
 					var cardinal = Cardinal.fromDegrees(angle.toDegrees());
-					sloop.cardinal = cardinal;
+					sloop.get(Direction).cardinal = cardinal;
 				}
 			}
 		}
 
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
-		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 6, true);
-		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 12, true);
+		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
+		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 10, true);
 
 		for (point in exploreCircle)
 		{

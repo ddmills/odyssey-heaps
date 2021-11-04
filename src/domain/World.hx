@@ -2,6 +2,7 @@ package domain;
 
 import common.struct.Coordinate;
 import core.Game;
+import domain.components.Sprite;
 import domain.terrain.ChunkManager;
 import h2d.Layers;
 import rand.ChunkGen;
@@ -133,7 +134,12 @@ class World
 
 	public function add(entity:Entity)
 	{
-		entities.addChild(entity.ob);
+		var sprite = entity.get(Sprite);
+
+		if (sprite != null)
+		{
+			entities.addChild(sprite.ob);
+		}
 	}
 
 	public function getEntitiesAt(pos:Coordinate):Array<Entity>
