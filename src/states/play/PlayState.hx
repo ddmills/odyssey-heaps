@@ -107,6 +107,7 @@ class PlayState extends GameState
 
 		stats = new Stats();
 		stats.attach(root);
+		stats.show('explore');
 
 		frames = new Buffer(128);
 		hxd.Window.getInstance().addResizeEvent(onResize);
@@ -191,6 +192,7 @@ class PlayState extends GameState
 
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
+		Performance.start('explore');
 		if (moved)
 		{
 			var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 10, true);
@@ -206,6 +208,7 @@ class PlayState extends GameState
 			world.entities.ysort(0);
 			moved = false;
 		}
+		Performance.stop('explore');
 
 		var txt = '';
 		txt += '\n' + frame.fps.round().toString();

@@ -42,8 +42,8 @@ class World
 		fog = new Layers();
 
 		container.addChildAt(bg, 0);
-		container.addChildAt(entities, 1);
 		container.addChildAt(fog, 2);
+		container.addChildAt(entities, 1);
 	}
 
 	function get_mapWidth():Int

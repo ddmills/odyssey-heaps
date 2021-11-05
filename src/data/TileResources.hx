@@ -33,7 +33,7 @@ class TileResources
 		var treeSheet = hxd.Res.img.trees.toTile();
 		var trees = treeSheet.divide(2, 1);
 
-		TREE = trees[0][0];
+		TREE = trees[0][1];
 
 		var fogSheet = hxd.Res.img.mask32.toTile();
 		var fogs = fogSheet.divide(4, 1);

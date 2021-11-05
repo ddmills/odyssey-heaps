@@ -16,11 +16,11 @@ typedef Point =
 
 class Coordinate
 {
-	public var x(default, null):Float;
-	public var y(default, null):Float;
-	public var space(default, null):Space;
+	public final x:Float;
+	public final y:Float;
+	public final space:Space;
 
-	public function new(x:Float, y:Float, space:Space)
+	public inline function new(x:Float, y:Float, space:Space)
 	{
 		this.x = x;
 		this.y = y;
