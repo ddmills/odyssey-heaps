@@ -36,6 +36,7 @@ class PlayState extends GameState
 	var frames:Buffer<Float>;
 	var graphs:Array<MonitorGraph>;
 	var stats:Stats;
+	var moved = true;
 
 	public function new() {}
 
@@ -107,9 +108,6 @@ class PlayState extends GameState
 		stats = new Stats();
 		stats.attach(root);
 
-		stats.show('explore');
-		stats.show('visible');
-
 		frames = new Buffer(128);
 		hxd.Window.getInstance().addResizeEvent(onResize);
 
@@ -144,6 +142,7 @@ class PlayState extends GameState
 
 		if (path != null && curPathIdx < path.length)
 		{
+			var startPos = sloop.pos;
 			var goal = path[curPathIdx];
 			var target = new Coordinate(goal.x, goal.y, WORLD);
 
@@ -186,25 +185,27 @@ class PlayState extends GameState
 					sloop.get(Direction).cardinal = cardinal;
 				}
 			}
+			var curPos = sloop.pos;
+			moved = curPos.x.floor() != startPos.x.floor() || curPos.y.floor() != startPos.y.floor();
 		}
 
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
-		Performance.start('explore');
-		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 10, true);
-		for (point in exploreCircle)
+		if (moved)
 		{
-			world.explore(new Coordinate(point.x, point.y, WORLD));
+			var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 10, true);
+			for (point in exploreCircle)
+			{
+				world.explore(new Coordinate(point.x, point.y, WORLD));
+			}
+
+			var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
+			var vis = Coordinate.FromPoints(visCircle, WORLD);
+			world.setVisible(vis);
+
+			world.entities.ysort(0);
+			moved = false;
 		}
-		Performance.stop('explore');
-
-		Performance.start('visible');
-		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
-		var vis = Coordinate.FromPoints(visCircle, WORLD);
-		world.setVisible(vis);
-		Performance.stop('visible');
-
-		world.entities.ysort(0);
 
 		var txt = '';
 		txt += '\n' + frame.fps.round().toString();
