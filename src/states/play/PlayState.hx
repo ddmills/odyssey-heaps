@@ -3,7 +3,7 @@ package states.play;
 import common.struct.Cardinal;
 import common.struct.Coordinate;
 import common.util.Bresenham;
-import common.util.FpsGraph;
+import common.util.Buffer;
 import core.Frame;
 import core.GameState;
 import data.TileResources;
@@ -16,6 +16,9 @@ import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Interactive;
 import h2d.Layers;
+import tools.MonitorGraph;
+import tools.Performance;
+import tools.Stats;
 
 class PlayState extends GameState
 {
@@ -30,7 +33,9 @@ class PlayState extends GameState
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
 	var query:Query;
-	var fpsGraph:FpsGraph;
+	var frames:Buffer<Float>;
+	var graphs:Array<MonitorGraph>;
+	var stats:Stats;
 
 	public function new() {}
 
@@ -99,10 +104,13 @@ class PlayState extends GameState
 		root.addChild(infoText);
 		root.addChild(interactive);
 
-		fpsGraph = new FpsGraph();
+		stats = new Stats();
+		stats.attach(root);
 
-		fpsGraph.attach(root);
+		stats.show('explore');
+		stats.show('visible');
 
+		frames = new Buffer(128);
 		hxd.Window.getInstance().addResizeEvent(onResize);
 
 		scene.add(root, 0);
@@ -182,16 +190,19 @@ class PlayState extends GameState
 
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
-		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
+		Performance.start('explore');
 		var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 10, true);
-
 		for (point in exploreCircle)
 		{
 			world.explore(new Coordinate(point.x, point.y, WORLD));
 		}
+		Performance.stop('explore');
 
+		Performance.start('visible');
+		var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
 		var vis = Coordinate.FromPoints(visCircle, WORLD);
 		world.setVisible(vis);
+		Performance.stop('visible');
 
 		world.entities.ysort(0);
 
@@ -221,7 +232,8 @@ class PlayState extends GameState
 		infoText.text = names.join('\n');
 		infoText.alignBottom(scene, game.TILE_H);
 		infoText.alignRight(scene, game.TILE_H);
-		fpsGraph.update(frame);
+		frames.push(frame.fps / 60);
+		stats.update();
 	}
 
 	override function destroy()

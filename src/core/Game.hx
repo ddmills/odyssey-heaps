@@ -2,6 +2,7 @@ package core;
 
 import domain.World;
 import ecs.Registry;
+import tools.Performance;
 
 class Game
 {
@@ -57,6 +58,7 @@ class Game
 
 	public inline function update()
 	{
+		Performance.update(frame.dt * 1000);
 		frame.update();
 		state._update(frame);
 	}

@@ -197,4 +197,9 @@ class CoordinateExtensions
 
 		return Game.instance.world.chunks.getChunkIdx(c.x, c.y);
 	}
+
+	static public inline function equals(a:Coordinate, b:Coordinate):Bool
+	{
+		return a.space == b.space && a.x == b.x && a.y == b.y;
+	}
 }
