@@ -20,8 +20,7 @@ class MonitorGraph
 		this.unit = unit;
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
 		text = new h2d.Text(bizcat);
-		text.setScale(1);
-		text.x = 2;
+		text.x = 4;
 		text.y = 2;
 		text.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
 		chart = new h2d.Graphics();

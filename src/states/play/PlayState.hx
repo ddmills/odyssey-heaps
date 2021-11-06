@@ -7,24 +7,22 @@ import common.util.Buffer;
 import core.Frame;
 import core.GameState;
 import data.TileResources;
+import domain.systems.CameraSystem;
 import domain.systems.MovementSystem;
 import domain.systems.System;
 import domain.systems.VisionSystem;
 import ecs.Entity;
-import ecs.Query;
 import ecs.components.Direction;
 import ecs.components.Explored;
 import ecs.components.Moniker;
 import ecs.components.Move;
 import ecs.components.MoveComplete;
 import ecs.components.Sprite;
-import ecs.components.Visible;
 import ecs.components.Vision;
 import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Interactive;
 import h2d.Layers;
-import shaders.ShroudShader;
 import tools.MonitorGraph;
 import tools.Performance;
 import tools.Stats;
@@ -46,6 +44,7 @@ class PlayState extends GameState
 	var stats:Stats;
 	var movement:System;
 	var vision:System;
+	var cam:CameraSystem;
 
 	public function new() {}
 
@@ -53,6 +52,7 @@ class PlayState extends GameState
 	{
 		movement = new MovementSystem();
 		vision = new VisionSystem();
+		cam = new CameraSystem();
 
 		mouse = new Coordinate(0, 0, SCREEN);
 		root = new Layers();
@@ -128,6 +128,7 @@ class PlayState extends GameState
 		game.camera.zoom = 2;
 		game.camera.x = 0;
 		game.camera.y = 0;
+		cam.focus = sloop;
 	}
 
 	function onResize()
@@ -144,6 +145,9 @@ class PlayState extends GameState
 		Performance.start('vision');
 		vision.update(frame);
 		Performance.stop('vision');
+		Performance.start('camera');
+		cam.update(frame);
+		Performance.stop('camera');
 
 		var p = mouse.toPx().floor();
 		var w = p.toWorld().floor();
@@ -179,10 +183,6 @@ class PlayState extends GameState
 			}
 		}
 
-		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
-
-		world.entities.ysort(0);
-
 		var txt = '';
 		txt += '\n' + frame.fps.round().toString();
 		txt += '\npixel ${p.toString()}';
@@ -199,7 +199,7 @@ class PlayState extends GameState
 		var entities = world.getEntitiesAt(mouse);
 		var withNames = Lambda.filter(entities, function(e)
 		{
-			return e.has(Moniker);
+			return e.has(Moniker) && e.has(Explored);
 		});
 		var names = Lambda.map(withNames, function(e)
 		{
