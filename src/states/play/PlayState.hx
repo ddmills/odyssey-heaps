@@ -10,12 +10,16 @@ import data.TileResources;
 import ecs.Entity;
 import ecs.Query;
 import ecs.components.Direction;
+import ecs.components.Explored;
 import ecs.components.Moniker;
+import ecs.components.Rendered;
 import ecs.components.Sprite;
+import ecs.components.Visible;
 import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Interactive;
 import h2d.Layers;
+import shaders.ShroudShader;
 import tools.MonitorGraph;
 import tools.Performance;
 import tools.Stats;
@@ -32,7 +36,7 @@ class PlayState extends GameState
 	var sloop:Entity;
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
-	var query:Query;
+	var exploredQuery:Query;
 	var frames:Buffer<Float>;
 	var graphs:Array<MonitorGraph>;
 	var stats:Stats;
@@ -42,6 +46,28 @@ class PlayState extends GameState
 
 	override function create()
 	{
+		exploredQuery = new Query({
+			all: [Explored, Sprite],
+			none: [Visible]
+		});
+
+		var shroud = new ShroudShader(.15, .7);
+		exploredQuery.onEntityAdded(function(entity)
+		{
+			var sprite = entity.get(Sprite);
+			sprite.visible = true;
+			sprite.ob.addShader(shroud);
+		});
+		exploredQuery.onEntityRemoved(function(entity)
+		{
+			var sprite = entity.get(Sprite);
+			sprite.ob.removeShader(shroud);
+			if (!entity.has(Explored))
+			{
+				sprite.visible = false;
+			}
+		});
+
 		mouse = new Coordinate(0, 0, SCREEN);
 		root = new Layers();
 
@@ -63,10 +89,6 @@ class PlayState extends GameState
 		settlement.x = 272;
 		settlement.y = 485;
 		world.add(settlement);
-
-		query = new Query({
-			all: [Moniker],
-		});
 
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
 		infoText = new h2d.Text(bizcat);
@@ -107,7 +129,6 @@ class PlayState extends GameState
 
 		stats = new Stats();
 		stats.attach(root);
-		stats.show('explore');
 
 		frames = new Buffer(128);
 		hxd.Window.getInstance().addResizeEvent(onResize);
@@ -217,6 +238,7 @@ class PlayState extends GameState
 		txt += '\nchunk ${c.toString()} (${c.toChunkIdx()})';
 		txt += '\nlocal ${w.toChunkLocal(c.x.floor(), c.y.floor()).toString()}';
 		txt += '\nentities ${game.registry.size}';
+		txt += '\nexplored ${exploredQuery.size}';
 
 		fpsText.text = txt;
 
@@ -236,6 +258,7 @@ class PlayState extends GameState
 		infoText.text = names.join('\n');
 		infoText.alignBottom(scene, game.TILE_H);
 		infoText.alignRight(scene, game.TILE_H);
+
 		frames.push(frame.fps / 60);
 		stats.update();
 	}

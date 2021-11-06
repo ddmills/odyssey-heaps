@@ -4,7 +4,9 @@ import common.struct.Coordinate;
 import core.Game;
 import domain.terrain.ChunkManager;
 import ecs.Entity;
+import ecs.components.Explored;
 import ecs.components.Sprite;
+import ecs.components.Visible;
 import h2d.Layers;
 import rand.ChunkGen;
 
@@ -42,8 +44,8 @@ class World
 		fog = new Layers();
 
 		container.addChildAt(bg, 0);
-		container.addChildAt(fog, 2);
-		container.addChildAt(entities, 1);
+		container.addChildAt(fog, 1);
+		container.addChildAt(entities, 2);
 	}
 
 	function get_mapWidth():Int
@@ -171,6 +173,13 @@ class World
 				var local = value.toChunkLocal(chunk.cx, chunk.cy);
 
 				chunk.setExplore(local.x.floor(), local.y.floor(), true, false);
+				for (entity in getEntitiesAt(value))
+				{
+					if (entity.has(Visible))
+					{
+						entity.remove(entity.get(Visible));
+					}
+				}
 			}
 		}
 		for (value in values)
@@ -182,6 +191,13 @@ class World
 				var local = value.toChunkLocal(chunk.cx, chunk.cy);
 
 				chunk.setExplore(local.x.floor(), local.y.floor(), true, true);
+				for (entity in getEntitiesAt(value))
+				{
+					if (!entity.has(Visible))
+					{
+						entity.add(new Visible());
+					}
+				}
 			}
 		}
 		visible = values;
@@ -195,6 +211,14 @@ class World
 		{
 			var local = coord.toChunkLocal(c.x, c.y);
 			chunk.setExplore(local.x.floor(), local.y.floor(), true, false);
+
+			for (entity in getEntitiesAt(coord))
+			{
+				if (!entity.has(Explored))
+				{
+					entity.add(new Explored());
+				}
+			}
 		}
 	}
 }

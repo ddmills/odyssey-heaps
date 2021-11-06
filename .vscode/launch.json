@@ -5,7 +5,7 @@
 			"name": "HashLink",
 			"request": "launch",
 			"type": "hl",
-			"profileSamples" : 10000,
+			// "profileSamples" : 10000,
 			"cwd": "${workspaceFolder}",
 			"preLaunchTask": {
 				"type": "haxe",

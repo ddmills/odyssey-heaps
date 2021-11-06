@@ -11,6 +11,7 @@ import ecs.components.Moniker;
 import ecs.components.Sprite;
 import h2d.Bitmap;
 import hxd.Perlin;
+import shaders.ShroudShader;
 
 class ChunkGen
 {
@@ -73,7 +74,8 @@ class ChunkGen
 	function createTree()
 	{
 		var tree = new Entity();
-		tree.add(new Sprite(new Bitmap(TileResources.TREE), Game.instance.TILE_W_HALF, Game.instance.TILE_H));
+		var bm = new Bitmap(TileResources.TREE);
+		tree.add(new Sprite(bm, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		tree.add(new Moniker('Tree'));
 		return tree;
 	}

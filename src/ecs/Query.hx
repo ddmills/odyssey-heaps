@@ -21,6 +21,8 @@ class Query
 
 	var filter:QueryFilter;
 	var cache:Map<String, Entity>;
+	var onAddListeners:Array<(Entity) -> Void>;
+	var onRemoveListeners:Array<(Entity) -> Void>;
 
 	inline function get_registry():Registry
 	{
@@ -30,6 +32,8 @@ class Query
 	public function new(filter:QueryFilter)
 	{
 		this.filter = filter;
+		onAddListeners = new Array();
+		onRemoveListeners = new Array();
 		cache = new Map();
 		size = 0;
 
@@ -77,11 +81,11 @@ class Query
 	{
 		var bits = entity.cbits;
 
-		var any = any == 0 || BitUtil.intersection(bits, any) > 0;
-		var all = BitUtil.intersection(bits, all) == all;
-		var none = BitUtil.intersection(bits, none) == 0;
+		var matchesAny = any == 0 || BitUtil.intersection(bits, any) > 0;
+		var matchesAll = BitUtil.intersection(bits, all) == all;
+		var matchesNone = BitUtil.intersection(bits, none) == 0;
 
-		return any && all && none;
+		return matchesAny && matchesAll && matchesNone;
 	}
 
 	public function candidate(entity:Entity)
@@ -94,6 +98,10 @@ class Query
 			{
 				size++;
 				cache.set(entity.id, entity);
+				for (listener in onAddListeners)
+				{
+					listener(entity);
+				}
 			}
 
 			return true;
@@ -103,6 +111,10 @@ class Query
 		{
 			size--;
 			cache.remove(entity.id);
+			for (listener in onRemoveListeners)
+			{
+				listener(entity);
+			}
 		}
 
 		return false;
@@ -121,5 +133,15 @@ class Query
 	public function iterator()
 	{
 		return cache.iterator();
+	}
+
+	public function onEntityAdded(fn:(Entity) -> Void)
+	{
+		onAddListeners.push(fn);
+	}
+
+	public function onEntityRemoved(fn:(Entity) -> Void)
+	{
+		onRemoveListeners.push(fn);
 	}
 }

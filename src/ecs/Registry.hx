@@ -40,7 +40,14 @@ class Registry
 	{
 		var className = Type.getClassName(type);
 
-		return bits.get(className);
+		var bit = bits.get(className);
+
+		if (bit == null)
+		{
+			return register(type);
+		}
+
+		return bit;
 	}
 
 	public function candidacy(entity:Entity)
