@@ -174,7 +174,7 @@ class PlayState extends GameState
 					var target = new Coordinate(goal.x, goal.y, WORLD);
 					var tween = curPathIdx == path.length - 1 ? LERP : LINEAR;
 
-					sloop.add(new Move(target, .08, tween));
+					sloop.add(new Move(target, .1, tween));
 				}
 			}
 		}

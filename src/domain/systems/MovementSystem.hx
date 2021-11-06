@@ -40,6 +40,8 @@ class MovementSystem extends System
 				return new Coordinate(dx, dy, WORLD);
 			case LERP:
 				return pos.lerp(goal, tmod * speed).sub(pos);
+			case INSTANT:
+				return goal.sub(pos);
 		}
 	}
 

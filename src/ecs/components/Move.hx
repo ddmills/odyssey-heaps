@@ -6,6 +6,7 @@ enum Tween
 {
 	LINEAR;
 	LERP;
+	INSTANT;
 }
 
 class Move extends Component
