@@ -1,12 +1,6 @@
 package common.struct;
 
-enum Space
-{
-	PIXEL;
-	WORLD;
-	CHUNK;
-	SCREEN;
-}
+import common.util.Projection;
 
 typedef Point =
 {

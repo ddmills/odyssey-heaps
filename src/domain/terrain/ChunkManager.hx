@@ -1,6 +1,7 @@
 package domain.terrain;
 
 import common.struct.Grid;
+import common.util.Projection;
 import core.Game;
 
 class ChunkManager
@@ -43,7 +44,7 @@ class ChunkManager
 
 	public inline function getChunkByPx(px:Float, py:Float):Chunk
 	{
-		var coords = Game.instance.world.pxToChunk(px, py);
+		var coords = Projection.pxToChunk(px, py);
 
 		return getChunk(Math.floor(coords.x), Math.floor(coords.y));
 	}

@@ -1,6 +1,7 @@
 package common.util;
 
 import common.struct.Coordinate;
+import common.util.Projection;
 import core.Game;
 
 class CoordinateExtensions
@@ -18,33 +19,30 @@ class CoordinateExtensions
 	static public inline function toSpace(c:Coordinate, space:Space):Coordinate
 	{
 		var px = c.toPx();
-		var world = Game.instance.world;
 
 		switch space
 		{
 			case PIXEL:
 				return px;
 			case CHUNK:
-				return world.pxToChunk(px.x, px.y);
+				return Projection.pxToChunk(px.x, px.y);
 			case SCREEN:
-				return world.pxToScreen(px.x, px.y);
+				return Projection.pxToScreen(px.x, px.y);
 			case WORLD:
-				return world.pxToWorld(px.x, px.y);
+				return Projection.pxToWorld(px.x, px.y);
 		}
 	}
 
 	static public inline function toWorld(c:Coordinate):Coordinate
 	{
-		var world = Game.instance.world;
-
 		switch c.space
 		{
 			case PIXEL:
-				return world.pxToWorld(c.x, c.y);
+				return Projection.pxToWorld(c.x, c.y);
 			case CHUNK:
-				return world.chunkToWorld(c.x, c.y);
+				return Projection.chunkToWorld(c.x, c.y);
 			case SCREEN:
-				return world.screenToWorld(c.x, c.y);
+				return Projection.screenToWorld(c.x, c.y);
 			case WORLD:
 				return c;
 		}
@@ -52,33 +50,29 @@ class CoordinateExtensions
 
 	static public inline function toPx(c:Coordinate):Coordinate
 	{
-		var world = Game.instance.world;
-
 		switch c.space
 		{
 			case PIXEL:
 				return c;
 			case CHUNK:
-				return world.chunkToPx(c.x, c.y);
+				return Projection.chunkToPx(c.x, c.y);
 			case SCREEN:
-				return world.screenToPx(c.x, c.y);
+				return Projection.screenToPx(c.x, c.y);
 			case WORLD:
-				return world.worldToPx(c.x, c.y);
+				return Projection.worldToPx(c.x, c.y);
 		}
 	}
 
 	static public inline function toChunk(c:Coordinate):Coordinate
 	{
-		var world = Game.instance.world;
-
 		switch c.space
 		{
 			case PIXEL:
-				return world.pxToChunk(c.x, c.y);
+				return Projection.pxToChunk(c.x, c.y);
 			case SCREEN:
-				return world.screenToChunk(c.x, c.y);
+				return Projection.screenToChunk(c.x, c.y);
 			case WORLD:
-				return world.worldToChunk(c.x, c.y);
+				return Projection.worldToChunk(c.x, c.y);
 			case CHUNK:
 				return c;
 		}
@@ -86,18 +80,16 @@ class CoordinateExtensions
 
 	static public inline function toScreen(c:Coordinate):Coordinate
 	{
-		var world = Game.instance.world;
-
 		switch c.space
 		{
 			case PIXEL:
-				return world.pxToScreen(c.x, c.y);
+				return Projection.pxToScreen(c.x, c.y);
 			case CHUNK:
-				return world.chunkToScreen(c.x, c.y);
+				return Projection.chunkToScreen(c.x, c.y);
 			case SCREEN:
 				return c;
 			case WORLD:
-				return world.worldToScreen(c.x, c.y);
+				return Projection.worldToScreen(c.x, c.y);
 		}
 	}
 

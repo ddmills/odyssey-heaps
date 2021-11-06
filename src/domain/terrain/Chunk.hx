@@ -2,6 +2,7 @@ package domain.terrain;
 
 import common.struct.Grid;
 import common.struct.GridMap;
+import common.util.Projection;
 import core.Game;
 import data.TileResources;
 import ecs.Entity;
@@ -66,7 +67,7 @@ class Chunk
 			}
 			else
 			{
-				var pix = Game.instance.world.worldToPx(x, y);
+				var pix = Projection.worldToPx(x, y);
 				var offsetX = pix.x - Game.instance.TILE_W_HALF;
 				var offsetY = pix.y;
 				var ob = new Bitmap(TileResources.FOG);
@@ -79,7 +80,7 @@ class Chunk
 		}
 		else
 		{
-			var pix = Game.instance.world.worldToPx(x, y);
+			var pix = Projection.worldToPx(x, y);
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
 			var offsetY = pix.y;
 			var ob = new Bitmap(TileResources.FOG);
@@ -107,7 +108,7 @@ class Chunk
 		Game.instance.world.bg.addChildAt(tiles, chunkId);
 		Game.instance.world.fog.addChildAt(fog, chunkId);
 
-		var pix = Game.instance.world.chunkToPx(cx, cy);
+		var pix = Projection.chunkToPx(cx, cy);
 		tiles.x = pix.x;
 		tiles.y = pix.y;
 		fog.x = pix.x;
@@ -136,7 +137,7 @@ class Chunk
 		for (t in terrain)
 		{
 			var tile = getTerrainTile(t.value);
-			var pix = Game.instance.world.worldToPx(t.x, t.y);
+			var pix = Projection.worldToPx(t.x, t.y);
 
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
 			var offsetY = pix.y;
@@ -170,7 +171,7 @@ class Chunk
 		{
 			if (!t.value)
 			{
-				var pix = Game.instance.world.worldToPx(t.x, t.y);
+				var pix = Projection.worldToPx(t.x, t.y);
 				var offsetX = pix.x - Game.instance.TILE_W_HALF;
 				var offsetY = pix.y;
 				var ob = new Bitmap(TileResources.FOG);

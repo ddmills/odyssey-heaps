@@ -16,7 +16,7 @@ class TileResources
 
 	public static function Init()
 	{
-		var landmarkSheet = hxd.Res.img.landmarks.toTile();
+		var landmarkSheet = hxd.Res.img.landmarks_png.toTile();
 		var landmarks = landmarkSheet.divide(4, 4);
 
 		SETTLEMENT = landmarks[0][0];

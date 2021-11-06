@@ -1,6 +1,7 @@
 package core;
 
 import common.struct.Coordinate;
+import common.util.Projection;
 import h2d.Object;
 
 class Camera
@@ -19,14 +20,14 @@ class Camera
 
 	function get_x():Float
 	{
-		var c = Game.instance.world.pxToWorld(-scroller.x, -scroller.y);
+		var c = Projection.pxToWorld(-scroller.x, -scroller.y);
 
 		return c.x;
 	}
 
 	function set_x(value:Float):Float
 	{
-		var p = Game.instance.world.worldToPx(value, y);
+		var p = Projection.worldToPx(value, y);
 
 		scroller.x = -p.x;
 		scroller.y = -p.y;
@@ -36,14 +37,14 @@ class Camera
 
 	function get_y():Float
 	{
-		var c = Game.instance.world.pxToWorld(-scroller.x, -scroller.y);
+		var c = Projection.pxToWorld(-scroller.x, -scroller.y);
 
 		return c.y;
 	}
 
 	function set_y(value:Float):Float
 	{
-		var p = Game.instance.world.worldToPx(x, value);
+		var p = Projection.worldToPx(x, value);
 
 		scroller.x = -p.x;
 		scroller.y = -p.y;
