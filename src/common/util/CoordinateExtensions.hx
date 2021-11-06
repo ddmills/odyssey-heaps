@@ -158,7 +158,7 @@ class CoordinateExtensions
 	}
 
 	/**
-		Returns length (distance to `0,0`) of this Coordinate.
+	 * Returns length (distance to `0,0`) of this Coordinate.
 	**/
 	public inline function length(a:Coordinate):Float
 	{
@@ -193,5 +193,13 @@ class CoordinateExtensions
 	static public inline function equals(a:Coordinate, b:Coordinate):Bool
 	{
 		return a.space == b.space && a.x == b.x && a.y == b.y;
+	}
+
+	/**
+	 * Returns normalized vector to given Coordinate
+	**/
+	static public inline function direction(a:Coordinate, b:Coordinate):{x:Float, y:Float}
+	{
+		return b.sub(a).normalized();
 	}
 }

@@ -7,11 +7,15 @@ import common.util.Buffer;
 import core.Frame;
 import core.GameState;
 import data.TileResources;
+import domain.systems.MovementSystem;
+import domain.systems.System;
 import ecs.Entity;
 import ecs.Query;
 import ecs.components.Direction;
 import ecs.components.Explored;
 import ecs.components.Moniker;
+import ecs.components.Move;
+import ecs.components.MoveComplete;
 import ecs.components.Sprite;
 import ecs.components.Visible;
 import h2d.Anim;
@@ -40,11 +44,13 @@ class PlayState extends GameState
 	var graphs:Array<MonitorGraph>;
 	var stats:Stats;
 	var moved = true;
+	var movement:System;
 
 	public function new() {}
 
 	override function create()
 	{
+		movement = new MovementSystem();
 		exploredQuery = new Query({
 			all: [Explored, Sprite],
 			none: [Visible]
@@ -128,6 +134,8 @@ class PlayState extends GameState
 
 		stats = new Stats();
 		stats.attach(root);
+		stats.show('movement');
+		stats.show('vision');
 
 		frames = new Buffer(128);
 		hxd.Window.getInstance().addResizeEvent(onResize);
@@ -147,6 +155,13 @@ class PlayState extends GameState
 
 	override function update(frame:Frame)
 	{
+		Performance.start('movement');
+		movement.update(frame);
+		Performance.stop('movement');
+		// Performance.start('vision');
+
+		// Performance.stop('vision');
+
 		var p = mouse.toPx().floor();
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
@@ -157,62 +172,36 @@ class PlayState extends GameState
 		{
 			var goal = click.toWorld().floor();
 			path = Bresenham.getLine(sloop.x.floor(), sloop.y.floor(), goal.x.floor(), goal.y.floor());
-			curPathIdx = 1;
+			curPathIdx = 0;
 			click = null;
 		}
 
-		if (path != null && curPathIdx < path.length)
+		if (path != null)
 		{
 			var startPos = sloop.pos;
-			var goal = path[curPathIdx];
-			var target = new Coordinate(goal.x, goal.y, WORLD);
 
-			if (curPathIdx == path.length - 1)
+			if (sloop.has(MoveComplete) || !sloop.has(Move))
 			{
-				sloop.pos = sloop.pos.lerp(target, frame.tmod * .1);
-				var angle = target.sub(sloop.pos).angle();
-				var cardinal = Cardinal.fromDegrees(angle.toDegrees());
-				sloop.get(Direction).cardinal = cardinal;
-				var distanceSq = sloop.pos.distanceSq(target, WORLD);
-
-				if (distanceSq < .01)
+				curPathIdx++;
+				if (curPathIdx == path.length)
 				{
-					sloop.pos = target;
-					curPathIdx++;
-				}
-			}
-			else
-			{
-				var direction = target.sub(sloop.pos).normalized();
-
-				var deltaPerFrame = .08;
-				var dx = direction.x * frame.tmod * deltaPerFrame;
-				var dy = direction.y * frame.tmod * deltaPerFrame;
-				var speedSq = new Coordinate(dx, dy, WORLD).lengthSq();
-				var distanceSq = sloop.pos.distanceSq(target, WORLD);
-
-				if (distanceSq < speedSq)
-				{
-					sloop.pos = target;
-					curPathIdx++;
+					path = null;
 				}
 				else
 				{
-					sloop.x += dx;
-					sloop.y += dy;
+					var goal = path[curPathIdx];
+					var target = new Coordinate(goal.x, goal.y, WORLD);
 
-					var angle = target.sub(sloop.pos).angle();
-					var cardinal = Cardinal.fromDegrees(angle.toDegrees());
-					sloop.get(Direction).cardinal = cardinal;
+					sloop.add(new Move(target, .08, LINEAR));
 				}
 			}
+
 			var curPos = sloop.pos;
 			moved = curPos.x.floor() != startPos.x.floor() || curPos.y.floor() != startPos.y.floor();
 		}
 
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
-		Performance.start('explore');
 		if (moved)
 		{
 			var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
@@ -228,7 +217,6 @@ class PlayState extends GameState
 			world.entities.ysort(0);
 			moved = false;
 		}
-		Performance.stop('explore');
 
 		var txt = '';
 		txt += '\n' + frame.fps.round().toString();
