@@ -9,6 +9,7 @@ import core.GameState;
 import data.TileResources;
 import domain.systems.MovementSystem;
 import domain.systems.System;
+import domain.systems.VisionSystem;
 import ecs.Entity;
 import ecs.Query;
 import ecs.components.Direction;
@@ -18,6 +19,7 @@ import ecs.components.Move;
 import ecs.components.MoveComplete;
 import ecs.components.Sprite;
 import ecs.components.Visible;
+import ecs.components.Vision;
 import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Interactive;
@@ -39,39 +41,18 @@ class PlayState extends GameState
 	var sloop:Entity;
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
-	var exploredQuery:Query;
 	var frames:Buffer<Float>;
 	var graphs:Array<MonitorGraph>;
 	var stats:Stats;
-	var moved = true;
 	var movement:System;
+	var vision:System;
 
 	public function new() {}
 
 	override function create()
 	{
 		movement = new MovementSystem();
-		exploredQuery = new Query({
-			all: [Explored, Sprite],
-			none: [Visible]
-		});
-
-		var shroud = new ShroudShader(.2, .8);
-		exploredQuery.onEntityAdded(function(entity)
-		{
-			var sprite = entity.get(Sprite);
-			sprite.visible = true;
-			sprite.ob.addShader(shroud);
-		});
-		exploredQuery.onEntityRemoved(function(entity)
-		{
-			var sprite = entity.get(Sprite);
-			sprite.ob.removeShader(shroud);
-			if (!entity.has(Explored))
-			{
-				sprite.visible = false;
-			}
-		});
+		vision = new VisionSystem();
 
 		mouse = new Coordinate(0, 0, SCREEN);
 		root = new Layers();
@@ -81,18 +62,20 @@ class PlayState extends GameState
 		world.add(cursor);
 
 		sloop = new Entity();
+		sloop.x = 278;
+		sloop.y = 488;
 		sloop.add(new Moniker('Sloop'));
 		sloop.add(new Sprite(new Anim(TileResources.SLOOP.split(8), 0), game.TILE_W_HALF, game.TILE_H));
 		sloop.add(new Direction());
-		sloop.x = 278;
-		sloop.y = 488;
+		sloop.add(new Vision(8, 1));
 		world.add(sloop);
 
 		var settlement = new Entity();
-		settlement.add(new Sprite(new Bitmap(TileResources.SETTLEMENT), game.TILE_W_HALF, game.TILE_H));
-		settlement.add(new Moniker('Settlement'));
 		settlement.x = 272;
 		settlement.y = 485;
+		settlement.add(new Sprite(new Bitmap(TileResources.SETTLEMENT), game.TILE_W_HALF, game.TILE_H));
+		settlement.add(new Moniker('Settlement'));
+		settlement.add(new Vision(2));
 		world.add(settlement);
 
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
@@ -158,9 +141,9 @@ class PlayState extends GameState
 		Performance.start('movement');
 		movement.update(frame);
 		Performance.stop('movement');
-		// Performance.start('vision');
-
-		// Performance.stop('vision');
+		Performance.start('vision');
+		vision.update(frame);
+		Performance.stop('vision');
 
 		var p = mouse.toPx().floor();
 		var w = p.toWorld().floor();
@@ -178,8 +161,6 @@ class PlayState extends GameState
 
 		if (path != null)
 		{
-			var startPos = sloop.pos;
-
 			if (sloop.has(MoveComplete) || !sloop.has(Move))
 			{
 				curPathIdx++;
@@ -195,28 +176,11 @@ class PlayState extends GameState
 					sloop.add(new Move(target, .08, LINEAR));
 				}
 			}
-
-			var curPos = sloop.pos;
-			moved = curPos.x.floor() != startPos.x.floor() || curPos.y.floor() != startPos.y.floor();
 		}
 
 		game.camera.focus = game.camera.focus.lerp(sloop.pos, .1 * frame.tmod);
 
-		if (moved)
-		{
-			var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
-			for (point in exploreCircle)
-			{
-				world.explore(new Coordinate(point.x, point.y, WORLD));
-			}
-
-			var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 7, true);
-			var vis = Coordinate.FromPoints(visCircle, WORLD);
-			world.setVisible(vis);
-
-			world.entities.ysort(0);
-			moved = false;
-		}
+		world.entities.ysort(0);
 
 		var txt = '';
 		txt += '\n' + frame.fps.round().toString();
@@ -225,7 +189,6 @@ class PlayState extends GameState
 		txt += '\nchunk ${c.toString()} (${c.toChunkIdx()})';
 		txt += '\nlocal ${w.toChunkLocal(c.x.floor(), c.y.floor()).toString()}';
 		txt += '\nentities ${game.registry.size}';
-		txt += '\nexplored ${exploredQuery.size}';
 
 		fpsText.text = txt;
 

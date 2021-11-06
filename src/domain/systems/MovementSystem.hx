@@ -49,7 +49,6 @@ class MovementSystem extends System
 		}
 		for (entity in moved)
 		{
-			trace('entity moved', entity.id);
 			entity.remove(entity.get(Moved));
 		}
 
