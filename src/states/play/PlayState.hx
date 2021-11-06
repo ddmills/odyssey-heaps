@@ -12,7 +12,6 @@ import ecs.Query;
 import ecs.components.Direction;
 import ecs.components.Explored;
 import ecs.components.Moniker;
-import ecs.components.Rendered;
 import ecs.components.Sprite;
 import ecs.components.Visible;
 import h2d.Anim;
@@ -51,7 +50,7 @@ class PlayState extends GameState
 			none: [Visible]
 		});
 
-		var shroud = new ShroudShader(.15, .7);
+		var shroud = new ShroudShader(.2, .8);
 		exploredQuery.onEntityAdded(function(entity)
 		{
 			var sprite = entity.get(Sprite);
@@ -216,13 +215,13 @@ class PlayState extends GameState
 		Performance.start('explore');
 		if (moved)
 		{
-			var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 10, true);
+			var exploreCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
 			for (point in exploreCircle)
 			{
 				world.explore(new Coordinate(point.x, point.y, WORLD));
 			}
 
-			var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 8, true);
+			var visCircle = Bresenham.getCircle(sloop.x.floor(), sloop.y.floor(), 7, true);
 			var vis = Coordinate.FromPoints(visCircle, WORLD);
 			world.setVisible(vis);
 
