@@ -64,7 +64,7 @@ class MonitorGraph
 			idx++;
 		}
 
-		var value = buffer.peak();
+		var value = buffer.peek();
 		var percent = (value * 100).round();
 		text.text = '${label} ${percent}${unit}';
 	}

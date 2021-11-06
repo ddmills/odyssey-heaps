@@ -1,0 +1,3 @@
+- move projection logic out of World
+- move update logic into World
+- create screen state system (push/pop/set/peek)

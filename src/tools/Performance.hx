@@ -48,7 +48,7 @@ class Performance
 
 	public static function percent(name:String)
 	{
-		var snapshot = snapshots.peak();
+		var snapshot = snapshots.peek();
 		return snapshot.meters.get(name);
 	}
 

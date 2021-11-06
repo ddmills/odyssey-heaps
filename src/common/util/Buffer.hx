@@ -21,7 +21,7 @@ class Buffer<T>
 		}
 	}
 
-	public function peak():T
+	public function peek():T
 	{
 		return values[values.length - 1];
 	}
