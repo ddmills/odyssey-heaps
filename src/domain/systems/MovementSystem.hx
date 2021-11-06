@@ -1,8 +1,10 @@
 package domain.systems;
 
+import common.struct.Cardinal;
 import common.struct.Coordinate;
 import core.Frame;
 import ecs.Query;
+import ecs.components.Direction;
 import ecs.components.Move;
 import ecs.components.MoveComplete;
 import ecs.components.Moved;
@@ -77,6 +79,15 @@ class MovementSystem extends System
 			if (entity.x.floor() != start.x.floor() || entity.y.floor() != start.y.floor())
 			{
 				entity.add(new Moved());
+			}
+
+			if (entity.has(Direction))
+			{
+				var component = entity.get(Direction);
+				var degrees = move.goal.sub(start).angle().toDegrees();
+				var cardinal = Cardinal.fromDegrees(degrees);
+
+				component.cardinal = cardinal;
 			}
 		}
 	}
