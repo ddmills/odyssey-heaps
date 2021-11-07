@@ -7,6 +7,7 @@ enum RenderLayerType
 {
 	GROUND;
 	FOG;
+	FOG_OVERLAY;
 	OBJECTS;
 	HUD;
 }
@@ -31,6 +32,7 @@ class RenderLayerManager
 
 		createLayer(GROUND, WORLD);
 		createLayer(FOG, WORLD);
+		createLayer(FOG_OVERLAY, WORLD);
 		createLayer(OBJECTS, WORLD);
 		createLayer(HUD, SCREEN);
 

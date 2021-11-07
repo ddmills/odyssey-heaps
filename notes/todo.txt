@@ -5,6 +5,7 @@
 - [x] create screen state system (push/pop/set/peek)
 - [x] render layers world.layers (render layers?)
 - [ ] world -> map
-- [ ] move player data
+- [x] move player data
+- [x] follow path system
 - [ ] create input systems
 - [ ] create grid layout for UI

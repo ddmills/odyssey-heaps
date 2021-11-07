@@ -31,6 +31,7 @@ class ChunkGen
 	public function generate(chunk:Chunk)
 	{
 		chunk.terrain.fill(WATER);
+		var waterline = .58;
 
 		for (i in chunk.terrain)
 		{
@@ -42,19 +43,19 @@ class ChunkGen
 			var n = perlin.perlin(seed, x, y, 8);
 			var v = (n + 1) / 2;
 			var tile = WATER;
-			if (v > .58)
+			if (v > waterline - .04)
 			{
 				tile = SHALLOWS;
 			}
-			if (v > .62)
+			if (v > waterline)
 			{
 				tile = SAND;
 			}
-			if (v > .63)
+			if (v > waterline + .01)
 			{
 				tile = GRASS;
 			}
-			if (v > .63)
+			if (v > waterline + .02)
 			{
 				var treen = perlin.perlin(seed, wx / 4, wy / 4, 9);
 				var treev = (treen + 1) / 2;

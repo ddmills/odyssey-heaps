@@ -2,9 +2,11 @@ package domain;
 
 import common.struct.Coordinate;
 import core.Game;
+import core.PlayerManager;
 import core.rendering.RenderLayerManager;
 import domain.systems.CameraSystem;
 import domain.systems.MovementSystem;
+import domain.systems.PathFollowSystem;
 import domain.systems.VisionSystem;
 import domain.terrain.ChunkManager;
 import ecs.Entity;
@@ -30,8 +32,10 @@ class World
 	public var movement(default, null):MovementSystem;
 	public var vision(default, null):VisionSystem;
 	public var camera(default, null):CameraSystem;
+	public var pathing(default, null):PathFollowSystem;
 
 	public var layers(default, null):RenderLayerManager;
+	public var player(default, null):PlayerManager;
 
 	inline function get_game():Game
 	{
@@ -41,6 +45,7 @@ class World
 	public function new()
 	{
 		layers = new RenderLayerManager();
+		player = new PlayerManager();
 		chunkGen = new ChunkGen(1);
 		chunks = new ChunkManager(chunkCountX, chunkCountY, chunkSize);
 		visible = new Array<Coordinate>();
@@ -48,6 +53,7 @@ class World
 		movement = new MovementSystem();
 		vision = new VisionSystem();
 		camera = new CameraSystem();
+		pathing = new PathFollowSystem();
 	}
 
 	function get_mapWidth():Int
@@ -164,5 +170,8 @@ class World
 		Performance.start('camera');
 		camera.update(frame);
 		Performance.stop('camera');
+		Performance.start('pathing');
+		pathing.update(frame);
+		Performance.stop('pathing');
 	}
 }

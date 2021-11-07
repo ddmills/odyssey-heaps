@@ -61,11 +61,13 @@ class Camera
 		if (event.kind == ERelease)
 		{
 			Game.instance.state.onMouseUp(new Coordinate(event.relX, event.relY, SCREEN));
+			Game.instance.screens.current.onMouseUp(new Coordinate(event.relX, event.relY, SCREEN));
 		}
 
 		if (event.kind == EPush)
 		{
 			Game.instance.state.onMouseDown(new Coordinate(event.relX, event.relY, SCREEN));
+			Game.instance.screens.current.onMouseDown(new Coordinate(event.relX, event.relY, SCREEN));
 		}
 	}
 

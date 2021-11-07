@@ -4,7 +4,8 @@ import common.util.Buffer;
 
 class Stats
 {
-	var ob:h2d.Object;
+	public var ob(default, null):h2d.Object;
+
 	var graphs:Map<String, MonitorGraph>;
 	var buffers:Map<String, Buffer<Float>>;
 
@@ -13,16 +14,6 @@ class Stats
 		buffers = new Map();
 		graphs = new Map();
 		ob = new h2d.Object();
-	}
-
-	public function attach(parent:h2d.Object)
-	{
-		parent.addChild(ob);
-	}
-
-	public function detach()
-	{
-		ob.remove();
 	}
 
 	public function update()
