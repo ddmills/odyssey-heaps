@@ -46,7 +46,7 @@ class ScreenManager
 		current.onEnter();
 	}
 
-	public function pop(screen:Screen)
+	public function pop()
 	{
 		current.onDestroy();
 		screens.pop();

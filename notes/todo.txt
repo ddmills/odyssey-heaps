@@ -2,6 +2,9 @@
 - [x] move 'Move' logic into MovementSystem
 - [x] move 'Vision' logic into VisionSystem
 - [x] move update logic into World
-- [ ] create screen state system (push/pop/set/peek)
+- [x] create screen state system (push/pop/set/peek)
+- [ ] render layers world.layers (render layers?)
+- [ ] world -> map
+- [ ] move player data
 - [ ] create input systems
 - [ ] create grid layout for UI

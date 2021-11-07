@@ -12,11 +12,17 @@ class Stats
 	{
 		buffers = new Map();
 		graphs = new Map();
+		ob = new h2d.Object();
 	}
 
-	public function attach(ob:h2d.Object)
+	public function attach(parent:h2d.Object)
 	{
-		this.ob = ob;
+		parent.addChild(ob);
+	}
+
+	public function detach()
+	{
+		ob.remove();
 	}
 
 	public function update()
@@ -30,6 +36,11 @@ class Stats
 
 	public function show(stat:String)
 	{
+		if (graphs.exists(stat))
+		{
+			return;
+		}
+
 		var buffer = new Buffer<Float>();
 		var graph = new MonitorGraph(buffer, stat, '%');
 

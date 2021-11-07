@@ -6,6 +6,7 @@ import core.Frame;
 import core.GameState;
 import data.TileResources;
 import domain.screens.SailScreen;
+import domain.screens.StatsScreen;
 import ecs.Entity;
 import ecs.components.Direction;
 import ecs.components.Explored;
@@ -18,7 +19,6 @@ import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Layers;
 import tools.MonitorGraph;
-import tools.Stats;
 
 class PlayState extends GameState
 {
@@ -28,14 +28,13 @@ class PlayState extends GameState
 	var sloop:Entity;
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
-	var graphs:Array<MonitorGraph>;
-	var stats:Stats;
 
 	public function new() {}
 
 	override function create()
 	{
 		game.screens.set(new SailScreen());
+		// game.screens.push(new StatsScreen());
 
 		root = new Layers();
 
@@ -80,11 +79,6 @@ class PlayState extends GameState
 		root.addChild(world.container);
 		root.addChild(fpsText);
 		root.addChild(infoText);
-
-		stats = new Stats();
-		stats.attach(root);
-		// stats.show('movement');
-		// stats.show('vision');
 
 		scene.add(root, 0);
 
@@ -145,8 +139,6 @@ class PlayState extends GameState
 		infoText.text = names.join('\n');
 		infoText.alignBottom(scene, game.TILE_H);
 		infoText.alignRight(scene, game.TILE_H);
-
-		stats.update();
 	}
 
 	override function onMouseDown(pos:Coordinate)

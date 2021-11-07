@@ -25,9 +25,8 @@ class GameStateManager
 			current._destroy();
 		}
 
-		next._create();
-
 		current = this.next;
+		next._create();
 	}
 
 	inline function get_scene():h2d.Scene
