@@ -7,7 +7,9 @@ import core.Screen;
 import data.TileResources;
 import domain.overlays.StatsOverlay;
 import ecs.Entity;
+import ecs.components.Moniker;
 import ecs.components.Path;
+import ecs.components.Settlement;
 import ecs.components.Sprite;
 
 class SailScreen extends Screen
@@ -49,6 +51,19 @@ class SailScreen extends Screen
 
 	override function onMouseDown(click:Coordinate)
 	{
+		var entities = world.getEntitiesAt(click);
+
+		var settlement = Lambda.find(entities, function(entity)
+		{
+			return entity.has(Settlement);
+		});
+
+		if (settlement != null)
+		{
+			game.screens.push(new SettlementScreen(settlement));
+			return;
+		}
+
 		var goal = click.toWorld().floor();
 		var line = Bresenham.getLine(world.player.x.floor(), world.player.y.floor(), goal.x.floor(), goal.y.floor());
 		var path = new Path(line);

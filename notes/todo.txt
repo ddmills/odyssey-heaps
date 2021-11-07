@@ -9,3 +9,5 @@
 - [x] follow path system
 - [ ] create input systems
 - [ ] create grid layout for UI
+- [ ] extract text creation
+- [x] screen for settlements

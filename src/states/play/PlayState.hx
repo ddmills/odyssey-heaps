@@ -7,6 +7,7 @@ import domain.screens.SailScreen;
 import ecs.Entity;
 import ecs.components.Explored;
 import ecs.components.Moniker;
+import ecs.components.Settlement;
 import ecs.components.Sprite;
 import ecs.components.Vision;
 import h2d.Bitmap;
@@ -27,6 +28,7 @@ class PlayState extends GameState
 		settlement.add(new Sprite(new Bitmap(TileResources.SETTLEMENT), game.TILE_W_HALF, game.TILE_H));
 		settlement.add(new Moniker('Settlement'));
 		settlement.add(new Vision(3));
+		settlement.add(new Settlement('New Bentoli'));
 		world.add(settlement);
 
 		scene.add(world.layers.root, 0);
