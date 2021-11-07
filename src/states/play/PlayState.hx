@@ -5,7 +5,6 @@ import core.GameState;
 import data.TileResources;
 import domain.screens.SailScreen;
 import ecs.Entity;
-import ecs.components.Explored;
 import ecs.components.Moniker;
 import ecs.components.Settlement;
 import ecs.components.Sprite;
@@ -18,6 +17,7 @@ class PlayState extends GameState
 
 	override function create()
 	{
+		world.InitSystems();
 		world.player.initialize();
 		world.player.x = 358;
 		world.player.y = 535;
@@ -28,7 +28,7 @@ class PlayState extends GameState
 		settlement.add(new Sprite(new Bitmap(TileResources.SETTLEMENT), game.TILE_W_HALF, game.TILE_H));
 		settlement.add(new Moniker('Settlement'));
 		settlement.add(new Vision(3));
-		settlement.add(new Settlement('New Bentoli'));
+		settlement.add(new Settlement('Port Saint Stawford'));
 		world.add(settlement);
 
 		scene.add(world.layers.root, 0);

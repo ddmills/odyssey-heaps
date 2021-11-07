@@ -11,12 +11,10 @@ class StatsOverlay extends h2d.Object
 	var fpsText:h2d.Text;
 	var infoText:h2d.Text;
 
-	public function new()
+	public function new(stats:Stats)
 	{
 		super();
-		stats = new Stats();
-		stats.show('movement');
-		stats.show('vision');
+		this.stats = stats;
 
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
 		infoText = new h2d.Text(bizcat);

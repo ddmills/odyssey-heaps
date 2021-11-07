@@ -7,6 +7,7 @@ import core.rendering.RenderLayerManager;
 import domain.systems.CameraSystem;
 import domain.systems.MovementSystem;
 import domain.systems.PathFollowSystem;
+import domain.systems.StatsSystem;
 import domain.systems.VisionSystem;
 import domain.terrain.ChunkManager;
 import ecs.Entity;
@@ -33,6 +34,7 @@ class World
 	public var vision(default, null):VisionSystem;
 	public var camera(default, null):CameraSystem;
 	public var pathing(default, null):PathFollowSystem;
+	public var stats(default, null):StatsSystem;
 
 	public var layers(default, null):RenderLayerManager;
 	public var player(default, null):PlayerManager;
@@ -42,7 +44,9 @@ class World
 		return Game.instance;
 	}
 
-	public function new()
+	public function new() {}
+
+	public function InitSystems()
 	{
 		layers = new RenderLayerManager();
 		player = new PlayerManager();
@@ -54,6 +58,7 @@ class World
 		vision = new VisionSystem();
 		camera = new CameraSystem();
 		pathing = new PathFollowSystem();
+		stats = new StatsSystem();
 	}
 
 	function get_mapWidth():Int
@@ -161,17 +166,10 @@ class World
 	{
 		var frame = game.frame;
 
-		Performance.start('movement');
 		movement.update(frame);
-		Performance.stop('movement');
-		Performance.start('vision');
 		vision.update(frame);
-		Performance.stop('vision');
-		Performance.start('camera');
 		camera.update(frame);
-		Performance.stop('camera');
-		Performance.start('pathing');
 		pathing.update(frame);
-		Performance.stop('pathing');
+		stats.update(frame);
 	}
 }
