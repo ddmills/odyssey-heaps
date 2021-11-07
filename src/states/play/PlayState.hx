@@ -1,16 +1,11 @@
 package states.play;
 
-import common.struct.Cardinal;
 import common.struct.Coordinate;
 import common.util.Bresenham;
-import common.util.Buffer;
 import core.Frame;
 import core.GameState;
 import data.TileResources;
-import domain.systems.CameraSystem;
-import domain.systems.MovementSystem;
-import domain.systems.System;
-import domain.systems.VisionSystem;
+import domain.screens.SailScreen;
 import ecs.Entity;
 import ecs.components.Direction;
 import ecs.components.Explored;
@@ -23,7 +18,6 @@ import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Layers;
 import tools.MonitorGraph;
-import tools.Performance;
 import tools.Stats;
 
 class PlayState extends GameState
@@ -31,32 +25,19 @@ class PlayState extends GameState
 	var fpsText:h2d.Text;
 	var infoText:h2d.Text;
 	var root:h2d.Object;
-	var click:Coordinate;
-	var cursor:Entity;
 	var sloop:Entity;
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
-	var frames:Buffer<Float>;
 	var graphs:Array<MonitorGraph>;
 	var stats:Stats;
-	var movement:System;
-	var vision:System;
-	var cam:CameraSystem;
 
 	public function new() {}
 
 	override function create()
 	{
-		movement = new MovementSystem();
-		vision = new VisionSystem();
-		cam = new CameraSystem();
+		game.screens.set(new SailScreen());
 
 		root = new Layers();
-
-		cursor = new Entity();
-		cursor.add(new Sprite(new Bitmap(TileResources.CURSOR), game.TILE_W_HALF));
-		cursor.get(Sprite).visible = true;
-		world.add(cursor);
 
 		sloop = new Entity();
 		sloop.x = 358;
@@ -105,41 +86,19 @@ class PlayState extends GameState
 		// stats.show('movement');
 		// stats.show('vision');
 
-		frames = new Buffer(128);
-
 		scene.add(root, 0);
 
 		game.camera.zoom = 2;
 		game.camera.x = 0;
 		game.camera.y = 0;
-		cam.focus = sloop;
+		world.camera.focus = sloop;
 	}
 
 	override function update(frame:Frame)
 	{
-		Performance.start('movement');
-		movement.update(frame);
-		Performance.stop('movement');
-		Performance.start('vision');
-		vision.update(frame);
-		Performance.stop('vision');
-		Performance.start('camera');
-		cam.update(frame);
-		Performance.stop('camera');
-
 		var p = camera.mouse.toPx().floor();
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
-
-		cursor.pos = w;
-
-		if (click != null)
-		{
-			var goal = click.toWorld().floor();
-			path = Bresenham.getLine(sloop.x.floor(), sloop.y.floor(), goal.x.floor(), goal.y.floor());
-			curPathIdx = 0;
-			click = null;
-		}
 
 		if (path != null)
 		{
@@ -154,9 +113,8 @@ class PlayState extends GameState
 				{
 					var goal = path[curPathIdx];
 					var target = new Coordinate(goal.x, goal.y, WORLD);
-					var tween = curPathIdx == path.length - 1 ? LERP : LINEAR;
 
-					sloop.add(new Move(target, .1, tween));
+					sloop.add(new Move(target, .1, LINEAR));
 				}
 			}
 		}
@@ -188,12 +146,13 @@ class PlayState extends GameState
 		infoText.alignBottom(scene, game.TILE_H);
 		infoText.alignRight(scene, game.TILE_H);
 
-		frames.push(frame.fps / 60);
 		stats.update();
 	}
 
 	override function onMouseDown(pos:Coordinate)
 	{
-		click = pos;
+		var goal = pos.toWorld().floor();
+		path = Bresenham.getLine(sloop.x.floor(), sloop.y.floor(), goal.x.floor(), goal.y.floor());
+		curPathIdx = 0;
 	}
 }

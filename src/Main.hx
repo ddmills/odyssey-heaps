@@ -13,7 +13,7 @@ class Main extends hxd.App
 
 	override function init()
 	{
-		hxd.Window.getInstance().title = "Odyssey";
+		hxd.Window.getInstance().title = "Privateers";
 		game = Game.Create(this, new SplashState(1));
 		game.backgroundColor = 0x1b1f23;
 	}

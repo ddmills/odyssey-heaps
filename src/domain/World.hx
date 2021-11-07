@@ -2,6 +2,9 @@ package domain;
 
 import common.struct.Coordinate;
 import core.Game;
+import domain.systems.CameraSystem;
+import domain.systems.MovementSystem;
+import domain.systems.VisionSystem;
 import domain.terrain.ChunkManager;
 import ecs.Entity;
 import ecs.components.Explored;
@@ -9,6 +12,7 @@ import ecs.components.Sprite;
 import ecs.components.Visible;
 import h2d.Layers;
 import rand.ChunkGen;
+import tools.Performance;
 
 class World
 {
@@ -26,6 +30,10 @@ class World
 	public var chunkGen(default, null):ChunkGen;
 
 	var visible:Array<Coordinate>;
+
+	public var movement(default, null):MovementSystem;
+	public var vision(default, null):VisionSystem;
+	public var camera(default, null):CameraSystem;
 
 	inline function get_game():Game
 	{
@@ -46,6 +54,10 @@ class World
 		container.addChildAt(bg, 0);
 		container.addChildAt(fog, 1);
 		container.addChildAt(entities, 2);
+
+		movement = new MovementSystem();
+		vision = new VisionSystem();
+		camera = new CameraSystem();
 	}
 
 	function get_mapWidth():Int
@@ -147,5 +159,20 @@ class World
 				}
 			}
 		}
+	}
+
+	public function updateSystems()
+	{
+		var frame = game.frame;
+
+		Performance.start('movement');
+		movement.update(frame);
+		Performance.stop('movement');
+		Performance.start('vision');
+		vision.update(frame);
+		Performance.stop('vision');
+		Performance.start('camera');
+		camera.update(frame);
+		Performance.stop('camera');
 	}
 }

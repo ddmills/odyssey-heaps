@@ -25,16 +25,18 @@ class Game
 	public var camera(default, null):Camera;
 	public var registry(default, null):Registry;
 	public var window(get, never):hxd.Window;
+	public var screens(default, null):ScreenManager;
 
 	private function new(app:hxd.App, initialState:GameState)
 	{
 		instance = this;
 		this.app = app;
+		registry = new Registry();
 		frame = new Frame();
 		world = new World();
 		states = new GameStateManager();
+		screens = new ScreenManager();
 		camera = new Camera();
-		registry = new Registry();
 		setState(initialState);
 	}
 
@@ -63,6 +65,7 @@ class Game
 		Performance.update(frame.dt * 1000);
 		frame.update();
 		state._update(frame);
+		screens.current.update(frame);
 	}
 
 	function get_backgroundColor():Int
