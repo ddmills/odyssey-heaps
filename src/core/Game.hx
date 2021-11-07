@@ -2,6 +2,7 @@ package core;
 
 import domain.World;
 import ecs.Registry;
+import hxd.Window;
 import tools.Performance;
 
 class Game
@@ -23,6 +24,7 @@ class Game
 	public var world(default, null):World;
 	public var camera(default, null):Camera;
 	public var registry(default, null):Registry;
+	public var window(get, never):hxd.Window;
 
 	private function new(app:hxd.App, initialState:GameState)
 	{
@@ -81,5 +83,10 @@ class Game
 	inline function get_TILE_H_HALF():Int
 	{
 		return Math.floor(TILE_H / 2);
+	}
+
+	inline function get_window():Window
+	{
+		return hxd.Window.getInstance();
 	}
 }

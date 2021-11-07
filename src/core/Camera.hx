@@ -8,6 +8,7 @@ class Camera
 {
 	public var x(get, set):Float;
 	public var y(get, set):Float;
+	public var mouse(default, null):Coordinate;
 	public var pos(get, set):Coordinate;
 	public var zoom(get, set):Float;
 	public var width(get, null):Float;
@@ -15,8 +16,41 @@ class Camera
 	public var focus(get, set):Coordinate;
 
 	var scroller(get, null):h2d.Object;
+	var scene:h2d.Scene;
 
-	public function new() {}
+	public function new()
+	{
+		mouse = new Coordinate(0, 0, SCREEN);
+	}
+
+	public function onSceneChanged(scene:h2d.Scene)
+	{
+		if (this.scene != null)
+		{
+			this.scene.removeEventListener(onSceneEvent);
+		}
+
+		this.scene = scene;
+		scene.addEventListener(onSceneEvent);
+	}
+
+	function onSceneEvent(event:hxd.Event)
+	{
+		if (event.kind == EMove)
+		{
+			mouse = new Coordinate(event.relX, event.relY, SCREEN);
+		}
+
+		if (event.kind == ERelease)
+		{
+			Game.instance.state.onMouseUp(new Coordinate(event.relX, event.relY, SCREEN));
+		}
+
+		if (event.kind == EPush)
+		{
+			Game.instance.state.onMouseDown(new Coordinate(event.relX, event.relY, SCREEN));
+		}
+	}
 
 	function get_x():Float
 	{

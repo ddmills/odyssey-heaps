@@ -21,7 +21,6 @@ import ecs.components.Sprite;
 import ecs.components.Vision;
 import h2d.Anim;
 import h2d.Bitmap;
-import h2d.Interactive;
 import h2d.Layers;
 import tools.MonitorGraph;
 import tools.Performance;
@@ -32,8 +31,6 @@ class PlayState extends GameState
 	var fpsText:h2d.Text;
 	var infoText:h2d.Text;
 	var root:h2d.Object;
-	var interactive:h2d.Interactive;
-	var mouse:Coordinate;
 	var click:Coordinate;
 	var cursor:Entity;
 	var sloop:Entity;
@@ -54,28 +51,28 @@ class PlayState extends GameState
 		vision = new VisionSystem();
 		cam = new CameraSystem();
 
-		mouse = new Coordinate(0, 0, SCREEN);
 		root = new Layers();
 
 		cursor = new Entity();
 		cursor.add(new Sprite(new Bitmap(TileResources.CURSOR), game.TILE_W_HALF));
+		cursor.get(Sprite).visible = true;
 		world.add(cursor);
 
 		sloop = new Entity();
-		sloop.x = 278;
-		sloop.y = 488;
+		sloop.x = 358;
+		sloop.y = 535;
 		sloop.add(new Moniker('Sloop'));
 		sloop.add(new Sprite(new Anim(TileResources.SLOOP.split(8), 0), game.TILE_W_HALF, game.TILE_H));
 		sloop.add(new Direction());
-		sloop.add(new Vision(8, 1));
+		sloop.add(new Vision(6, 1));
 		world.add(sloop);
 
 		var settlement = new Entity();
-		settlement.x = 272;
-		settlement.y = 485;
+		settlement.x = 344;
+		settlement.y = 525;
 		settlement.add(new Sprite(new Bitmap(TileResources.SETTLEMENT), game.TILE_W_HALF, game.TILE_H));
 		settlement.add(new Moniker('Settlement'));
-		settlement.add(new Vision(2));
+		settlement.add(new Vision(3));
 		world.add(settlement);
 
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
@@ -99,29 +96,16 @@ class PlayState extends GameState
 			alpha: .5
 		};
 
-		interactive = new Interactive(camera.width, camera.height);
-		interactive.onMove = function(event:hxd.Event)
-		{
-			mouse = new Coordinate(event.relX, event.relY, SCREEN);
-		}
-
-		interactive.onClick = function(event:hxd.Event)
-		{
-			click = new Coordinate(event.relX, event.relY, SCREEN);
-		}
-
 		root.addChild(world.container);
 		root.addChild(fpsText);
 		root.addChild(infoText);
-		root.addChild(interactive);
 
 		stats = new Stats();
 		stats.attach(root);
-		stats.show('movement');
-		stats.show('vision');
+		// stats.show('movement');
+		// stats.show('vision');
 
 		frames = new Buffer(128);
-		hxd.Window.getInstance().addResizeEvent(onResize);
 
 		scene.add(root, 0);
 
@@ -129,12 +113,6 @@ class PlayState extends GameState
 		game.camera.x = 0;
 		game.camera.y = 0;
 		cam.focus = sloop;
-	}
-
-	function onResize()
-	{
-		interactive.width = camera.width;
-		interactive.height = camera.height;
 	}
 
 	override function update(frame:Frame)
@@ -149,7 +127,7 @@ class PlayState extends GameState
 		cam.update(frame);
 		Performance.stop('camera');
 
-		var p = mouse.toPx().floor();
+		var p = camera.mouse.toPx().floor();
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
 
@@ -196,7 +174,7 @@ class PlayState extends GameState
 		fpsText.alignBottom(scene, game.TILE_H);
 		fpsText.alignLeft(scene, game.TILE_H);
 
-		var entities = world.getEntitiesAt(mouse);
+		var entities = world.getEntitiesAt(camera.mouse);
 		var withNames = Lambda.filter(entities, function(e)
 		{
 			return e.has(Moniker) && e.has(Explored);
@@ -214,8 +192,8 @@ class PlayState extends GameState
 		stats.update();
 	}
 
-	override function destroy()
+	override function onMouseDown(pos:Coordinate)
 	{
-		hxd.Window.getInstance().removeResizeEvent(onResize);
+		click = pos;
 	}
 }

@@ -1,7 +1,7 @@
 - [x] move projection logic out of World
 - [x] move 'Move' logic into MovementSystem
 - [x] move 'Vision' logic into VisionSystem
-- [ ] move update logic into World
+- [x] move update logic into World
 - [ ] create input systems
 - [ ] create grid layout for UI
 - [ ] create screen state system (push/pop/set/peek)

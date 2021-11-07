@@ -1,5 +1,6 @@
 package core;
 
+import common.struct.Coordinate;
 import domain.World;
 
 /**
@@ -38,6 +39,7 @@ class GameState
 		game = Game.instance;
 		scene = new h2d.Scene();
 		game.app.setScene(scene, true);
+		game.camera.onSceneChanged(scene);
 		create();
 		isCreated = true;
 	}
@@ -64,4 +66,16 @@ class GameState
 	 * Called on every frame.
 	 */
 	function update(frame:Frame) {}
+
+	/**
+	 * Handle mouse click down
+	 */
+	@:allow(core.Camera)
+	function onMouseDown(pos:Coordinate) {}
+
+	/**
+	 * Handle mouse click up
+	 */
+	@:allow(core.Camera)
+	function onMouseUp(pos:Coordinate) {}
 }

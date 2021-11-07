@@ -5,7 +5,6 @@ import core.Game;
 import domain.terrain.ChunkManager;
 import ecs.Entity;
 import ecs.components.Explored;
-import ecs.components.Moved;
 import ecs.components.Sprite;
 import ecs.components.Visible;
 import h2d.Layers;
