@@ -2,6 +2,8 @@ package core;
 
 import common.struct.Coordinate;
 import common.util.Projection;
+import ecs.Entity;
+import ecs.EntityRef;
 import h2d.Object;
 
 class Camera
@@ -14,12 +16,27 @@ class Camera
 	public var width(get, null):Float;
 	public var height(get, null):Float;
 	public var focus(get, set):Coordinate;
+	public var follow(get, set):Entity;
+
+	var followRef:EntityRef;
+
+	inline function get_follow():Entity
+	{
+		return followRef.entity;
+	}
+
+	inline function set_follow(value:Entity):Entity
+	{
+		followRef.entity = value;
+		return value;
+	}
 
 	var scroller(get, null):h2d.Object;
 	var scene:h2d.Scene;
 
 	public function new()
 	{
+		followRef = new EntityRef();
 		mouse = new Coordinate(0, 0, SCREEN);
 	}
 
@@ -98,9 +115,9 @@ class Camera
 		return value;
 	}
 
-	function get_scroller():Object
+	inline function get_scroller():Object
 	{
-		return Game.instance.world.container;
+		return Game.instance.world.layers.scroller;
 	}
 
 	inline function get_width():Float

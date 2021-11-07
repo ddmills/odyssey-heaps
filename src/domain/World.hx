@@ -2,6 +2,7 @@ package domain;
 
 import common.struct.Coordinate;
 import core.Game;
+import core.rendering.RenderLayerManager;
 import domain.systems.CameraSystem;
 import domain.systems.MovementSystem;
 import domain.systems.VisionSystem;
@@ -10,7 +11,6 @@ import ecs.Entity;
 import ecs.components.Explored;
 import ecs.components.Sprite;
 import ecs.components.Visible;
-import h2d.Layers;
 import rand.ChunkGen;
 import tools.Performance;
 
@@ -23,10 +23,6 @@ class World
 	public var mapHeight(get, null):Int;
 	public var game(get, null):Game;
 	public var chunks(default, null):ChunkManager;
-	public var bg(default, null):h2d.Layers;
-	public var fog(default, null):h2d.Layers;
-	public var entities(default, null):h2d.Layers;
-	public var container(default, null):h2d.Layers;
 	public var chunkGen(default, null):ChunkGen;
 
 	var visible:Array<Coordinate>;
@@ -35,6 +31,8 @@ class World
 	public var vision(default, null):VisionSystem;
 	public var camera(default, null):CameraSystem;
 
+	public var layers(default, null):RenderLayerManager;
+
 	inline function get_game():Game
 	{
 		return Game.instance;
@@ -42,18 +40,10 @@ class World
 
 	public function new()
 	{
+		layers = new RenderLayerManager();
 		chunkGen = new ChunkGen(1);
 		chunks = new ChunkManager(chunkCountX, chunkCountY, chunkSize);
-		container = new Layers();
 		visible = new Array<Coordinate>();
-
-		bg = new Layers();
-		entities = new Layers();
-		fog = new Layers();
-
-		container.addChildAt(bg, 0);
-		container.addChildAt(fog, 1);
-		container.addChildAt(entities, 2);
 
 		movement = new MovementSystem();
 		vision = new VisionSystem();
@@ -76,7 +66,7 @@ class World
 
 		if (sprite != null)
 		{
-			entities.addChild(sprite.ob);
+			layers.render(OBJECTS, sprite.ob);
 		}
 	}
 

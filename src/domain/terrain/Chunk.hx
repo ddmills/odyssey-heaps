@@ -12,16 +12,15 @@ import h2d.TileGroup;
 
 class Chunk
 {
+	var tiles:TileGroup;
+	var fog:h2d.Object;
+
 	public var terrain(default, null):Grid<TerrainType>;
 	public var exploration(default, null):Grid<Null<Bool>>;
 	public var entities(default, null):GridMap<String>;
 	public var isLoaded(default, null):Bool;
 
-	var tiles:TileGroup;
-	var fog:h2d.Object;
-
 	public var size(default, null):Int;
-
 	public var chunkId(default, null):Int;
 	public var cx(default, null):Int;
 	public var cy(default, null):Int;
@@ -105,8 +104,8 @@ class Chunk
 		tiles = buildTerrainTileGroup();
 		fog = buildFogObject();
 
-		Game.instance.world.bg.addChildAt(tiles, chunkId);
-		Game.instance.world.fog.addChildAt(fog, chunkId);
+		Game.instance.render(GROUND, tiles);
+		Game.instance.render(FOG, fog);
 
 		var pix = Projection.chunkToPx(cx, cy);
 		tiles.x = pix.x;
@@ -127,6 +126,8 @@ class Chunk
 		tiles.clear();
 		tiles.remove();
 		tiles = null;
+		fog.remove();
+		fog = null;
 		isLoaded = false;
 	}
 

@@ -6,7 +6,6 @@ import core.Frame;
 import core.GameState;
 import data.TileResources;
 import domain.screens.SailScreen;
-import domain.screens.StatsScreen;
 import ecs.Entity;
 import ecs.components.Direction;
 import ecs.components.Explored;
@@ -17,14 +16,11 @@ import ecs.components.Sprite;
 import ecs.components.Vision;
 import h2d.Anim;
 import h2d.Bitmap;
-import h2d.Layers;
-import tools.MonitorGraph;
 
 class PlayState extends GameState
 {
 	var fpsText:h2d.Text;
 	var infoText:h2d.Text;
-	var root:h2d.Object;
 	var sloop:Entity;
 	var path:Array<{x:Int, y:Int}>;
 	var curPathIdx:Int;
@@ -35,8 +31,6 @@ class PlayState extends GameState
 	{
 		game.screens.set(new SailScreen());
 		// game.screens.push(new StatsScreen());
-
-		root = new Layers();
 
 		sloop = new Entity();
 		sloop.x = 358;
@@ -76,16 +70,15 @@ class PlayState extends GameState
 			alpha: .5
 		};
 
-		root.addChild(world.container);
-		root.addChild(fpsText);
-		root.addChild(infoText);
+		game.render(HUD, fpsText);
+		game.render(HUD, infoText);
 
-		scene.add(root, 0);
+		scene.add(world.layers.root, 0);
 
 		game.camera.zoom = 2;
 		game.camera.x = 0;
 		game.camera.y = 0;
-		world.camera.focus = sloop;
+		game.camera.follow = sloop;
 	}
 
 	override function update(frame:Frame)

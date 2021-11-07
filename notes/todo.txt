@@ -3,7 +3,7 @@
 - [x] move 'Vision' logic into VisionSystem
 - [x] move update logic into World
 - [x] create screen state system (push/pop/set/peek)
-- [ ] render layers world.layers (render layers?)
+- [x] render layers world.layers (render layers?)
 - [ ] world -> map
 - [ ] move player data
 - [ ] create input systems

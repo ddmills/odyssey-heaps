@@ -1,5 +1,6 @@
 package core;
 
+import core.rendering.RenderLayerManager.RenderLayerType;
 import domain.World;
 import ecs.Registry;
 import hxd.Window;
@@ -66,6 +67,11 @@ class Game
 		frame.update();
 		state._update(frame);
 		screens.current.update(frame);
+	}
+
+	public inline function render(layer:RenderLayerType, ob:h2d.Object)
+	{
+		return world.layers.render(layer, ob);
 	}
 
 	function get_backgroundColor():Int
