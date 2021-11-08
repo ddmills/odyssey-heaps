@@ -11,6 +11,7 @@ import ecs.components.Moniker;
 import ecs.components.Sprite;
 import h2d.Bitmap;
 import hxd.Perlin;
+import rand.names.SpanishNameGenerator;
 import shaders.ShroudShader;
 
 class ChunkGen
@@ -61,7 +62,7 @@ class ChunkGen
 				var treev = (treen + 1) / 2;
 				if (treev > .5)
 				{
-					var tree = createTree();
+					var tree = createTree(wx, wy);
 					tree.pos = new Coordinate(wx, wy, WORLD);
 
 					Game.instance.world.add(tree);
@@ -72,12 +73,15 @@ class ChunkGen
 		}
 	}
 
-	function createTree()
+	function createTree(x:Int, y:Int)
 	{
+		var seed = x + (y * 2000);
 		var tree = new Entity();
 		var bm = new Bitmap(TileResources.TREE);
 		tree.add(new Sprite(bm, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
-		tree.add(new Moniker('Tree'));
+		var name = seed % 2 == 0 ? SpanishNameGenerator.getMaleName(seed) : SpanishNameGenerator.getFemaleName(seed);
+
+		tree.add(new Moniker('${name} [${seed}]'));
 		return tree;
 	}
 }

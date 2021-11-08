@@ -11,3 +11,7 @@
 - [ ] create grid layout for UI
 - [ ] extract text creation
 - [x] screen for settlements
+- [x] random spanish name generator
+- [ ] weight table
+- [ ] Identity component
+

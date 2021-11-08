@@ -10,6 +10,7 @@ import ecs.components.Settlement;
 import ecs.components.Sprite;
 import ecs.components.Vision;
 import h2d.Bitmap;
+import rand.names.SpanishNameGenerator;
 
 class PlayState extends GameState
 {
@@ -28,11 +29,17 @@ class PlayState extends GameState
 		settlement.add(new Sprite(new Bitmap(TileResources.SETTLEMENT), game.TILE_W_HALF, game.TILE_H));
 		settlement.add(new Moniker('Settlement'));
 		settlement.add(new Vision(3));
-		settlement.add(new Settlement('Port Saint Stawford'));
+		settlement.add(new Settlement('Port Troutberk'));
 		world.add(settlement);
 
 		scene.add(world.layers.root, 0);
 
 		game.screens.set(new SailScreen());
+
+		for (n in 0...100)
+		{
+			var name = SpanishNameGenerator.getMaleName(n);
+			trace(n, name);
+		}
 	}
 }
