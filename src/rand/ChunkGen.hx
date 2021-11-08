@@ -29,10 +29,10 @@ class ChunkGen
 
 	public function getTerrain(wx:Int, wy:Int):TerrainType
 	{
-		var zoom = 38;
+		var zoom = 80;
 		var x = wx / zoom;
 		var y = wy / zoom;
-		var waterline = .58;
+		var waterline = .6;
 		var n = perlin.perlin(seed, x, y, 8);
 		var v = (n + 1) / 2;
 

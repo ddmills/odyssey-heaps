@@ -21,7 +21,7 @@ class World
 {
 	public var chunkSize(default, null):Int = 16;
 	public var chunkCountX(default, null):Int = 64;
-	public var chunkCountY(default, null):Int = 64;
+	public var chunkCountY(default, null):Int = 40;
 	public var mapWidth(get, null):Int;
 	public var mapHeight(get, null):Int;
 	public var game(get, null):Game;

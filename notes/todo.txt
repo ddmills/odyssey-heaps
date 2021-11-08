@@ -7,7 +7,8 @@
 - [ ] world -> map
 - [x] move player data
 - [x] follow path system
-- [ ] map screen
+- [ ] map gen
+- [x] map screen
 - [ ] create input systems
 - [ ] create grid layout for UI
 - [ ] extract text creation
@@ -16,5 +17,5 @@
 - [ ] weight table
 - [ ] pathfinding
 - [ ] identity component
-- [ ] minimap
+- [x] minimap
 - [ ] settlement generation (placement)

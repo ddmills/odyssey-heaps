@@ -21,10 +21,14 @@ class MapScreen extends Screen
 	{
 		switch type
 		{
-			case WATER | SHALLOWS:
-				return 0x40596a;
-			case SAND | GRASS:
-				return 0x517342;
+			case SHALLOWS:
+				return 0x326475;
+			case WATER:
+				return 0x235465;
+			case SAND:
+				return 0xb3904d;
+			case GRASS:
+				return 0x57723a;
 		}
 	}
 
@@ -34,8 +38,8 @@ class MapScreen extends Screen
 		var color = terrainToColor(type);
 		var tile = Tile.fromColor(color, size, size);
 		var bm = new Bitmap(tile);
-		bm.x = (wx / granularity) * size;
-		bm.y = (wy / granularity) * size;
+		bm.x = (wx / granularity).floor() * size;
+		bm.y = (wy / granularity).floor() * size;
 		ob.addChild(bm);
 	}
 
@@ -43,8 +47,8 @@ class MapScreen extends Screen
 	{
 		var mapWidth = game.world.mapWidth;
 		var mapHeight = game.world.mapHeight;
-		var granularity = 8;
-		var size = 4;
+		var granularity = 4;
+		var size = 2;
 
 		var w = (mapWidth / granularity).floor();
 		var h = (mapHeight / granularity).floor();
@@ -60,9 +64,9 @@ class MapScreen extends Screen
 			}
 		}
 
-		var white = Tile.fromColor(0xffffff, size, size);
-		var red = Tile.fromColor(0xff0000, size, size);
-		var blink = new Anim([white, red], 4);
+		var white = Tile.fromColor(0xffffff, size, size, 0);
+		var red = Tile.fromColor(0xe91e63, size, size);
+		var blink = new Anim([white, red], 6);
 
 		blink.x = (world.player.x / granularity).floor() * size;
 		blink.y = (world.player.y / granularity).floor() * size;
