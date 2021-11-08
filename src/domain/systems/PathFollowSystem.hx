@@ -36,7 +36,6 @@ class PathFollowSystem extends System
 				}
 				else
 				{
-					trace('PATH COMPLETE');
 					entity.remove(path);
 				}
 			}

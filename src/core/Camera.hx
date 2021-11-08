@@ -69,6 +69,12 @@ class Camera
 			Game.instance.state.onMouseDown(new Coordinate(event.relX, event.relY, SCREEN));
 			Game.instance.screens.current.onMouseDown(new Coordinate(event.relX, event.relY, SCREEN));
 		}
+
+		if (event.kind == EKeyUp)
+		{
+			Game.instance.state.onKeyUp(event.keyCode);
+			Game.instance.screens.current.onKeyUp(event.keyCode);
+		}
 	}
 
 	function get_x():Float

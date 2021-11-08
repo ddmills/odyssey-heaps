@@ -41,6 +41,14 @@ class SailScreen extends Screen
 		cursor.pos = camera.mouse.toWorld().floor();
 	}
 
+	override function onKeyUp(keyCode:Int)
+	{
+		if (keyCode == 77)
+		{
+			game.screens.push(new MapScreen());
+		}
+	}
+
 	override function onMouseDown(click:Coordinate)
 	{
 		var entities = world.getEntitiesAt(click);

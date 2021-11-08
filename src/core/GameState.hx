@@ -78,4 +78,10 @@ class GameState
 	 */
 	@:allow(core.Camera)
 	function onMouseUp(pos:Coordinate) {}
+
+	/**
+	 * Handle key up
+	 */
+	@:allow(core.Camera)
+	function onKeyUp(keyCode:Int) {}
 }

@@ -35,11 +35,5 @@ class PlayState extends GameState
 		scene.add(world.layers.root, 0);
 
 		game.screens.set(new SailScreen());
-
-		for (n in 0...100)
-		{
-			var name = SpanishNameGenerator.getMaleName(n);
-			trace(n, name);
-		}
 	}
 }

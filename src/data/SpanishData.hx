@@ -3,11 +3,11 @@ package data;
 class SpanishData
 {
 	public static var maleGiven = [
-		'Juan', 'Francisco', 'Pedro', 'Diego', 'Alonso', 'Hernando', 'Cristóbal', 'Antonio', 'Andrés', 'Gonzalo', 'Hernán', 'Luis', 'Bartolomé', 'Martín',
-		'Miguel', 'Rodrigo', 'Antón', 'Gaspar', 'Gabriel', 'Lorenzo', 'Sebastian', 'Jaime', 'Lope', 'Jerónimo', 'Alvaro', 'Baltasar', 'Benito', 'Manuel',
-		'Marcos', 'Agustín', 'Bernardino', 'Domingo', 'Esteban', 'Felipe', 'Lucas', 'Simón', 'Tomás', 'Carlos', 'Cosme', 'Gines', 'Gregorio', 'Mateo',
-		'Matias', 'Nicolas', 'Sancho', 'Santiago', 'Barros', 'Bastía', 'Bautista', 'Blas', 'Eyague', 'Frutos', 'Garci', 'Giraldo', 'Guillen', 'Hector',
-		'Jorge', 'Jose', 'Melchor', 'Mergildo', 'Pablo', 'Pascual', 'Salvador', 'Tomé', 'Truylos'
+		'Álvares', 'Gonçalo', 'Juan', 'Francisco', 'Pedro', 'Diego', 'Alonso', 'Hernando', 'Cristóbal', 'Antonio', 'Andrés', 'Gonzalo', 'Hernán', 'Luis',
+		'Bartolomé', 'Martín', 'Miguel', 'Rodrigo', 'Antón', 'Gaspar', 'Gabriel', 'Lorenzo', 'Sebastian', 'Jaime', 'Lope', 'Jerónimo', 'Alvaro', 'Baltasar',
+		'Benito', 'Manuel', 'Marcos', 'Agustín', 'Bernardino', 'Domingo', 'Esteban', 'Felipe', 'Lucas', 'Simón', 'Tomás', 'Carlos', 'Cosme', 'Gines',
+		'Gregorio', 'Mateo', 'Matias', 'Nicolas', 'Sancho', 'Santiago', 'Barros', 'Bastía', 'Bautista', 'Blas', 'Eyague', 'Frutos', 'Garci', 'Giraldo',
+		'Guillen', 'Hector', 'Jorge', 'Jose', 'Melchor', 'Mergildo', 'Pablo', 'Pascual', 'Salvador', 'Tomé', 'Truylos'
 	];
 
 	public static var femaleGiven = [
@@ -29,7 +29,7 @@ class SpanishData
 
 	public static var patronymics = [
 		'Sánchez', 'Rodríguez', 'López', 'García', 'Hernández', 'González', 'Martín', 'Pérez', 'Díaz', 'Gutiérrez', 'Gómez', 'Martínez', 'Jiménez', 'Ortiz',
-		'Ruiz', 'Nuñez', 'Vázquez', 'Muñoz', 'Suárez', 'Juárez', 'Ramírez', 'Arias', 'Méndez', 'Sanz', 'Díez', 'Yañez', 'Blas',
+		'Ruiz', 'Nuñez', 'Vázquez', 'Muñoz', 'Suárez', 'Juárez', 'Ramírez', 'Arias', 'Méndez', 'Sanz', 'Díez', 'Yañez', 'Blas', 'Ponce', 'Vásquez'
 	];
 
 	public static var other = [

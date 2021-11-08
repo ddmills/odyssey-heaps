@@ -7,11 +7,14 @@
 - [ ] world -> map
 - [x] move player data
 - [x] follow path system
+- [ ] map screen
 - [ ] create input systems
 - [ ] create grid layout for UI
 - [ ] extract text creation
 - [x] screen for settlements
 - [x] random spanish name generator
 - [ ] weight table
-- [ ] Identity component
-
+- [ ] pathfinding
+- [ ] identity component
+- [ ] minimap
+- [ ] settlement generation (placement)

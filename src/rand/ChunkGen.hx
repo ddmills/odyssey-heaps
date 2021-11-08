@@ -1,7 +1,6 @@
 package rand;
 
 import common.struct.Coordinate;
-import common.struct.Grid;
 import core.Game;
 import data.TileResources;
 import domain.terrain.Chunk;
@@ -12,7 +11,6 @@ import ecs.components.Sprite;
 import h2d.Bitmap;
 import hxd.Perlin;
 import rand.names.SpanishNameGenerator;
-import shaders.ShroudShader;
 
 class ChunkGen
 {
@@ -29,34 +27,44 @@ class ChunkGen
 		perlin.normalize = true;
 	}
 
+	public function getTerrain(wx:Int, wy:Int):TerrainType
+	{
+		var zoom = 38;
+		var x = wx / zoom;
+		var y = wy / zoom;
+		var waterline = .58;
+		var n = perlin.perlin(seed, x, y, 8);
+		var v = (n + 1) / 2;
+
+		if (v < waterline - .04)
+		{
+			return WATER;
+		}
+
+		if (v < waterline)
+		{
+			return SHALLOWS;
+		}
+
+		if (v < waterline + .01)
+		{
+			return SAND;
+		}
+
+		return GRASS;
+	}
+
 	public function generate(chunk:Chunk)
 	{
 		chunk.terrain.fill(WATER);
-		var waterline = .58;
 
 		for (i in chunk.terrain)
 		{
-			var zoom = 38;
 			var wx = chunk.cx * chunk.size + i.x;
 			var wy = chunk.cy * chunk.size + i.y;
-			var x = wx / zoom;
-			var y = wy / zoom;
-			var n = perlin.perlin(seed, x, y, 8);
-			var v = (n + 1) / 2;
-			var tile = WATER;
-			if (v > waterline - .04)
-			{
-				tile = SHALLOWS;
-			}
-			if (v > waterline)
-			{
-				tile = SAND;
-			}
-			if (v > waterline + .01)
-			{
-				tile = GRASS;
-			}
-			if (v > waterline + .02)
+			var tile = getTerrain(wx, wy);
+
+			if (tile == GRASS)
 			{
 				var treen = perlin.perlin(seed, wx / 4, wy / 4, 9);
 				var treev = (treen + 1) / 2;
