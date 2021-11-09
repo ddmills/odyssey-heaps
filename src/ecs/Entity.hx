@@ -114,6 +114,14 @@ class Entity
 		return _y;
 	}
 
+	public function destroy()
+	{
+		for (component in components)
+		{
+			remove(component);
+		}
+	}
+
 	public function add(component:Component)
 	{
 		cbits = BitUtil.addBit(cbits, component.bit);
@@ -137,7 +145,7 @@ class Entity
 	{
 		cbits = BitUtil.subtractBit(cbits, component.bit);
 		components.remove(component.type);
-		component._detach();
+		component._remove();
 		registry.candidacy(this);
 		if (Std.isOfType(component, Sprite))
 		{

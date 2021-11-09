@@ -33,6 +33,8 @@ abstract class Component
 		return _bit;
 	}
 
+	function onRemove() {}
+
 	@:allow(ecs.Entity)
 	function _attach(entity:Entity)
 	{
@@ -40,8 +42,9 @@ abstract class Component
 	}
 
 	@:allow(ecs.Entity)
-	function _detach()
+	function _remove()
 	{
+		onRemove();
 		entity = null;
 	}
 

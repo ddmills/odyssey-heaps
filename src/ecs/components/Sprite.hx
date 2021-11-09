@@ -30,4 +30,9 @@ class Sprite extends Component
 	{
 		return ob.visible = value;
 	}
+
+	override function onRemove()
+	{
+		ob.remove();
+	}
 }

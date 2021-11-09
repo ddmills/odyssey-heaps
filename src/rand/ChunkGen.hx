@@ -71,9 +71,11 @@ class ChunkGen
 				if (treev > .5)
 				{
 					var tree = createTree(wx, wy);
-					tree.pos = new Coordinate(wx, wy, WORLD);
-
-					Game.instance.world.add(tree);
+					if (tree != null)
+					{
+						tree.pos = new Coordinate(wx, wy, WORLD);
+						Game.instance.world.add(tree);
+					}
 				}
 			}
 
@@ -83,13 +85,23 @@ class ChunkGen
 
 	function createTree(x:Int, y:Int)
 	{
-		var seed = x + (y * 2000);
-		var tree = new Entity();
-		var bm = new Bitmap(TileResources.TREE);
-		tree.add(new Sprite(bm, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
-		var name = seed % 2 == 0 ? SpanishNameGenerator.getMaleName(seed) : SpanishNameGenerator.getFemaleName(seed);
+		var settlements = Game.instance.world.settlements;
 
-		tree.add(new Moniker('${name} [${seed}]'));
-		return tree;
+		if (!Lambda.exists(settlements, function(p)
+		{
+			return Math.abs(x - p.x) < 3 && Math.abs(y - p.y) < 3;
+		}))
+		{
+			var seed = x + (y * 2000);
+			var tree = new Entity();
+			var bm = new Bitmap(TileResources.TREE);
+			tree.add(new Sprite(bm, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
+			var name = seed % 2 == 0 ? SpanishNameGenerator.getMaleName(seed) : SpanishNameGenerator.getFemaleName(seed);
+
+			tree.add(new Moniker('${name} [${seed}]'));
+			return tree;
+		}
+
+		return null;
 	}
 }
