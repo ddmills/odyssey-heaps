@@ -9,6 +9,7 @@ import ecs.components.Moniker;
 import ecs.components.Settlement;
 import ecs.components.Sprite;
 import ecs.components.Vision;
+import ecs.prefabs.SettlementPrefab;
 import h2d.Bitmap;
 import rand.names.SpanishNameGenerator;
 
@@ -23,13 +24,9 @@ class PlayState extends GameState
 		world.player.x = 358;
 		world.player.y = 535;
 
-		var settlement = new Entity();
+		var settlement = SettlementPrefab.Create();
 		settlement.x = 353;
 		settlement.y = 530;
-		settlement.add(new Sprite(new Bitmap(TileResources.SETTLEMENT), game.TILE_W_HALF, game.TILE_H));
-		settlement.add(new Moniker('Settlement'));
-		settlement.add(new Vision(3));
-		settlement.add(new Settlement('Port Troutberk'));
 		world.add(settlement);
 
 		scene.add(world.layers.root, 0);

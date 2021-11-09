@@ -39,6 +39,8 @@ class World
 	public var layers(default, null):RenderLayerManager;
 	public var player(default, null):PlayerManager;
 
+	public var settlements = new Array<{x:Int, y:Int}>();
+
 	inline function get_game():Game
 	{
 		return Game.instance;

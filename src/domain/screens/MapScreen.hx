@@ -4,6 +4,7 @@ import common.struct.Coordinate;
 import core.Frame;
 import core.Screen;
 import domain.terrain.TerrainType;
+import ecs.prefabs.SettlementPrefab;
 import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Object;
@@ -75,6 +76,16 @@ class MapScreen extends Screen
 		blink.x = (world.player.x / granularity).floor() * tileSize;
 		blink.y = (world.player.y / granularity).floor() * tileSize;
 		ob.addChild(blink);
+
+		for (s in world.settlements)
+		{
+			var red = Tile.fromColor(0xe91e63, tileSize, tileSize);
+			var point = new Bitmap(red);
+
+			point.x = (s.x / granularity).floor() * tileSize;
+			point.y = (s.y / granularity).floor() * tileSize;
+			ob.addChild(point);
+		}
 	}
 
 	public override function onEnter()
@@ -82,6 +93,11 @@ class MapScreen extends Screen
 		populate();
 		game.render(HUD, ob);
 		sampler = new PoissonDiscSampler(game.world.mapWidth, game.world.mapHeight, 40);
+
+		if (world.settlements.length == 0)
+		{
+			gen();
+		}
 	}
 
 	public override function onDestroy()
@@ -97,31 +113,22 @@ class MapScreen extends Screen
 		}
 	}
 
-	override function update(frame:Frame)
+	function gen()
 	{
 		var s = sampler.sample();
-		if (s != null)
+		while (s != null)
 		{
 			var t = world.chunkGen.getTerrain(s.x, s.y);
 
 			if (t == GRASS || t == SAND)
 			{
-				var red = Tile.fromColor(0xe91e63, tileSize, tileSize);
-				var point = new Bitmap(red);
-
-				point.x = (s.x / granularity).floor() * tileSize;
-				point.y = (s.y / granularity).floor() * tileSize;
-				ob.addChild(point);
+				var settlement = SettlementPrefab.Create();
+				settlement.x = s.x;
+				settlement.y = s.y;
+				world.add(settlement);
+				world.settlements.push(s);
 			}
-			else
-			{
-				var blue = Tile.fromColor(0x0000ff, tileSize, tileSize);
-				var point = new Bitmap(blue);
-
-				point.x = (s.x / granularity).floor() * tileSize;
-				point.y = (s.y / granularity).floor() * tileSize;
-				ob.addChild(point);
-			}
+			s = sampler.sample();
 		}
 	}
 }
