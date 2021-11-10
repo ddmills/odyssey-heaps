@@ -6,6 +6,7 @@ import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Object;
 import h2d.Tile;
+import rand.RandColor;
 
 class MapScreen extends Screen
 {
@@ -63,13 +64,20 @@ class MapScreen extends Screen
 			}
 		}
 
-		var white = Tile.fromColor(0xffffff, tileSize, tileSize, 0);
-		var red = Tile.fromColor(0xe91e63, tileSize, tileSize);
-		var blink = new Anim([white, red], 6);
+		for (isle in world.map.islandDat)
+		{
+			var color = RandColor.Get();
 
-		blink.x = (world.player.x / granularity).floor() * tileSize;
-		blink.y = (world.player.y / granularity).floor() * tileSize;
-		ob.addChild(blink);
+			for (dat in isle)
+			{
+				var green = Tile.fromColor(color, tileSize, tileSize);
+				var point = new Bitmap(green);
+
+				point.x = (dat.x / granularity).floor() * tileSize;
+				point.y = (dat.y / granularity).floor() * tileSize;
+				ob.addChild(point);
+			}
+		}
 
 		for (s in world.map.settlements)
 		{
@@ -80,6 +88,14 @@ class MapScreen extends Screen
 			point.y = (s.y / granularity).floor() * tileSize;
 			ob.addChild(point);
 		}
+
+		var white = Tile.fromColor(0xffffff, tileSize, tileSize, 0);
+		var red = Tile.fromColor(0xe91e63, tileSize, tileSize);
+		var blink = new Anim([white, red], 6);
+
+		blink.x = (world.player.x / granularity).floor() * tileSize;
+		blink.y = (world.player.y / granularity).floor() * tileSize;
+		ob.addChild(blink);
 	}
 
 	public override function onEnter()

@@ -1,9 +1,12 @@
 package domain;
 
 import common.struct.Grid;
+import common.util.FloodFill;
 import core.Game;
 import domain.terrain.TerrainType;
 import rand.PoissonDiscSampler;
+import tools.Meter;
+import tools.Performance;
 
 class MapData
 {
@@ -13,6 +16,8 @@ class MapData
 	var height:Grid<Null<Float>>;
 	var terrain:Grid<TerrainType>;
 	var islands:Grid<Null<Int>>;
+
+	public var islandDat:Array<Array<{x:Int, y:Int}>>;
 
 	public var settlements:Array<{x:Int, y:Int}>;
 
@@ -34,11 +39,15 @@ class MapData
 		terrain = new Grid(world.mapWidth, world.mapHeight);
 		islands = new Grid(world.mapWidth, world.mapHeight);
 		settlements = new Array();
+		islandDat = new Array();
 
+		Performance.start('map');
 		generateHeight();
 		generateTerrain();
 		generateIslands();
 		generateSettlements();
+		Performance.stop('map');
+		trace(Performance.friendly('map'));
 	}
 
 	function perlin(x:Float, y:Float, octaves:Int)
@@ -105,7 +114,56 @@ class MapData
 
 	function generateIslands()
 	{
-		islands.fill(0);
+		islands.fill(-1);
+		while (generateIsland()) {};
+	}
+
+	var _isleIndex = 0;
+
+	function generateIsland()
+	{
+		var islandId = islandDat.length + 1;
+		var start = null;
+
+		for (idx in _isleIndex...terrain.size)
+		{
+			var land = terrain.getAt(idx);
+			var isGrass = land == GRASS;
+			var isUnassigned = islands.getAt(idx) == -1;
+
+			if (isGrass && isUnassigned)
+			{
+				start = terrain.coord(idx);
+				_isleIndex = idx;
+				break;
+			}
+		}
+
+		if (start == null || islandId > 500)
+		{
+			return false;
+		}
+
+		var isle = new Array<{x:Int, y:Int}>();
+
+		FloodFill.flood(start, function(point)
+		{
+			var current = islands.get(point.x, point.y);
+			var land = terrain.get(point.x, point.y);
+
+			if (land == GRASS && current == -1)
+			{
+				isle.push(point);
+				islands.set(point.x, point.y, islandId);
+				return true;
+			}
+
+			return false;
+		});
+
+		islandDat.push(isle);
+
+		return true;
 	}
 
 	function generateSettlements()

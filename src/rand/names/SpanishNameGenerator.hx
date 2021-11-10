@@ -59,4 +59,12 @@ class SpanishNameGenerator
 				return given + ' ' + pick(r, SpanishData.patronymics) + ' ' + pick(r, SpanishData.locative);
 		}
 	}
+
+	public static function getSettlementName(seed:Int)
+	{
+		var r = Rand.create();
+		r.init(seed);
+
+		return pick(r, SpanishData.settlements);
+	}
 }

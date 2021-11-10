@@ -39,7 +39,8 @@ class ChunkGen
 
 			if (map.hasSettlement(wx, wy))
 			{
-				var settlement = SettlementPrefab.Create();
+				var s = wx + (wy * 2000);
+				var settlement = SettlementPrefab.Create(s);
 				settlement.x = wx;
 				settlement.y = wy;
 				Game.instance.world.add(settlement);

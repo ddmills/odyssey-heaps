@@ -46,6 +46,14 @@ class Performance
 		return getOrCreateMeter(name);
 	}
 
+	public static function friendly(name:String)
+	{
+		var val = getOrCreateMeter(name).latest;
+		var trunc = Math.floor(val * 100) / 100;
+
+		return '${name} ${trunc}ms';
+	}
+
 	public static function percent(name:String)
 	{
 		var snapshot = snapshots.peek();

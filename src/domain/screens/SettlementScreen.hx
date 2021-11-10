@@ -24,6 +24,7 @@ class SettlementScreen extends Screen
 			color: 0x000000,
 			alpha: .75
 		};
+		text.y = 256;
 		text.text = settlement.get(Settlement).name;
 	}
 
@@ -45,6 +46,6 @@ class SettlementScreen extends Screen
 	override function update(frame:Frame)
 	{
 		world.updateSystems();
-		text.alignCenter(game.state.scene);
+		text.alignCenterX(game.state.scene);
 	}
 }
