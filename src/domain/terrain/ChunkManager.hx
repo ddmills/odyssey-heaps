@@ -2,7 +2,6 @@ package domain.terrain;
 
 import common.struct.Grid;
 import common.util.Projection;
-import core.Game;
 
 class ChunkManager
 {
@@ -15,8 +14,6 @@ class ChunkManager
 		{
 			var coord = chunks.coord(i);
 			var chunk = new Chunk(i, coord.x, coord.y, chunkSize);
-
-			chunk.terrain.fill(WATER);
 
 			chunks.setIdx(i, chunk);
 		}

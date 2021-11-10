@@ -7,7 +7,7 @@ class SpanishData
 		'Bartolomé', 'Martín', 'Miguel', 'Rodrigo', 'Antón', 'Gaspar', 'Gabriel', 'Lorenzo', 'Sebastian', 'Jaime', 'Lope', 'Jerónimo', 'Alvaro', 'Baltasar',
 		'Benito', 'Manuel', 'Marcos', 'Agustín', 'Bernardino', 'Domingo', 'Esteban', 'Felipe', 'Lucas', 'Simón', 'Tomás', 'Carlos', 'Cosme', 'Gines',
 		'Gregorio', 'Mateo', 'Matias', 'Nicolas', 'Sancho', 'Santiago', 'Barros', 'Bastía', 'Bautista', 'Blas', 'Eyague', 'Frutos', 'Garci', 'Giraldo',
-		'Guillen', 'Hector', 'Jorge', 'Jose', 'Melchor', 'Mergildo', 'Pablo', 'Pascual', 'Salvador', 'Tomé', 'Truylos'
+		'Guillen', 'Hector', 'Jorge', 'Jose', 'Melchor', 'Mergildo', 'Pablo', 'Pascual', 'Salvador', 'Tomé', 'Truylos',
 	];
 
 	public static var femaleGiven = [
@@ -29,12 +29,20 @@ class SpanishData
 
 	public static var patronymics = [
 		'Sánchez', 'Rodríguez', 'López', 'García', 'Hernández', 'González', 'Martín', 'Pérez', 'Díaz', 'Gutiérrez', 'Gómez', 'Martínez', 'Jiménez', 'Ortiz',
-		'Ruiz', 'Nuñez', 'Vázquez', 'Muñoz', 'Suárez', 'Juárez', 'Ramírez', 'Arias', 'Méndez', 'Sanz', 'Díez', 'Yañez', 'Blas', 'Ponce', 'Vásquez'
+		'Ruiz', 'Nuñez', 'Vázquez', 'Muñoz', 'Suárez', 'Juárez', 'Ramírez', 'Arias', 'Méndez', 'Sanz', 'Díez', 'Yañez', 'Blas', 'Ponce', 'Vásquez',
 	];
 
 	public static var other = [
 		'Moreno', 'Carrillo', 'de la Cruz', 'Ramos', 'Caballero', 'Farfán', 'Barrosa', 'Lomelin', 'Pinto', 'Quijada', 'Blaque', 'del Canto', 'Cerrada',
 		'Chico', 'Cortés', 'Donoso', 'Macías', 'Peinado', 'Pizarro', 'Pletes', 'Riquel', 'Roja', 'Vaca', 'del Aguila', 'Aloy', 'Cabezas', 'Cardero',
-		'Ejarque', 'Fillado', 'Galán', 'Luengo', 'Marita', 'Marqués', 'Nelleda', 'Perdigon', 'Sañudo', 'Solucio', 'Suero', 'Vizcaína'
+		'Ejarque', 'Fillado', 'Galán', 'Luengo', 'Marita', 'Marqués', 'Nelleda', 'Perdigon', 'Sañudo', 'Solucio', 'Suero', 'Vizcaína',
+	];
+
+	public static var settlements = [
+		'Santancamento', 'Tarouredes', 'Taluz', 'Cantalés', 'Guarcia', 'Budrid', 'Toruña', 'Castilicia', 'Abramego', 'Trapascara', 'Espodia', 'Cartarica',
+		'Leógo', 'Catoria', 'Beninca', 'Seintijo', 'Naouveza', 'Ávisia', 'Abrajo', 'Grancia', 'Camancamento', 'Andaruña', 'Aguarica', 'Canimar', 'Vallarcia',
+		'Santaceres', 'Espirosa', 'Castelusia', 'Bajo', 'Granatava', 'Algeciras', 'Árgos', 'Aguarteira', 'Chioples', 'Ararez', 'Alziruña', 'Brelzano',
+		'Marbejón', 'Granaviedo', 'Cavenna', 'Piligno', 'Bergasello', 'Amarango', 'Alzigroño', 'Cantahuela', 'Montecenza', 'Tirugia', 'Orogena', 'Toledoba',
+		'Alverreja', 'Ábria', 'Bozio', 'Tares', 'Cartarón', 'Cálencia', 'Portalegre', 'Torrestián',
 	];
 }

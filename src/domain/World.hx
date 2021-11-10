@@ -15,7 +15,6 @@ import ecs.components.Explored;
 import ecs.components.Sprite;
 import ecs.components.Visible;
 import rand.ChunkGen;
-import tools.Performance;
 
 class World
 {
@@ -28,8 +27,6 @@ class World
 	public var chunks(default, null):ChunkManager;
 	public var chunkGen(default, null):ChunkGen;
 
-	var visible:Array<Coordinate>;
-
 	public var movement(default, null):MovementSystem;
 	public var vision(default, null):VisionSystem;
 	public var camera(default, null):CameraSystem;
@@ -38,8 +35,9 @@ class World
 
 	public var layers(default, null):RenderLayerManager;
 	public var player(default, null):PlayerManager;
+	public var map(default, null):MapData;
 
-	public var settlements = new Array<{x:Int, y:Int}>();
+	var visible:Array<Coordinate>;
 
 	inline function get_game():Game
 	{
@@ -61,6 +59,8 @@ class World
 		camera = new CameraSystem();
 		pathing = new PathFollowSystem();
 		stats = new StatsSystem();
+
+		map = new MapData(1);
 	}
 
 	function get_mapWidth():Int

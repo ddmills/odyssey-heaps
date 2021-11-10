@@ -1,5 +1,6 @@
 package domain.terrain;
 
+import common.struct.Coordinate;
 import common.struct.Grid;
 import common.struct.GridMap;
 import common.util.Projection;
@@ -15,7 +16,6 @@ class Chunk
 	var tiles:TileGroup;
 	var fog:h2d.Object;
 
-	public var terrain(default, null):Grid<TerrainType>;
 	public var exploration(default, null):Grid<Null<Bool>>;
 	public var entities(default, null):GridMap<String>;
 	public var isLoaded(default, null):Bool;
@@ -34,7 +34,6 @@ class Chunk
 
 		cx = chunkX;
 		cy = chunkY;
-		terrain = new Grid(size, size);
 		exploration = new Grid(size, size);
 		entities = new GridMap(size, size);
 	}
@@ -135,9 +134,13 @@ class Chunk
 	{
 		var tiles = new h2d.TileGroup();
 
-		for (t in terrain)
+		for (t in exploration)
 		{
-			var tile = getTerrainTile(t.value);
+			var wx = cx * size + t.x;
+			var wy = cy * size + t.y;
+
+			var terrain = Game.instance.world.map.getTerrain(wx, wy);
+			var tile = getTerrainTile(terrain);
 			var pix = Projection.worldToPx(t.x, t.y);
 
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;

@@ -1,21 +1,15 @@
 package domain.screens;
 
-import common.struct.Coordinate;
-import core.Frame;
 import core.Screen;
 import domain.terrain.TerrainType;
-import ecs.prefabs.SettlementPrefab;
 import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Object;
 import h2d.Tile;
-import rand.ChunkGen;
-import rand.PoissonDiscSampler;
 
 class MapScreen extends Screen
 {
 	var ob:Object;
-	var sampler:PoissonDiscSampler;
 	var granularity = 4;
 	var tileSize = 3;
 
@@ -41,7 +35,7 @@ class MapScreen extends Screen
 
 	function populateTile(wx:Int, wy:Int)
 	{
-		var type = world.chunkGen.getTerrain(wx, wy);
+		var type = world.map.getTerrain(wx, wy);
 		var color = terrainToColor(type);
 		var tile = Tile.fromColor(color, tileSize, tileSize);
 		var bm = new Bitmap(tile);
@@ -77,7 +71,7 @@ class MapScreen extends Screen
 		blink.y = (world.player.y / granularity).floor() * tileSize;
 		ob.addChild(blink);
 
-		for (s in world.settlements)
+		for (s in world.map.settlements)
 		{
 			var red = Tile.fromColor(0xe91e63, tileSize, tileSize);
 			var point = new Bitmap(red);
@@ -92,12 +86,6 @@ class MapScreen extends Screen
 	{
 		populate();
 		game.render(HUD, ob);
-		sampler = new PoissonDiscSampler(game.world.mapWidth, game.world.mapHeight, 40);
-
-		if (world.settlements.length == 0)
-		{
-			gen();
-		}
 	}
 
 	public override function onDestroy()
@@ -110,25 +98,6 @@ class MapScreen extends Screen
 		if (keyCode == 77)
 		{
 			game.screens.pop();
-		}
-	}
-
-	function gen()
-	{
-		var s = sampler.sample();
-		while (s != null)
-		{
-			var t = world.chunkGen.getTerrain(s.x, s.y);
-
-			if (t == GRASS || t == SAND)
-			{
-				var settlement = SettlementPrefab.Create();
-				settlement.x = s.x;
-				settlement.y = s.y;
-				world.add(settlement);
-				world.settlements.push(s);
-			}
-			s = sampler.sample();
 		}
 	}
 }

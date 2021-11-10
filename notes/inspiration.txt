@@ -3,13 +3,20 @@
 - Use Logwood trees for dye (blue, purple, black (mixed with iron))
 - Dyes/Logwood (https://www.youtube.com/watch?v=Si6yX_FTAQs)
 - Coffee, Tea
+- Sugar Cane
 
 ## Sailing
 - heave to https://en.wikipedia.org/wiki/Heaving_to
 
 ## Names
+- Real town names https://www.mithrilandmages.com/utilities/CityNames.php
 - spanish https://www.cs.cmu.edu/~kvs/heraldry/spanish16/
 - ships https://en.wikipedia.org/wiki/List_of_ships_of_the_line_of_Spain
 - french ships https://en.wikipedia.org/wiki/List_of_ships_of_the_line_of_France
 - other ships https://www.ellipsis.cx/~liana/names/other/ships.html
 - naming french ships https://forum.game-labs.net/topic/4361-french-ship-names-in-age-of-sail/
+
+- Dutch Republic (https://en.wikipedia.org/wiki/Dutch_Republic)c
+
+## Caribbean
+https://en.wikipedia.org/wiki/Territorial_evolution_of_the_Caribbean

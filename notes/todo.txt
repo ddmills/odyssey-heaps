@@ -9,6 +9,8 @@
 - [x] follow path system
 - [ ] map gen
 - [x] map screen
+- [ ] flood fill
+- [ ] island assignment
 - [ ] create input systems
 - [ ] create grid layout for UI
 - [ ] extract text creation
