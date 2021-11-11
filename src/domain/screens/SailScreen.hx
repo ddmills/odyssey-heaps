@@ -1,7 +1,9 @@
 package domain.screens;
 
 import common.struct.Coordinate;
+import common.util.AStar;
 import common.util.Bresenham;
+import common.util.Distance;
 import core.Frame;
 import core.Screen;
 import data.TileResources;
@@ -41,6 +43,33 @@ class SailScreen extends Screen
 		cursor.pos = camera.mouse.toWorld().floor();
 	}
 
+	function astar(goal:Coordinate)
+	{
+		var map = world.map;
+
+		return AStar.GetPath({
+			start: world.player.pos.toWorld().ToIntPoint(),
+			goal: goal.ToIntPoint(),
+			allowDiagonals: true,
+			cost: function(a, b)
+			{
+				if (map.data.isOutOfBounds(b.x, b.y))
+				{
+					return Math.POSITIVE_INFINITY;
+				}
+
+				var tile = map.data.get(b.x, b.y);
+
+				if (!tile.isWater)
+				{
+					return Distance.Diagonal(a, b) * 4;
+				}
+
+				return Distance.Diagonal(a, b);
+			}
+		});
+	}
+
 	override function onKeyUp(keyCode:Int)
 	{
 		if (keyCode == 77)
@@ -64,9 +93,9 @@ class SailScreen extends Screen
 			return;
 		}
 
-		var goal = click.toWorld().floor();
-		var line = Bresenham.getLine(world.player.x.floor(), world.player.y.floor(), goal.x.floor(), goal.y.floor());
-		var path = new Path(line);
+		var goal = click.toWorld();
+		var line = astar(goal);
+		var path = new Path(line.path);
 
 		world.player.entity.add(path);
 	}

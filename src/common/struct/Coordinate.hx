@@ -28,4 +28,14 @@ class Coordinate
 			return new Coordinate(p.x, p.y, space);
 		});
 	}
+
+	public inline function ToIntPoint()
+	{
+		return new IntPoint(x.floor(), y.floor());
+	}
+
+	public inline function ToFloatPoint()
+	{
+		return new FloatPoint(x, y);
+	}
 }

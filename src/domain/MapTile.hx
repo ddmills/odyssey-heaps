@@ -15,6 +15,7 @@ class MapTile
 	public var hasIsland(get, never):Bool;
 	public var settlement(get, never):SettlementData;
 	public var hasSettlement(get, never):Bool;
+	public var isWater(get, never):Bool;
 
 	public var x(get, never):Int;
 	public var y(get, never):Int;
@@ -65,5 +66,10 @@ class MapTile
 	function get_hasSettlement():Bool
 	{
 		return settlementId != -1;
+	}
+
+	function get_isWater():Bool
+	{
+		return terrain == WATER || terrain == SHALLOWS;
 	}
 }

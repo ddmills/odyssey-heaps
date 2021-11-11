@@ -169,8 +169,6 @@ class MapData
 			return false;
 		});
 
-		trace('island generated', island.id, island.size);
-
 		islands.push(island);
 
 		return true;

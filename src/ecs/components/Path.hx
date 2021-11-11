@@ -1,15 +1,17 @@
 package ecs.components;
 
+import common.struct.IntPoint;
+
 class Path extends Component
 {
-	var instructions:Array<{x:Int, y:Int}>;
+	var instructions:Array<IntPoint>;
 	var curIdx:Int;
 
 	public var length(get, never):Int;
 	public var remaining(get, never):Int;
-	public var current(get, never):{x:Int, y:Int};
+	public var current(get, never):IntPoint;
 
-	public function new(instructions:Array<{x:Int, y:Int}>)
+	public function new(instructions:Array<IntPoint>)
 	{
 		this.instructions = instructions;
 		curIdx = 0;
@@ -20,7 +22,7 @@ class Path extends Component
 		return instructions.length;
 	}
 
-	inline function get_current():{x:Int, y:Int}
+	inline function get_current():IntPoint
 	{
 		return instructions[curIdx];
 	}
@@ -33,7 +35,7 @@ class Path extends Component
 	/**
 	 * Advance the current node in the path
 	**/
-	public function next():{x:Int, y:Int}
+	public function next():IntPoint
 	{
 		curIdx++;
 		return current;

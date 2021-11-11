@@ -4,24 +4,25 @@
 - [x] move update logic into World
 - [x] create screen state system (push/pop/set/peek)
 - [x] render layers world.layers (render layers?)
-- [ ] world -> map
+- [x] world -> map
 - [x] move player data
 - [x] follow path system
-- [ ] map gen
+- [x] map gen
 - [x] map screen
 - [x] flood fill
 - [x] island assignment
 - [ ] rivers
-- [ ] AStar
+- [x] AStar
 - [ ] Markov
+- [ ] haxe console commands
 - [ ] island names
 - [ ] create input systems
 - [ ] create grid layout for UI
-- [ ] extract text creation
+- [ ] extract h2d.Text creation
 - [x] screen for settlements
 - [x] random spanish name generator
 - [ ] weight table
-- [ ] pathfinding
+- [x] pathfinding
 - [ ] identity component
 - [x] minimap
 - [ ] settlement generation (placement)
