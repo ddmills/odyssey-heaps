@@ -36,7 +36,7 @@ package common.struct;
 		return Math.floor(idx / width);
 	}
 
-	public function coord(idx:Int)
+	public function coord(idx:Int):IntPoint
 	{
 		return {
 			x: x(idx),

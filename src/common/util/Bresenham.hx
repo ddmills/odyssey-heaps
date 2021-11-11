@@ -1,14 +1,16 @@
 package common.util;
 
+import common.struct.IntPoint;
+
 class Bresenham
 {
-	public static function getLine(x0:Int, y0:Int, x1:Int, y1:Int):Array<{x:Int, y:Int}>
+	public static function getLine(x0:Int, y0:Int, x1:Int, y1:Int):Array<IntPoint>
 	{
 		var dx = (x1 - x0).abs();
 		var dy = (y1 - y0).abs();
 		var sx = x0 < x1 ? 1 : -1;
 		var sy = y0 < y1 ? 1 : -1;
-		var result = new Array<{x:Int, y:Int}>();
+		var result = new Array<IntPoint>();
 
 		var err = dx - dy;
 		while (true)
@@ -41,15 +43,15 @@ class Bresenham
 		return result;
 	}
 
-	public static function getCircle(x0:Int, y0:Int, r:Int, fill:Bool = false):Array<{x:Int, y:Int}>
+	public static function getCircle(x0:Int, y0:Int, r:Int, fill:Bool = false):Array<IntPoint>
 	{
-		var pm = new Map<String, {x:Int, y:Int}>();
-		var points = new Array<{x:Int, y:Int}>();
+		var pm = new Map<String, IntPoint>();
+		var points = new Array<IntPoint>();
 		var balance:Int = -r;
 		var dx:Int = 0;
 		var dy:Int = r;
 
-		function addPoint(p:{x:Int, y:Int})
+		function addPoint(p:IntPoint)
 		{
 			var k = '${p.x},${p.y}';
 			if (pm.get(k) == null)
@@ -110,7 +112,7 @@ class Bresenham
 		return points;
 	}
 
-	private static function hline(x:Int, y:Int, w:Int, fn:({x:Int, y:Int}) -> Void)
+	private static function hline(x:Int, y:Int, w:Int, fn:(IntPoint) -> Void)
 	{
 		for (i in 0...w)
 		{

@@ -1,13 +1,8 @@
 package rand;
 
 import common.struct.Grid;
+import common.struct.IntPoint;
 import hxd.Math;
-
-typedef Point =
-{
-	var x:Int;
-	var y:Int;
-}
 
 class PoissonDiscSampler
 {
@@ -19,9 +14,9 @@ class PoissonDiscSampler
 	var radius2:Int;
 	var PI2:Float = 2 * Math.PI;
 	var cellSize:Float;
-	var grid:Grid<Point>;
-	var results:Array<Point>;
-	var active:Array<Point>;
+	var grid:Grid<IntPoint>;
+	var results:Array<IntPoint>;
+	var active:Array<IntPoint>;
 
 	public function new(width:Int, height:Int, radius:Int)
 	{
@@ -35,14 +30,14 @@ class PoissonDiscSampler
 		radius2 = radius * radius;
 
 		cellSize = radius * Math.sqrt(.5);
-		grid = new Grid<Point>(Math.ceil(width / cellSize), Math.ceil(height / cellSize));
-		active = new Array<Point>();
-		results = new Array<Point>();
+		grid = new Grid<IntPoint>(Math.ceil(width / cellSize), Math.ceil(height / cellSize));
+		active = new Array<IntPoint>();
+		results = new Array<IntPoint>();
 	}
 
-	function addSample(x:Int, y:Int):Point
+	function addSample(x:Int, y:Int):IntPoint
 	{
-		var point = {
+		var point:IntPoint = {
 			x: x,
 			y: y
 		};
@@ -88,7 +83,7 @@ class PoissonDiscSampler
 		return true;
 	}
 
-	public function sample():Point
+	public function sample():IntPoint
 	{
 		if (results.length == 0)
 		{

@@ -1,11 +1,13 @@
 package domain;
 
+import common.struct.IntPoint;
+
 class IslandData
 {
 	public var id(default, null):Int;
 	public var map(default, null):MapData;
 	public var size(get, never):Int;
-	public var tiles:Array<{x:Int, y:Int}>;
+	public var tiles:Array<IntPoint>;
 
 	public function new(id:Int, map:MapData)
 	{

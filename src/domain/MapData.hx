@@ -1,6 +1,7 @@
 package domain;
 
 import common.struct.Grid;
+import common.struct.IntPoint;
 import common.util.FloodFill;
 import core.Game;
 import domain.terrain.TerrainType;
@@ -129,7 +130,7 @@ class MapData
 	function generateIsland()
 	{
 		var islandId = islands.length;
-		var start = null;
+		var start:IntPoint = null;
 		var island = new IslandData(islandId, this);
 
 		for (idx in _isleIndex...data.size)
@@ -138,7 +139,8 @@ class MapData
 
 			if ((tile.terrain == GRASS || tile.terrain == SAND) && !tile.hasIsland)
 			{
-				start = data.coord(idx);
+				var coord = data.coord(idx);
+				start = new IntPoint(coord.x, coord.y);
 				_isleIndex = idx;
 				break;
 			}

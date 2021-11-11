@@ -1,10 +1,6 @@
 package common.util;
 
-typedef Point =
-{
-	var x:Int;
-	var y:Int;
-}
+import common.struct.IntPoint;
 
 class FloodFill
 {
@@ -13,9 +9,9 @@ class FloodFill
 	 * against `fill`. The `fill` function needs to both check if the point
 	 * should be filled (bool), and fill it in
 	**/
-	public static function flood(seed:Point, fill:(Point) -> Bool)
+	public static function flood(seed:IntPoint, fill:(IntPoint) -> Bool)
 	{
-		var queue = new Array<Point>();
+		var queue = new Array<IntPoint>();
 		queue.push(seed);
 
 		while (queue.length > 0)

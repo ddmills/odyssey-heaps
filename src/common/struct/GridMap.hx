@@ -1,7 +1,5 @@
 package common.struct;
 
-import common.struct.Coordinate.Point;
-
 @:generic class GridMap<T:(String)>
 {
 	var hash:Map<T, Int>;
@@ -81,14 +79,16 @@ import common.struct.Coordinate.Point;
 		return idx;
 	}
 
-	public function getPosition(id:T):Null<Point>
+	public function getPosition(id:T):Null<IntPoint>
 	{
 		var idx = hash.get(id);
 		if (idx == null)
 		{
 			return null;
 		}
-		return coord(idx);
+		var coord = coord(idx);
+
+		return new IntPoint(coord.x, coord.y);
 	}
 
 	public function remove(value:T):Bool
