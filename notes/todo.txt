@@ -9,8 +9,12 @@
 - [x] follow path system
 - [ ] map gen
 - [x] map screen
-- [ ] flood fill
-- [ ] island assignment
+- [x] flood fill
+- [x] island assignment
+- [ ] rivers
+- [ ] AStar
+- [ ] Markov
+- [ ] island names
 - [ ] create input systems
 - [ ] create grid layout for UI
 - [ ] extract text creation

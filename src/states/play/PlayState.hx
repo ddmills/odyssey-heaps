@@ -11,8 +11,8 @@ class PlayState extends GameState
 	{
 		world.InitSystems();
 		world.player.initialize();
-		world.player.x = 358;
-		world.player.y = 535;
+		world.player.x = 311;
+		world.player.y = 506;
 
 		scene.add(world.layers.root, 0);
 

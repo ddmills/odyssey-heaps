@@ -7,6 +7,7 @@
 
 ## Sailing
 - heave to https://en.wikipedia.org/wiki/Heaving_to
+- ship names http://rulebritannia.pbworks.com/w/page/4577691/List%20of%20ships%20by%20reigning
 
 ## Names
 - Real town names https://www.mithrilandmages.com/utilities/CityNames.php
@@ -20,3 +21,4 @@
 
 ## Caribbean
 https://en.wikipedia.org/wiki/Territorial_evolution_of_the_Caribbean
+https://en.wikipedia.org/wiki/List_of_Caribbean_islands

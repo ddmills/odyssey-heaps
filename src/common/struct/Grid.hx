@@ -26,11 +26,21 @@ package common.struct;
 		return y * width + x;
 	}
 
+	public inline function x(idx:Int)
+	{
+		return Math.floor(idx % width);
+	}
+
+	public inline function y(idx:Int)
+	{
+		return Math.floor(idx / width);
+	}
+
 	public function coord(idx:Int)
 	{
 		return {
-			x: Math.floor(idx % width),
-			y: Math.floor(idx / width),
+			x: x(idx),
+			y: y(idx),
 		};
 	}
 

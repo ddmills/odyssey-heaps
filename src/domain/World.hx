@@ -145,6 +145,18 @@ class World
 		visible = values;
 	}
 
+	public function isExplored(coord:Coordinate)
+	{
+		var c = coord.toChunk();
+		var chunk = chunks.getChunk(c.x, c.y);
+		if (chunk == null)
+		{
+			return false;
+		}
+		var local = coord.toChunkLocal(c.x, c.y);
+		return chunk.exploration.get(local.x.floor(), local.y.floor());
+	}
+
 	public function explore(coord:Coordinate)
 	{
 		var c = coord.toChunk();

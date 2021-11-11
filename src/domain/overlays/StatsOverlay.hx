@@ -53,6 +53,8 @@ class StatsOverlay extends h2d.Object
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
 
+		var island = world.map.getIsland(w.x, w.y);
+
 		var txt = '';
 		txt += '\n' + game.frame.fps.round().toString();
 		txt += '\npixel ${p.toString()}';
@@ -60,6 +62,15 @@ class StatsOverlay extends h2d.Object
 		txt += '\nchunk ${c.toString()} (${c.toChunkIdx()})';
 		txt += '\nlocal ${w.toChunkLocal(c.x.floor(), c.y.floor()).toString()}';
 		txt += '\nentities ${game.registry.size}';
+
+		if (island != null)
+		{
+			txt += '\nisland ${island.id.toString()} (${island.tiles.length.toString()} tiles)';
+		}
+		else
+		{
+			txt += '\nocean';
+		}
 
 		fpsText.text = txt;
 		fpsText.alignBottom(game.state.scene, game.TILE_H);

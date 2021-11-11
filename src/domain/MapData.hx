@@ -5,7 +5,6 @@ import common.util.FloodFill;
 import core.Game;
 import domain.terrain.TerrainType;
 import rand.PoissonDiscSampler;
-import tools.Meter;
 import tools.Performance;
 
 class MapData
@@ -13,13 +12,10 @@ class MapData
 	var hxdPerlin:hxd.Perlin;
 	var seed:Int;
 	var settlementDensity:Int;
-	var height:Grid<Null<Float>>;
-	var terrain:Grid<TerrainType>;
-	var islands:Grid<Null<Int>>;
 
-	public var islandDat:Array<Array<{x:Int, y:Int}>>;
-
-	public var settlements:Array<{x:Int, y:Int}>;
+	public var islands:Array<IslandData>;
+	public var settlements:Array<SettlementData>;
+	public var data:Grid<MapTile>;
 
 	var world(get, never):World;
 
@@ -35,11 +31,13 @@ class MapData
 		hxdPerlin.normalize = true;
 		settlementDensity = 40;
 
-		height = new Grid(world.mapWidth, world.mapHeight);
-		terrain = new Grid(world.mapWidth, world.mapHeight);
-		islands = new Grid(world.mapWidth, world.mapHeight);
+		islands = new Array();
 		settlements = new Array();
-		islandDat = new Array();
+		data = new Grid(world.mapWidth, world.mapHeight);
+		data.fillFn(function(idx)
+		{
+			return new MapTile(idx, this);
+		});
 
 		Performance.start('map');
 		generateHeight();
@@ -47,7 +45,9 @@ class MapData
 		generateIslands();
 		generateSettlements();
 		Performance.stop('map');
+
 		trace(Performance.friendly('map'));
+		trace('islands', islands.length);
 	}
 
 	function perlin(x:Float, y:Float, octaves:Int)
@@ -59,62 +59,68 @@ class MapData
 
 	public function getTerrain(wx:Float, wy:Float):TerrainType
 	{
-		return terrain.get(wx.floor(), wy.floor());
+		return data.get(wx.floor(), wy.floor()).terrain;
+	}
+
+	public function getIsland(wx:Float, wy:Float):IslandData
+	{
+		var tile = data.get(wx.floor(), wy.floor());
+
+		return tile.island;
 	}
 
 	public function hasSettlement(wx:Float, wy:Float):Bool
 	{
-		var fx = wx.floor();
-		var fy = wy.floor();
-		return Lambda.exists(settlements, function(p)
-		{
-			return fx == p.x && fy == p.y;
-		});
+		var tile = data.get(wx.floor(), wy.floor());
+
+		return tile.settlement != null;
 	}
 
 	function generateHeight()
 	{
 		var zoom = 80;
 
-		height.fillFn(function(idx:Int)
+		for (tile in data)
 		{
-			var w = height.coord(idx);
-			var x = w.x / zoom;
-			var y = w.y / zoom;
-			return perlin(x, y, 8);
-		});
+			var x = tile.x / zoom;
+			var y = tile.y / zoom;
+
+			tile.value.height = perlin(x, y, 8);
+		}
+	}
+
+	function heightToTerrain(h:Float)
+	{
+		var waterline = .6;
+
+		if (h < waterline - .04)
+		{
+			return WATER;
+		}
+
+		if (h < waterline)
+		{
+			return SHALLOWS;
+		}
+
+		if (h < waterline + .01)
+		{
+			return SAND;
+		}
+
+		return GRASS;
 	}
 
 	function generateTerrain()
 	{
-		var waterline = .6;
-
-		terrain.fillFn(function(idx:Int)
+		for (tile in data)
 		{
-			var h = height.getAt(idx);
-
-			if (h < waterline - .04)
-			{
-				return WATER;
-			}
-
-			if (h < waterline)
-			{
-				return SHALLOWS;
-			}
-
-			if (h < waterline + .01)
-			{
-				return SAND;
-			}
-
-			return GRASS;
-		});
+			tile.value.terrain = heightToTerrain(tile.value.height);
+		}
 	}
 
 	function generateIslands()
 	{
-		islands.fill(-1);
 		while (generateIsland()) {};
 	}
 
@@ -122,46 +128,50 @@ class MapData
 
 	function generateIsland()
 	{
-		var islandId = islandDat.length + 1;
+		var islandId = islands.length;
 		var start = null;
+		var island = new IslandData(islandId, this);
 
-		for (idx in _isleIndex...terrain.size)
+		for (idx in _isleIndex...data.size)
 		{
-			var land = terrain.getAt(idx);
-			var isGrass = land == GRASS;
-			var isUnassigned = islands.getAt(idx) == -1;
+			var tile = data.getAt(idx);
 
-			if (isGrass && isUnassigned)
+			if ((tile.terrain == GRASS || tile.terrain == SAND) && !tile.hasIsland)
 			{
-				start = terrain.coord(idx);
+				start = data.coord(idx);
 				_isleIndex = idx;
 				break;
 			}
 		}
 
-		if (start == null || islandId > 500)
+		if (start == null)
 		{
 			return false;
 		}
 
-		var isle = new Array<{x:Int, y:Int}>();
-
 		FloodFill.flood(start, function(point)
 		{
-			var current = islands.get(point.x, point.y);
-			var land = terrain.get(point.x, point.y);
-
-			if (land == GRASS && current == -1)
+			var tile = data.get(point.x, point.y);
+			if (tile == null)
 			{
-				isle.push(point);
-				islands.set(point.x, point.y, islandId);
+				return false;
+			}
+
+			var terrain = tile.terrain;
+
+			if ((terrain == GRASS || terrain == SAND) && !tile.hasIsland)
+			{
+				tile.islandId = islandId;
+				island.tiles.push(point);
 				return true;
 			}
 
 			return false;
 		});
 
-		islandDat.push(isle);
+		trace('island generated', island.id, island.size);
+
+		islands.push(island);
 
 		return true;
 	}
@@ -169,18 +179,25 @@ class MapData
 	function generateSettlements()
 	{
 		var sampler = new PoissonDiscSampler(world.mapWidth, world.mapHeight, settlementDensity);
+		var point = sampler.sample();
 
-		var s = sampler.sample();
-		while (s != null)
+		while (point != null)
 		{
-			var t = terrain.get(s.x, s.y);
+			var tile = data.get(point.x, point.y);
 
-			if (t == GRASS || t == SAND)
+			if (tile.terrain == GRASS || tile.terrain == SAND)
 			{
-				settlements.push(s);
+				var settlementId = settlements.length;
+				var settlement = new SettlementData(settlementId, this);
+
+				settlement.x = point.x;
+				settlement.y = point.y;
+				settlements.push(settlement);
+
+				tile.settlementId = settlementId;
 			}
 
-			s = sampler.sample();
+			point = sampler.sample();
 		}
 	}
 }

@@ -51,6 +51,8 @@ class Chunk
 			return;
 		}
 
+		exploration.setIdx(idx, isExplored);
+
 		var child = fog.getChildAt(idx);
 		if (child != null)
 		{

@@ -1,5 +1,6 @@
 package domain.screens;
 
+import common.struct.Coordinate;
 import core.Screen;
 import domain.terrain.TerrainType;
 import h2d.Anim;
@@ -36,10 +37,13 @@ class MapScreen extends Screen
 
 	function populateTile(wx:Int, wy:Int)
 	{
+		var coord = new Coordinate(wx, wy, WORLD);
+		var explored = world.isExplored(coord);
 		var type = world.map.getTerrain(wx, wy);
-		var color = terrainToColor(type);
+		var color = explored ? terrainToColor(type) : 0x111111;
 		var tile = Tile.fromColor(color, tileSize, tileSize);
 		var bm = new Bitmap(tile);
+
 		bm.x = (wx / granularity).floor() * tileSize;
 		bm.y = (wy / granularity).floor() * tileSize;
 		ob.addChild(bm);
@@ -64,24 +68,9 @@ class MapScreen extends Screen
 			}
 		}
 
-		for (isle in world.map.islandDat)
-		{
-			var color = RandColor.Get();
-
-			for (dat in isle)
-			{
-				var green = Tile.fromColor(color, tileSize, tileSize);
-				var point = new Bitmap(green);
-
-				point.x = (dat.x / granularity).floor() * tileSize;
-				point.y = (dat.y / granularity).floor() * tileSize;
-				ob.addChild(point);
-			}
-		}
-
 		for (s in world.map.settlements)
 		{
-			var red = Tile.fromColor(0xe91e63, tileSize, tileSize);
+			var red = Tile.fromColor(0x001eff, tileSize, tileSize);
 			var point = new Bitmap(red);
 
 			point.x = (s.x / granularity).floor() * tileSize;
