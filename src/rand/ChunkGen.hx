@@ -7,9 +7,12 @@ import domain.terrain.Chunk;
 import ecs.Entity;
 import ecs.components.Moniker;
 import ecs.components.Sprite;
+import ecs.prefabs.FarmPrefab;
 import ecs.prefabs.SettlementPrefab;
+import ecs.prefabs.WindmillPrefab;
 import h2d.Bitmap;
 import hxd.Perlin;
+import hxd.Rand;
 import rand.names.SpanishNameGenerator;
 
 class ChunkGen
@@ -30,6 +33,8 @@ class ChunkGen
 	public function generate(chunk:Chunk)
 	{
 		var map = Game.instance.world.map;
+		var r = Rand.create();
+		r.init(seed + chunk.chunkId);
 
 		for (i in chunk.exploration)
 		{
@@ -44,12 +49,37 @@ class ChunkGen
 				settlement.x = wx;
 				settlement.y = wy;
 				Game.instance.world.add(settlement);
+				var neighbors = map.data.getNeighbors(wx, wy);
+				var hasWindmill = false;
+				r.shuffle(neighbors);
+
+				for (neighbor in neighbors)
+				{
+					if (neighbor != null && neighbor.terrain == GRASS)
+					{
+						if (!hasWindmill)
+						{
+							var windmill = WindmillPrefab.Create(s);
+							windmill.x = neighbor.x;
+							windmill.y = neighbor.y;
+							Game.instance.world.add(windmill);
+							hasWindmill = true;
+						}
+						else
+						{
+							var farm = FarmPrefab.Create(s);
+							farm.x = neighbor.x;
+							farm.y = neighbor.y;
+							Game.instance.world.add(farm);
+						}
+					}
+				}
 			}
 			else if (tile == GRASS)
 			{
 				var treen = perlin.perlin(seed, wx / 4, wy / 4, 9);
 				var treev = (treen + 1) / 2;
-				if (treev > .5)
+				if (treev > .6)
 				{
 					var tree = createTree(wx, wy);
 					if (tree != null)

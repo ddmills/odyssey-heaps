@@ -3,6 +3,8 @@ package data;
 class TileResources
 {
 	public static var SETTLEMENT:h2d.Tile;
+	public static var FARM:h2d.Tile;
+	public static var WINDMILL:Array<h2d.Tile>;
 	public static var GROUND_WATER:h2d.Tile;
 	public static var GROUND_SHALLOWS:h2d.Tile;
 	public static var GROUND_SAND:h2d.Tile;
@@ -20,6 +22,8 @@ class TileResources
 		var landmarks = landmarkSheet.divide(4, 4);
 
 		SETTLEMENT = landmarks[0][0];
+		FARM = landmarks[0][1];
+		WINDMILL = [landmarks[0][2], landmarks[0][3]];
 
 		var terrainSheet = hxd.Res.img.iso32_png.toTile();
 		var terrains = terrainSheet.divide(4, 2);

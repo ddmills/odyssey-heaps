@@ -14,6 +14,10 @@ class MapData
 	var hxdPerlin:hxd.Perlin;
 	var seed:Int;
 	var settlementDensity:Int;
+	var heightZoom:Int;
+	var waterline:Float;
+	var riverDensity:Int;
+	var springHeightThreshold:Float;
 
 	public var islands:Array<IslandData>;
 	public var settlements:Array<SettlementData>;
@@ -32,7 +36,11 @@ class MapData
 		this.seed = seed;
 		hxdPerlin = new hxd.Perlin();
 		hxdPerlin.normalize = true;
-		settlementDensity = 40;
+		settlementDensity = 30;
+		heightZoom = 72;
+		waterline = .58;
+		riverDensity = 650;
+		springHeightThreshold = .65;
 
 		islands = new Array();
 		settlements = new Array();
@@ -88,12 +96,10 @@ class MapData
 
 	function generateHeight()
 	{
-		var zoom = 80;
-
 		for (tile in data)
 		{
-			var x = tile.x / zoom;
-			var y = tile.y / zoom;
+			var x = tile.x / heightZoom;
+			var y = tile.y / heightZoom;
 
 			tile.value.height = perlin(x, y, 8);
 		}
@@ -101,8 +107,6 @@ class MapData
 
 	function heightToTerrain(h:Float)
 	{
-		var waterline = .6;
-
 		if (h < waterline - .04)
 		{
 			return WATER;
@@ -267,14 +271,19 @@ class MapData
 
 		for (island in islands)
 		{
-			if (island.size > 2000)
+			if (island.size > 1000)
 			{
-				for (n in 0...5)
+				for (n in 0...(island.size / riverDensity).floor())
 				{
 					var valid = island.tiles.filter(function(t)
 					{
-						return data.get(t.x, t.y).height > .7;
+						return data.get(t.x, t.y).height > springHeightThreshold;
 					});
+
+					if (valid.length == 0)
+					{
+						continue;
+					}
 
 					var spring = null;
 					for (attempt in 0...30)
@@ -307,7 +316,7 @@ class MapData
 
 	function generateSettlements()
 	{
-		var sampler = new PoissonDiscSampler(world.mapWidth, world.mapHeight, settlementDensity);
+		var sampler = new PoissonDiscSampler(world.mapWidth, world.mapHeight, settlementDensity, seed);
 		var point = sampler.sample();
 
 		while (point != null)

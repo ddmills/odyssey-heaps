@@ -3,12 +3,14 @@ package rand;
 import common.struct.Grid;
 import common.struct.IntPoint;
 import hxd.Math;
+import hxd.Rand;
 
 class PoissonDiscSampler
 {
 	var width:Int;
 	var height:Int;
 	var radius:Int;
+	var r:Rand;
 
 	var attempts:Int;
 	var radius2:Int;
@@ -18,8 +20,11 @@ class PoissonDiscSampler
 	var results:Array<IntPoint>;
 	var active:Array<IntPoint>;
 
-	public function new(width:Int, height:Int, radius:Int)
+	public function new(width:Int, height:Int, radius:Int, seed:Int)
 	{
+		r = Rand.create();
+		r.init(seed);
+
 		this.width = width;
 		this.height = height;
 		this.radius = radius;
@@ -87,18 +92,18 @@ class PoissonDiscSampler
 	{
 		if (results.length == 0)
 		{
-			return addSample((Math.random() * width).floor(), (Math.random() * height).floor());
+			return addSample((r.rand() * width).floor(), (r.rand() * height).floor());
 		}
 
 		while (active.length > 0)
 		{
-			var i = Math.floor(Math.random() * active.length);
+			var i = Math.floor(r.rand() * active.length);
 			var sample = active[i];
 
 			for (attempt in 0...attempts)
 			{
-				var angle = PI2 * Math.random();
-				var distance = radius + Math.floor(Math.random() * radius);
+				var angle = PI2 * r.rand();
+				var distance = radius + Math.floor(r.rand() * radius);
 				var x = (sample.x + distance * Math.cos(angle)).floor();
 				var y = (sample.y + distance * Math.sin(angle)).floor();
 
