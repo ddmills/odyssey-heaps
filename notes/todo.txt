@@ -11,7 +11,7 @@
 - [x] map screen
 - [x] flood fill
 - [x] island assignment
-- [ ] rivers
+- [x] rivers
 - [x] AStar
 - [ ] Markov
 - [ ] haxe console commands

@@ -1,0 +1,7 @@
+1, Identify islands over 'N' size
+2. Find highest point on island
+3. spawn "Sprint" at highest point
+4. get immediate neighbors
+5. pick neighbor with lowest height that is not "river"
+6. if neighbor is water, end
+6. spawn river at neighbor, repeat from #4

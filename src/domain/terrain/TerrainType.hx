@@ -4,6 +4,7 @@ enum TerrainType
 {
 	WATER;
 	SHALLOWS;
+	RIVER;
 	SAND;
 	GRASS;
 }

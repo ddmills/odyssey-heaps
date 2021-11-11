@@ -5,6 +5,7 @@ import common.struct.IntPoint;
 import common.util.FloodFill;
 import core.Game;
 import domain.terrain.TerrainType;
+import hxd.Rand;
 import rand.PoissonDiscSampler;
 import tools.Performance;
 
@@ -16,6 +17,7 @@ class MapData
 
 	public var islands:Array<IslandData>;
 	public var settlements:Array<SettlementData>;
+	public var rivers:Array<RiverData>;
 	public var data:Grid<MapTile>;
 
 	var world(get, never):World;
@@ -34,6 +36,7 @@ class MapData
 
 		islands = new Array();
 		settlements = new Array();
+		rivers = new Array();
 		data = new Grid(world.mapWidth, world.mapHeight);
 		data.fillFn(function(idx)
 		{
@@ -44,6 +47,7 @@ class MapData
 		generateHeight();
 		generateTerrain();
 		generateIslands();
+		generateRivers();
 		generateSettlements();
 		Performance.stop('map');
 
@@ -66,6 +70,11 @@ class MapData
 	public function getIsland(wx:Float, wy:Float):IslandData
 	{
 		var tile = data.get(wx.floor(), wy.floor());
+
+		if (tile == null)
+		{
+			return null;
+		}
 
 		return tile.island;
 	}
@@ -174,6 +183,126 @@ class MapData
 		islands.push(island);
 
 		return true;
+	}
+
+	function generateRivers()
+	{
+		function canSpring(point:IntPoint)
+		{
+			var tile = data.get(point.x, point.y);
+
+			return !tile.isWater;
+		}
+
+		function meander(river:RiverData, point:IntPoint, idx:Int = 0)
+		{
+			river.tiles.push(point);
+
+			var neighbors = data.getImmediateNeighbors(point.x, point.y);
+			var lowest:MapTile = null;
+			var success = false;
+
+			for (neighbor in neighbors)
+			{
+				if (neighbor == null)
+				{
+					continue;
+				}
+
+				if (neighbor.terrain == WATER || neighbor.terrain == SHALLOWS)
+				{
+					success = true;
+					break;
+				}
+
+				if (neighbor.terrain == RIVER)
+				{
+					continue;
+				}
+
+				var p = new IntPoint(neighbor.x, neighbor.y);
+
+				if (river.hasTile(p))
+				{
+					continue;
+				}
+
+				if (lowest == null)
+				{
+					lowest = neighbor;
+					continue;
+				}
+
+				if (neighbor.height < lowest.height)
+				{
+					lowest = neighbor;
+				}
+			}
+
+			if (success)
+			{
+				return true;
+			}
+			else if (lowest != null)
+			{
+				var p = new IntPoint(lowest.x, lowest.y);
+				river.tiles.push(p);
+				return meander(river, p, ++idx);
+			}
+			else
+			{
+				if (idx > 1)
+				{
+					return meander(river, river.tiles[idx - 2], idx - 1);
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+
+		var r = Rand.create();
+		r.init(seed);
+
+		for (island in islands)
+		{
+			if (island.size > 2000)
+			{
+				for (n in 0...5)
+				{
+					var valid = island.tiles.filter(function(t)
+					{
+						return data.get(t.x, t.y).height > .7;
+					});
+
+					var spring = null;
+					for (attempt in 0...30)
+					{
+						var p = valid[r.random(valid.length)];
+						if (canSpring(p))
+						{
+							spring = p;
+							break;
+						}
+					}
+
+					if (spring == null)
+					{
+						continue;
+					}
+
+					var river = new RiverData(rivers.length, this);
+					meander(river, spring);
+					rivers.push(river);
+
+					for (t in river.tiles)
+					{
+						data.get(t.x, t.y).terrain = RIVER;
+					}
+				}
+			}
+		}
 	}
 
 	function generateSettlements()

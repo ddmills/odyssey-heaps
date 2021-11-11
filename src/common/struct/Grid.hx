@@ -132,6 +132,16 @@ package common.struct;
 		];
 	}
 
+	public function getImmediateNeighbors(x:Int, y:Int)
+	{
+		return [
+			get(x, y - 1), // TOP
+			get(x - 1, y), // LEFT
+			get(x + 1, y), // RIGHT
+			get(x, y + 1), // BOTTOM
+		];
+	}
+
 	public function as2DArray()
 	{
 		var arr = new Array<Array<T>>();

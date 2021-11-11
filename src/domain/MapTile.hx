@@ -70,6 +70,6 @@ class MapTile
 
 	function get_isWater():Bool
 	{
-		return terrain == WATER || terrain == SHALLOWS;
+		return terrain == WATER || terrain == SHALLOWS || terrain == RIVER;
 	}
 }

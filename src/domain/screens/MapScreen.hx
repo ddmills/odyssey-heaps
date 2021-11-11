@@ -13,7 +13,7 @@ class MapScreen extends Screen
 {
 	var ob:Object;
 	var granularity = 4;
-	var tileSize = 3;
+	var tileSize = 4;
 
 	public function new()
 	{
@@ -24,7 +24,7 @@ class MapScreen extends Screen
 	{
 		switch type
 		{
-			case SHALLOWS:
+			case SHALLOWS | RIVER:
 				return 0x326475;
 			case WATER:
 				return 0x235465;
@@ -40,7 +40,8 @@ class MapScreen extends Screen
 		var coord = new Coordinate(wx, wy, WORLD);
 		var explored = world.isExplored(coord);
 		var type = world.map.getTerrain(wx, wy);
-		var color = explored ? terrainToColor(type) : 0x111111;
+		// var color = explored ? terrainToColor(type) : 0x111111;
+		var color = terrainToColor(type);
 		var tile = Tile.fromColor(color, tileSize, tileSize);
 		var bm = new Bitmap(tile);
 
@@ -70,7 +71,7 @@ class MapScreen extends Screen
 
 		for (s in world.map.settlements)
 		{
-			var red = Tile.fromColor(0x001eff, tileSize, tileSize);
+			var red = Tile.fromColor(0xffff00, tileSize, tileSize);
 			var point = new Bitmap(red);
 
 			point.x = (s.x / granularity).floor() * tileSize;
