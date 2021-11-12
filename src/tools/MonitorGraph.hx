@@ -1,6 +1,7 @@
 package tools;
 
 import common.util.Buffer;
+import data.TextResource;
 
 class MonitorGraph
 {
@@ -18,11 +19,9 @@ class MonitorGraph
 		this.buffer = buffer;
 		this.label = label;
 		this.unit = unit;
-		var bizcat = hxd.Res.fnt.bizcat.toFont();
-		text = new h2d.Text(bizcat);
+		text = TextResource.MakeText();
 		text.x = 4;
 		text.y = 2;
-		text.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
 		chart = new h2d.Graphics();
 	}
 

@@ -3,3 +3,18 @@
 ## theives
 - A group of shady figures jump out and point a knife at you. "Hand over the loot!"
 - Fight? Hand over loot.
+
+## danger
+- You hear a rustling in the trees nearby.
+    - Investigate?
+    - Call out.
+    - Must be the wind.
+
+## blurbs
+- When stepping ashore:
+    - You have a feeling you are being watched.
+
+## rations
+- As you look over the remaining food stores, you find there is less here than you
+    - Food - n
+    -

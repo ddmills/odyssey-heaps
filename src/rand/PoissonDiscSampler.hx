@@ -97,7 +97,7 @@ class PoissonDiscSampler
 
 		while (active.length > 0)
 		{
-			var i = Math.floor(r.rand() * active.length);
+			var i = r.pickIdx(active);
 			var sample = active[i];
 
 			for (attempt in 0...attempts)

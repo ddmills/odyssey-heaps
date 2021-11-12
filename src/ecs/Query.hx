@@ -18,8 +18,8 @@ class Query
 	var any:Int;
 	var all:Int;
 	var none:Int;
+	var isDisposed:Bool;
 
-	var filter:QueryFilter;
 	var cache:Map<String, Entity>;
 	var onAddListeners:Array<(Entity) -> Void>;
 	var onRemoveListeners:Array<(Entity) -> Void>;
@@ -31,47 +31,15 @@ class Query
 
 	public function new(filter:QueryFilter)
 	{
-		this.filter = filter;
+		isDisposed = false;
 		onAddListeners = new Array();
 		onRemoveListeners = new Array();
 		cache = new Map();
 		size = 0;
 
-		if (filter.any != null)
-		{
-			any = Lambda.fold(filter.any, function(c, s)
-			{
-				return BitUtil.addBit(s, registry.getBit(c));
-			}, 0);
-		}
-		else
-		{
-			any = 0;
-		}
-
-		if (filter.all != null)
-		{
-			all = Lambda.fold(filter.all, function(c, s)
-			{
-				return BitUtil.addBit(s, registry.getBit(c));
-			}, 0);
-		}
-		else
-		{
-			all = 0;
-		}
-
-		if (filter.none != null)
-		{
-			none = Lambda.fold(filter.none, function(c, s)
-			{
-				return BitUtil.addBit(s, registry.getBit(c));
-			}, 0);
-		}
-		else
-		{
-			none = 0;
-		}
+		any = getBitmask(filter.any);
+		all = getBitmask(filter.all);
+		none = getBitmask(filter.none);
 
 		registry.registerQuery(this);
 		refresh();
@@ -130,7 +98,7 @@ class Query
 		}
 	}
 
-	public function iterator()
+	public inline function iterator()
 	{
 		return cache.iterator();
 	}
@@ -143,5 +111,25 @@ class Query
 	public function onEntityRemoved(fn:(Entity) -> Void)
 	{
 		onRemoveListeners.push(fn);
+	}
+
+	public function dispose()
+	{
+		isDisposed = true;
+		onAddListeners = new Array();
+		onRemoveListeners = new Array();
+		cache = new Map();
+		size = 0;
+		registry.unregisterQuery(this);
+	}
+
+	function getBitmask(components:Array<Class<Component>>)
+	{
+		if (components == null)
+		{
+			return 0;
+		}
+
+		return components.fold((c, s) -> BitUtil.addBit(s, registry.getBit(c)), 0);
 	}
 }

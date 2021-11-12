@@ -64,6 +64,12 @@ class Registry
 		queries.push(query);
 	}
 
+	@:allow(ecs.Query)
+	function unregisterQuery(query:Query)
+	{
+		queries.remove(query);
+	}
+
 	@:allow(ecs.Entity)
 	function registerEntity(entity:Entity)
 	{

@@ -4,9 +4,14 @@ import common.struct.Grid;
 import common.struct.IntPoint;
 import common.util.FloodFill;
 import core.Game;
+import data.Gender;
 import domain.terrain.TerrainType;
+import ecs.Entity;
+import ecs.components.InSettlement;
+import ecs.components.Person;
 import hxd.Rand;
 import rand.PoissonDiscSampler;
+import rand.names.SpanishNameGenerator;
 import tools.Performance;
 
 class MapData
@@ -46,10 +51,7 @@ class MapData
 		settlements = new Array();
 		rivers = new Array();
 		data = new Grid(world.mapWidth, world.mapHeight);
-		data.fillFn(function(idx)
-		{
-			return new MapTile(idx, this);
-		});
+		data.fillFn((idx) -> new MapTile(idx, this));
 
 		Performance.start('map');
 		generateHeight();
@@ -57,6 +59,7 @@ class MapData
 		generateIslands();
 		generateRivers();
 		generateSettlements();
+		generatePeople();
 		Performance.stop('map');
 
 		trace(Performance.friendly('map'));
@@ -89,9 +92,14 @@ class MapData
 
 	public function hasSettlement(wx:Float, wy:Float):Bool
 	{
+		return getSettlement(wx, wy) == null;
+	}
+
+	public function getSettlement(wx:Float, wy:Float):SettlementData
+	{
 		var tile = data.get(wx.floor(), wy.floor());
 
-		return tile.settlement != null;
+		return tile.settlement;
 	}
 
 	function generateHeight()
@@ -164,7 +172,7 @@ class MapData
 			return false;
 		}
 
-		FloodFill.flood(start, function(point)
+		FloodFill.flood(start, (point) ->
 		{
 			var tile = data.get(point.x, point.y);
 			if (tile == null)
@@ -275,7 +283,7 @@ class MapData
 			{
 				for (n in 0...(island.size / riverDensity).floor())
 				{
-					var valid = island.tiles.filter(function(t)
+					var valid = island.tiles.filter((t) ->
 					{
 						return data.get(t.x, t.y).height > springHeightThreshold;
 					});
@@ -336,6 +344,28 @@ class MapData
 			}
 
 			point = sampler.sample();
+		}
+	}
+
+	function generatePeople()
+	{
+		var r = Rand.create();
+		r.init(seed + 10);
+
+		for (settlement in settlements)
+		{
+			var count = 4 + r.random(4);
+
+			for (c in 0...count)
+			{
+				var pSeed = settlement.id * 10000 + c;
+				var gender:Gender = r.pick([MALE, FEMALE]);
+				var name = SpanishNameGenerator.getName(pSeed, gender);
+
+				var e = new Entity();
+				e.add(new Person(name, gender, SPANISH));
+				e.add(new InSettlement(settlement.id));
+			}
 		}
 	}
 }

@@ -60,7 +60,7 @@ class World
 		pathing = new PathFollowSystem();
 		stats = new StatsSystem();
 
-		map = new MapData(1);
+		map = new MapData(12);
 	}
 
 	function get_mapWidth():Int
@@ -94,10 +94,7 @@ class World
 		var local = pos.toWorld().toChunkLocal(chunk.cx, chunk.cy);
 		var ids = chunk.getEntityIdsAt(local.x, local.y);
 
-		return Lambda.map(ids, function(id:String)
-		{
-			return game.registry.getEntity(id);
-		});
+		return ids.map((id:String) -> game.registry.getEntity(id));
 	}
 
 	public function setVisible(values:Array<Coordinate>)

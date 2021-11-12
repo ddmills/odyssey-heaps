@@ -40,7 +40,7 @@ class MapScreen extends Screen
 		var coord = new Coordinate(wx, wy, WORLD);
 		var explored = world.isExplored(coord);
 		var type = world.map.getTerrain(wx, wy);
-		var color = explored ? terrainToColor(type) : 0x111111;
+		var color = explored ? terrainToColor(type) : 0x1b1f23;
 		// var color = terrainToColor(type);
 		var tile = Tile.fromColor(color, tileSize, tileSize);
 		var bm = new Bitmap(tile);

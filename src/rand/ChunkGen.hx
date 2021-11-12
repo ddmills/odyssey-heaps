@@ -9,6 +9,7 @@ import ecs.components.Moniker;
 import ecs.components.Sprite;
 import ecs.prefabs.FarmPrefab;
 import ecs.prefabs.SettlementPrefab;
+import ecs.prefabs.TreePrefab;
 import ecs.prefabs.WindmillPrefab;
 import h2d.Bitmap;
 import hxd.Perlin;
@@ -41,11 +42,12 @@ class ChunkGen
 			var wx = chunk.cx * chunk.size + i.x;
 			var wy = chunk.cy * chunk.size + i.y;
 			var tile = map.getTerrain(wx, wy);
+			var settlementData = map.getSettlement(wx, wy);
 
-			if (map.hasSettlement(wx, wy))
+			if (settlementData != null)
 			{
 				var s = wx + (wy * 2000);
-				var settlement = SettlementPrefab.Create(s);
+				var settlement = SettlementPrefab.Create(settlementData.id, s);
 				settlement.x = wx;
 				settlement.y = wy;
 				Game.instance.world.add(settlement);
@@ -79,38 +81,20 @@ class ChunkGen
 			{
 				var treen = perlin.perlin(seed, wx / 4, wy / 4, 9);
 				var treev = (treen + 1) / 2;
-				if (treev > .6)
+				if (treev > .6 && !nearSettlement(wx, wy))
 				{
-					var tree = createTree(wx, wy);
-					if (tree != null)
-					{
-						tree.pos = new Coordinate(wx, wy, WORLD);
-						Game.instance.world.add(tree);
-					}
+					var tree = TreePrefab.Create();
+					tree.pos = new Coordinate(wx, wy, WORLD);
+					Game.instance.world.add(tree);
 				}
 			}
 		}
 	}
 
-	function createTree(x:Int, y:Int)
+	function nearSettlement(x:Int, y:Int)
 	{
 		var settlements = Game.instance.world.map.settlements;
 
-		if (!Lambda.exists(settlements, function(p)
-		{
-			return Math.abs(x - p.x) < 3 && Math.abs(y - p.y) < 3;
-		}))
-		{
-			var seed = x + (y * 2000);
-			var tree = new Entity();
-			var bm = new Bitmap(TileResources.TREE);
-			tree.add(new Sprite(bm, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
-			var name = seed % 2 == 0 ? SpanishNameGenerator.getMaleName(seed) : SpanishNameGenerator.getFemaleName(seed);
-
-			tree.add(new Moniker('${name} [${seed}]'));
-			return tree;
-		}
-
-		return null;
+		return settlements.exists((p) -> (x - p.x).abs() < 3 && (y - p.y).abs() < 3);
 	}
 }

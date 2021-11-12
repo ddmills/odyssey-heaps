@@ -1,5 +1,6 @@
 package rand.names;
 
+import data.Gender;
 import data.SpanishData;
 import hxd.Rand;
 
@@ -13,9 +14,15 @@ enum GenMethod
 
 class SpanishNameGenerator
 {
-	static function pick<T>(r:Rand, array:Array<T>):T
+	public static function getName(seed:Int, gender:Gender)
 	{
-		return array[r.random(array.length)];
+		switch gender
+		{
+			case MALE:
+				return getMaleName(seed);
+			case FEMALE:
+				return getFemaleName(seed);
+		}
 	}
 
 	public static function getMaleName(seed:Int)
@@ -23,19 +30,19 @@ class SpanishNameGenerator
 		var r = Rand.create();
 		r.init(seed);
 
-		var given = pick(r, SpanishData.maleGiven);
-		var method = pick(r, [GIVEN_LOCATIVE, GIVEN_PATRONYMIC, GIVEN_OTHER, GIVEN_PATRONYMIC_LOCATIVE]);
+		var given = r.pick(SpanishData.maleGiven);
+		var method = r.pick([GIVEN_LOCATIVE, GIVEN_PATRONYMIC, GIVEN_OTHER, GIVEN_PATRONYMIC_LOCATIVE]);
 
 		switch method
 		{
 			case GIVEN_LOCATIVE:
-				return given + ' ' + pick(r, SpanishData.locative);
+				return given + ' ' + r.pick(SpanishData.locative);
 			case GIVEN_PATRONYMIC:
-				return given + ' ' + pick(r, SpanishData.patronymics);
+				return given + ' ' + r.pick(SpanishData.patronymics);
 			case GIVEN_OTHER:
-				return given + ' ' + pick(r, SpanishData.other);
+				return given + ' ' + r.pick(SpanishData.other);
 			case GIVEN_PATRONYMIC_LOCATIVE:
-				return given + ' ' + pick(r, SpanishData.patronymics) + ' ' + pick(r, SpanishData.locative);
+				return given + ' ' + r.pick(SpanishData.patronymics) + ' ' + r.pick(SpanishData.locative);
 		}
 	}
 
@@ -44,19 +51,19 @@ class SpanishNameGenerator
 		var r = Rand.create();
 		r.init(seed);
 
-		var given = pick(r, SpanishData.femaleGiven);
-		var method = pick(r, [GIVEN_LOCATIVE, GIVEN_PATRONYMIC, GIVEN_OTHER, GIVEN_PATRONYMIC_LOCATIVE]);
+		var given = r.pick(SpanishData.femaleGiven);
+		var method = r.pick([GIVEN_LOCATIVE, GIVEN_PATRONYMIC, GIVEN_OTHER, GIVEN_PATRONYMIC_LOCATIVE]);
 
 		switch method
 		{
 			case GIVEN_LOCATIVE:
-				return given + ' ' + pick(r, SpanishData.locative);
+				return given + ' ' + r.pick(SpanishData.locative);
 			case GIVEN_PATRONYMIC:
-				return given + ' ' + pick(r, SpanishData.patronymics);
+				return given + ' ' + r.pick(SpanishData.patronymics);
 			case GIVEN_OTHER:
-				return given + ' ' + pick(r, SpanishData.other);
+				return given + ' ' + r.pick(SpanishData.other);
 			case GIVEN_PATRONYMIC_LOCATIVE:
-				return given + ' ' + pick(r, SpanishData.patronymics) + ' ' + pick(r, SpanishData.locative);
+				return given + ' ' + r.pick(SpanishData.patronymics) + ' ' + r.pick(SpanishData.locative);
 		}
 	}
 
@@ -65,6 +72,6 @@ class SpanishNameGenerator
 		var r = Rand.create();
 		r.init(seed);
 
-		return pick(r, SpanishData.settlements);
+		return r.pick(SpanishData.settlements);
 	}
 }

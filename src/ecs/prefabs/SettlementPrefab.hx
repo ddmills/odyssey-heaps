@@ -9,13 +9,13 @@ import rand.names.SpanishNameGenerator;
 
 class SettlementPrefab
 {
-	public static function Create(seed:Int)
+	public static function Create(settlementId:Int, seed:Int)
 	{
 		var settlement = new Entity();
 		settlement.add(new Sprite(new h2d.Bitmap(TileResources.SETTLEMENT), Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		settlement.add(new Moniker('Settlement'));
 		var name = SpanishNameGenerator.getSettlementName(seed);
-		settlement.add(new Settlement(name));
+		settlement.add(new Settlement(settlementId, name));
 
 		return settlement;
 	}

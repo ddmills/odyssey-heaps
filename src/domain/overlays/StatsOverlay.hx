@@ -1,6 +1,7 @@
 package domain.overlays;
 
 import core.Game;
+import data.TextResource;
 import ecs.components.Explored;
 import ecs.components.Moniker;
 import tools.Stats;
@@ -16,26 +17,9 @@ class StatsOverlay extends h2d.Object
 		super();
 		this.stats = stats;
 
-		var bizcat = hxd.Res.fnt.bizcat.toFont();
-		infoText = new h2d.Text(bizcat);
+		fpsText = TextResource.MakeText();
+		infoText = TextResource.MakeText();
 		infoText.textAlign = Right;
-		fpsText = new h2d.Text(bizcat);
-		infoText.setScale(1);
-		fpsText.setScale(1);
-		infoText.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
-		fpsText.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
-		infoText.dropShadow = {
-			dx: 1,
-			dy: 1,
-			color: 0x000000,
-			alpha: .75
-		};
-		fpsText.dropShadow = {
-			dx: 1,
-			dy: 1,
-			color: 0x000000,
-			alpha: .75
-		};
 
 		addChild(stats.ob);
 		addChild(fpsText);
@@ -77,11 +61,10 @@ class StatsOverlay extends h2d.Object
 		fpsText.alignLeft(game.state.scene, game.TILE_H);
 
 		var entities = world.getEntitiesAt(p);
-		var withNames = Lambda.filter(entities, function(e)
+		var names = entities.filter((e) ->
 		{
 			return e.has(Moniker) && e.has(Explored);
-		});
-		var names = Lambda.map(withNames, function(e)
+		}).map((e) ->
 		{
 			var moniker = e.get(Moniker);
 			return '${moniker.displayName} (${e.id})';

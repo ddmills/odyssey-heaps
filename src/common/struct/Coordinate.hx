@@ -17,10 +17,7 @@ class Coordinate
 
 	public static function FromPoints(points:Array<IntPoint>, space:Space):Array<Coordinate>
 	{
-		return Lambda.map(points, function(p)
-		{
-			return new Coordinate(p.x, p.y, space);
-		});
+		return points.map((p) -> new Coordinate(p.x, p.y, space));
 	}
 
 	public inline function ToIntPoint()

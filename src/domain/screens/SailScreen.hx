@@ -82,10 +82,7 @@ class SailScreen extends Screen
 	{
 		var entities = world.getEntitiesAt(click);
 
-		var settlement = Lambda.find(entities, function(entity)
-		{
-			return entity.has(Settlement);
-		});
+		var settlement = entities.find((entity) -> entity.has(Settlement));
 
 		if (settlement != null)
 		{

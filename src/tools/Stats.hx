@@ -38,7 +38,7 @@ class Stats
 		buffers.set(stat, buffer);
 		graphs.set(stat, graph);
 
-		var count = Lambda.count(graphs);
+		var count = graphs.count();
 		graph.attach(ob, 8, (50 + 8) * (count - 1) + 8, 256, 50);
 	}
 }

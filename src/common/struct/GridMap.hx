@@ -17,10 +17,7 @@ package common.struct;
 	public function new(width:Int = 128, height:Int = 128)
 	{
 		grid = new Grid(width, height);
-		grid.fillFn(function(idx:Int)
-		{
-			return new Array();
-		});
+		grid.fillFn((idx:Int) -> new Array());
 		hash = new Map();
 	}
 

@@ -31,17 +31,17 @@ class VisionSystem extends System
 			all: [Vision]
 		});
 
-		moved.onEntityAdded(function(entity)
+		moved.onEntityAdded((entity) ->
 		{
 			recompute = true;
 		});
 
-		visions.onEntityAdded(function(entity)
+		visions.onEntityAdded((entity) ->
 		{
 			recompute = true;
 		});
 
-		visions.onEntityRemoved(function(entity)
+		visions.onEntityRemoved((entity) ->
 		{
 			recompute = true;
 		});
@@ -56,25 +56,25 @@ class VisionSystem extends System
 			any: [Visible, Explored]
 		});
 
-		visibles.onEntityAdded(function(entity)
+		visibles.onEntityAdded((entity) ->
 		{
 			entity.get(Sprite).visible = true;
 		});
 
-		visibles.onEntityRemoved(function(entity)
+		visibles.onEntityRemoved((entity) ->
 		{
 			entity.get(Sprite).visible = false;
 		});
 
 		var shroud = new ShroudShader(.2, .8);
 
-		shrouded.onEntityAdded(function(entity)
+		shrouded.onEntityAdded((entity) ->
 		{
 			var sprite = entity.get(Sprite);
 			sprite.ob.addShader(shroud);
 		});
 
-		shrouded.onEntityRemoved(function(entity)
+		shrouded.onEntityRemoved((entity) ->
 		{
 			var sprite = entity.get(Sprite);
 			sprite.ob.removeShader(shroud);
@@ -108,10 +108,7 @@ class VisionSystem extends System
 			}
 		}
 
-		var tiles = Lambda.map(visible, function(vis)
-		{
-			return vis;
-		});
+		var tiles = visible.map((vis) -> vis);
 
 		world.setVisible(tiles);
 	}

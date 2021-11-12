@@ -12,8 +12,6 @@ class FarmPrefab
 		var farm = new Entity();
 		farm.add(new Sprite(new h2d.Bitmap(TileResources.FARM), Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		farm.add(new Moniker('Farm'));
-		// var name = SpanishNameGenerator.getSettlementName(seed);
-		// settlement.add(new Settlement(name));
 
 		return farm;
 	}

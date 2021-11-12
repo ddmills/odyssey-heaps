@@ -25,4 +25,9 @@
 - [x] pathfinding
 - [ ] identity component
 - [x] minimap
-- [ ] settlement generation (placement)
+- [x] settlement generation (placement)
+- [ ] settlement buildings
+- [ ] jump flood algorithm + sin wave shader
+- [x] show settlers members at settlement
+- [ ] select settlers member at settlement
+- [ ] add settler member to your own crew

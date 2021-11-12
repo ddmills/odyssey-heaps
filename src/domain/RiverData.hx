@@ -23,9 +23,6 @@ class RiverData
 
 	public function hasTile(point:IntPoint):Bool
 	{
-		return Lambda.exists(tiles, function(t)
-		{
-			return t.equals(point);
-		});
+		return tiles.exists((t) -> t.equals(point));
 	}
 }

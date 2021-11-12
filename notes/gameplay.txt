@@ -1,0 +1,16 @@
+
+## Discovery/Exploration
+- landmarks (old trees, view, mountain, river)
+- collectables
+- "locked" areas (need special equipment)
+- clues/storylines (journal entries?)
+- Major ports
+    - a few "major port" cities exist, which you can quick-travel between
+    - the major port must be discovered before you can travel there
+- exploration must be "dangerous"
+    - enemies (duh)
+    - resources
+- clear goals (quests?)
+    - go from a to b
+-
+
