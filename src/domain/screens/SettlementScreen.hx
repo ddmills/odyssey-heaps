@@ -31,7 +31,6 @@ class SettlementScreen extends Screen
 
 		text = TextResource.MakeText();
 		text.setScale(2);
-		text.y = 256;
 		text.text = settlement.get(Settlement).name;
 
 		query = new Query({
@@ -51,7 +50,7 @@ class SettlementScreen extends Screen
 			};
 		}
 
-		peopleText.text = "Settlers";
+		peopleText.text = 'Settlers of ${settlement.get(Settlement).name}';
 		for (person in people)
 		{
 			peopleText.text += '\n   ${person.name}';
@@ -93,6 +92,9 @@ class SettlementScreen extends Screen
 	override function update(frame:Frame)
 	{
 		world.updateSystems();
-		text.alignCenterX(game.state.scene);
+		var screen = settlement.pos.toScreen();
+		text.textAlign = Center;
+		text.x = screen.x;
+		text.y = screen.y - 64;
 	}
 }

@@ -3,35 +3,36 @@ package domain.screens;
 import common.struct.Coordinate;
 import core.Screen;
 import domain.terrain.TerrainType;
+import domain.ui.Box;
 import h2d.Anim;
 import h2d.Bitmap;
 import h2d.Object;
 import h2d.Tile;
-import rand.RandColor;
 
 class MapScreen extends Screen
 {
-	var ob:Object;
+	var map:Object;
+	var box:Box;
 	var granularity = 4;
-	var tileSize = 4;
+	var tileSize = 2;
 
 	public function new()
 	{
-		ob = new Object();
+		map = new Object();
 	}
 
-	function terrainToColor(type:TerrainType)
+	function terrainToColor(type:TerrainType, explored:Bool)
 	{
 		switch type
 		{
 			case SHALLOWS | RIVER:
-				return 0x326475;
+				return explored ? 0x326475 : 0xb2b5a2;
 			case WATER:
-				return 0x235465;
+				return explored ? 0x235465 : 0xd2d6b6;
 			case SAND:
-				return 0xb3904d;
+				return explored ? 0xb3904d : 0xc0c3b2;
 			case GRASS:
-				return 0x57723a;
+				return explored ? 0x57723a : 0xb2b5a2;
 		}
 	}
 
@@ -40,14 +41,13 @@ class MapScreen extends Screen
 		var coord = new Coordinate(wx, wy, WORLD);
 		var explored = world.isExplored(coord);
 		var type = world.map.getTerrain(wx, wy);
-		var color = explored ? terrainToColor(type) : 0x1b1f23;
-		// var color = terrainToColor(type);
+		var color = terrainToColor(type, explored);
 		var tile = Tile.fromColor(color, tileSize, tileSize);
 		var bm = new Bitmap(tile);
 
 		bm.x = (wx / granularity).floor() * tileSize;
 		bm.y = (wy / granularity).floor() * tileSize;
-		ob.addChild(bm);
+		map.addChild(bm);
 	}
 
 	function populate()
@@ -71,32 +71,54 @@ class MapScreen extends Screen
 
 		for (s in world.map.settlements)
 		{
-			var red = Tile.fromColor(0xffff00, tileSize, tileSize);
-			var point = new Bitmap(red);
+			var coord = new Coordinate(s.x, s.y, WORLD);
+			var isExplored = world.isExplored(coord);
+
+			var color = isExplored ? 0x804c36 : 0x8e907e;
+			var tile = Tile.fromColor(color, tileSize, tileSize);
+			var point = new Bitmap(tile);
 
 			point.x = (s.x / granularity).floor() * tileSize;
 			point.y = (s.y / granularity).floor() * tileSize;
-			ob.addChild(point);
+			map.addChild(point);
 		}
 
-		var white = Tile.fromColor(0xffffff, tileSize, tileSize, 0);
+		var white = Tile.fromColor(0xd2d6b6, tileSize, tileSize, 0);
 		var red = Tile.fromColor(0xe91e63, tileSize, tileSize);
 		var blink = new Anim([white, red], 6);
 
 		blink.x = (world.player.x / granularity).floor() * tileSize;
 		blink.y = (world.player.y / granularity).floor() * tileSize;
-		ob.addChild(blink);
+		map.addChild(blink);
 	}
 
 	public override function onEnter()
 	{
 		populate();
-		game.render(HUD, ob);
+
+		var mapWidth = (tileSize * (game.world.mapWidth / granularity).floor()) / 32;
+		var mapHeight = (tileSize * (game.world.mapHeight / granularity).floor()) / 32;
+
+		box = new Box({
+			width: mapWidth.floor() + 2,
+			height: mapHeight.floor() + 2,
+			scale: 2,
+			size: 16,
+		});
+
+		box.addChild(map);
+		map.x = 32;
+		map.y = 32;
+
+		box.x = 64;
+		box.y = 64;
+		game.render(HUD, box);
 	}
 
 	public override function onDestroy()
 	{
-		ob.remove();
+		map.remove();
+		box.remove();
 	}
 
 	override function onKeyUp(keyCode:Int)
