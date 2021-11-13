@@ -1,7 +1,6 @@
 package common.struct;
 
-@:enum
-abstract Cardinal(Int)
+enum abstract Cardinal(Int)
 {
 	var NORTH = 0;
 	var NORTH_EAST = 1;
@@ -37,5 +36,11 @@ abstract Cardinal(Int)
 			case _:
 				return WEST;
 		}
+	}
+
+	@:to
+	public function toInt():Int
+	{
+		return this;
 	}
 }

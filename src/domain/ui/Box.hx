@@ -19,6 +19,11 @@ class Box extends h2d.Object
 	public function new(opts:BoxOptions)
 	{
 		super();
+		redraw(opts);
+	}
+
+	public function redraw(opts:BoxOptions)
+	{
 		this.opts = opts;
 		drawWindow();
 	}

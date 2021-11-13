@@ -141,7 +141,7 @@ class Entity
 		return BitUtil.hasBit(cbits, registry.getBit(type));
 	}
 
-	public function remove(component:Component)
+	function removeInstance(component:Component)
 	{
 		cbits = BitUtil.subtractBit(cbits, component.bit);
 		components.remove(component.type);
@@ -150,6 +150,20 @@ class Entity
 		if (Std.isOfType(component, Sprite))
 		{
 			sprite = null;
+		}
+	}
+
+	public overload extern inline function remove(component:Component)
+	{
+		removeInstance(component);
+	}
+
+	public overload extern inline function remove<T:Component>(type:Class<T>)
+	{
+		var c = get(type);
+		if (c != null)
+		{
+			removeInstance(c);
 		}
 	}
 

@@ -6,6 +6,7 @@ import common.util.Bresenham;
 import common.util.Distance;
 import core.Frame;
 import core.Screen;
+import data.Keybindings.Keybinding;
 import data.TileResources;
 import ecs.Entity;
 import ecs.components.Path;
@@ -72,7 +73,7 @@ class SailScreen extends Screen
 
 	override function onKeyUp(keyCode:Int)
 	{
-		if (keyCode == 77)
+		if (Keybinding.OPEN_MAP_SCREEN.is(keyCode))
 		{
 			game.screens.push(new MapScreen());
 		}

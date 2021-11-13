@@ -11,5 +11,10 @@
 		"doWhile": "next",
 		"tryBody": "next",
 		"tryCatch": "next"
+	},
+	"wrapping": {
+		"methodChain": {
+			"defaultWrap": "keep"
+		}
 	}
 }

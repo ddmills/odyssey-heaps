@@ -2,6 +2,7 @@ package domain.screens;
 
 import common.struct.Coordinate;
 import core.Screen;
+import data.Keybindings.Keybinding;
 import domain.terrain.TerrainType;
 import domain.ui.Box;
 import h2d.Anim;
@@ -123,7 +124,7 @@ class MapScreen extends Screen
 
 	override function onKeyUp(keyCode:Int)
 	{
-		if (keyCode == 77)
+		if (keyCode == Keybinding.BACK || keyCode == Keybinding.OPEN_MAP_SCREEN)
 		{
 			game.screens.pop();
 		}

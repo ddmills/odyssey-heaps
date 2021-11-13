@@ -49,11 +49,11 @@ class MovementSystem extends System
 	{
 		for (entity in completed)
 		{
-			entity.remove(entity.get(MoveComplete));
+			entity.remove(MoveComplete);
 		}
 		for (entity in moved)
 		{
-			entity.remove(entity.get(Moved));
+			entity.remove(Moved);
 		}
 
 		for (entity in query)

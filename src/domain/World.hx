@@ -112,7 +112,7 @@ class World
 				{
 					if (entity.has(Visible))
 					{
-						entity.remove(entity.get(Visible));
+						entity.remove(Visible);
 					}
 				}
 			}
