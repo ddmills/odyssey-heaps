@@ -6,11 +6,11 @@ class TextResource
 	{
 		var bizcat = hxd.Res.fnt.bizcat.toFont();
 		var text = new h2d.Text(bizcat);
-		text.color = new h3d.Vector(204 / 256, 207 / 255, 201 / 255);
+		text.color = 0xd2d6b6.toHxdColor();
 		text.dropShadow = {
 			dx: 1,
 			dy: 1,
-			color: 0x000000,
+			color: 0x1b1f23,
 			alpha: .75
 		};
 

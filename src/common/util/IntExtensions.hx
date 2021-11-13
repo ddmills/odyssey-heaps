@@ -21,4 +21,13 @@ class IntExtensions
 	{
 		return n <= 0 ? -n : n;
 	}
+
+	static public inline function toHxdColor(n:Int):h3d.Vector
+	{
+		var b = n & 0xff;
+		var g = (n >> 8) & 0xff;
+		var r = (n >> 16) & 0xff;
+
+		return new h3d.Vector(r / 255, g / 255, b / 255);
+	}
 }

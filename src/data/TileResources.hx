@@ -14,6 +14,16 @@ class TileResources
 	public static var FOG:h2d.Tile;
 	public static var SLOOP:h2d.Tile;
 
+	public static var UI_BORDER_L:h2d.Tile;
+	public static var UI_BORDER_R:h2d.Tile;
+	public static var UI_BORDER_T:h2d.Tile;
+	public static var UI_BORDER_B:h2d.Tile;
+	public static var UI_BORDER_TL:h2d.Tile;
+	public static var UI_BORDER_TR:h2d.Tile;
+	public static var UI_BORDER_BR:h2d.Tile;
+	public static var UI_BORDER_BL:h2d.Tile;
+	public static var UI_FILL:h2d.Tile;
+
 	public function new() {}
 
 	public static function Init()
@@ -45,5 +55,18 @@ class TileResources
 		FOG = fogs[0][0];
 
 		SLOOP = hxd.Res.img.sloop_png.toTile();
+
+		var uiSheet = hxd.Res.img.ui16_png.toTile();
+		var uis = uiSheet.divide(8, 8);
+
+		UI_FILL = uis[1][1];
+		UI_BORDER_L = uis[1][0];
+		UI_BORDER_R = uis[1][2];
+		UI_BORDER_T = uis[0][1];
+		UI_BORDER_B = uis[2][1];
+		UI_BORDER_TL = uis[0][0];
+		UI_BORDER_TR = uis[0][2];
+		UI_BORDER_BR = uis[2][2];
+		UI_BORDER_BL = uis[2][0];
 	}
 }
