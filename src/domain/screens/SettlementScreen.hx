@@ -1,8 +1,8 @@
 package domain.screens;
 
-import common.struct.Coordinate;
 import core.Frame;
 import core.Screen;
+import data.Keybindings.Keybinding;
 import data.TextResource;
 import domain.ui.Box;
 import ecs.Entity;
@@ -91,13 +91,26 @@ class SettlementScreen extends Screen
 		query.dispose();
 	}
 
-	override function onMouseDown(click:Coordinate)
-	{
-		game.screens.pop();
-	}
-
 	override function onKeyUp(key:Int)
 	{
+		if (Keybinding.BACK.is(key))
+		{
+			game.screens.pop();
+			return;
+		}
+
+		if (Keybinding.MAP_SCREEN.is(key))
+		{
+			game.screens.push(new MapScreen());
+			return;
+		}
+
+		if (Keybinding.CREW_SCREEN.is(key))
+		{
+			game.screens.push(new CrewScreen());
+			return;
+		}
+
 		// allow key 1-9
 		var n = (key - 48);
 		if (n > 0 && n < 10)

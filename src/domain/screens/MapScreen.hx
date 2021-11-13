@@ -15,7 +15,7 @@ class MapScreen extends Screen
 	var map:Object;
 	var box:Box;
 	var granularity = 4;
-	var tileSize = 2;
+	var tileSize = 3;
 
 	public function new()
 	{
@@ -27,13 +27,13 @@ class MapScreen extends Screen
 		switch type
 		{
 			case SHALLOWS | RIVER:
-				return explored ? 0x326475 : 0xb2b5a2;
+				return explored ? 0x326475 : 0xd2d6b6;
 			case WATER:
 				return explored ? 0x235465 : 0xd2d6b6;
 			case SAND:
-				return explored ? 0xb3904d : 0xc0c3b2;
+				return explored ? 0xb3904d : 0xa1af85;
 			case GRASS:
-				return explored ? 0x57723a : 0xb2b5a2;
+				return explored ? 0x57723a : 0xa1af85;
 		}
 	}
 
@@ -122,11 +122,16 @@ class MapScreen extends Screen
 		box.remove();
 	}
 
-	override function onKeyUp(keyCode:Int)
+	override function onKeyUp(key:Int)
 	{
-		if (keyCode == Keybinding.BACK || keyCode == Keybinding.OPEN_MAP_SCREEN)
+		if (key == Keybinding.BACK || key == Keybinding.MAP_SCREEN)
 		{
 			game.screens.pop();
+		}
+		if (Keybinding.CREW_SCREEN.is(key))
+		{
+			game.screens.replace(new CrewScreen());
+			return;
 		}
 	}
 }
