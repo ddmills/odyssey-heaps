@@ -22,8 +22,7 @@ class PoissonDiscSampler
 
 	public function new(width:Int, height:Int, radius:Int, seed:Int)
 	{
-		r = Rand.create();
-		r.init(seed);
+		r = new Rand(seed);
 
 		this.width = width;
 		this.height = height;

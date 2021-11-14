@@ -34,8 +34,7 @@ class ChunkGen
 	public function generate(chunk:Chunk)
 	{
 		var map = Game.instance.world.map;
-		var r = Rand.create();
-		r.init(seed + chunk.chunkId);
+		var r = new Rand(seed + chunk.chunkId);
 
 		for (i in chunk.exploration)
 		{

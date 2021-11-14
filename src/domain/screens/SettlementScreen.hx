@@ -9,7 +9,9 @@ import ecs.Entity;
 import ecs.Query;
 import ecs.components.CrewMember;
 import ecs.components.InSettlement;
+import ecs.components.Level;
 import ecs.components.Person;
+import ecs.components.Profession;
 import ecs.components.Settlement;
 
 class SettlementScreen extends Screen
@@ -56,7 +58,9 @@ class SettlementScreen extends Screen
 		var i = 1;
 		for (person in people)
 		{
-			peopleText.text += '\n [${i++}] ${person.name}';
+			var lvl = person.entity.get(Level).lvl;
+			var prof = person.entity.get(Profession).data.name;
+			peopleText.text += '\n [${i++}] ${person.name}. Lvl ${lvl} ${prof}';
 		}
 
 		var boxW = (peopleText.textWidth / 32).ciel();

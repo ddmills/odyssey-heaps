@@ -27,8 +27,7 @@ class SpanishNameGenerator
 
 	public static function getMaleName(seed:Int)
 	{
-		var r = Rand.create();
-		r.init(seed);
+		var r = new Rand(seed);
 
 		var given = r.pick(SpanishData.maleGiven);
 		var method = r.pick([GIVEN_LOCATIVE, GIVEN_PATRONYMIC, GIVEN_OTHER, GIVEN_PATRONYMIC_LOCATIVE]);
@@ -48,8 +47,7 @@ class SpanishNameGenerator
 
 	public static function getFemaleName(seed:Int)
 	{
-		var r = Rand.create();
-		r.init(seed);
+		var r = new Rand(seed);
 
 		var given = r.pick(SpanishData.femaleGiven);
 		var method = r.pick([GIVEN_LOCATIVE, GIVEN_PATRONYMIC, GIVEN_OTHER, GIVEN_PATRONYMIC_LOCATIVE]);
@@ -69,8 +67,7 @@ class SpanishNameGenerator
 
 	public static function getSettlementName(seed:Int)
 	{
-		var r = Rand.create();
-		r.init(seed);
+		var r = new Rand(seed);
 
 		return r.pick(SpanishData.settlements);
 	}

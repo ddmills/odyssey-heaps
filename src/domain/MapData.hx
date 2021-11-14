@@ -5,10 +5,14 @@ import common.struct.IntPoint;
 import common.util.FloodFill;
 import core.Game;
 import data.Gender;
+import data.Professions;
 import domain.terrain.TerrainType;
 import ecs.Entity;
 import ecs.components.InSettlement;
+import ecs.components.Level;
+import ecs.components.Nationality;
 import ecs.components.Person;
+import ecs.components.Profession;
 import hxd.Rand;
 import rand.PoissonDiscSampler;
 import rand.names.SpanishNameGenerator;
@@ -274,8 +278,7 @@ class MapData
 			}
 		}
 
-		var r = Rand.create();
-		r.init(seed);
+		var r = new Rand(seed);
 
 		for (island in islands)
 		{
@@ -349,8 +352,7 @@ class MapData
 
 	function generatePeople()
 	{
-		var r = Rand.create();
-		r.init(seed + 10);
+		var r = new Rand(seed);
 
 		for (settlement in settlements)
 		{
@@ -361,9 +363,14 @@ class MapData
 				var pSeed = settlement.id * 10000 + c;
 				var gender:Gender = r.pick([MALE, FEMALE]);
 				var name = SpanishNameGenerator.getName(pSeed, gender);
+				var level = r.pick([1, 2, 3]);
+				var prof = r.pick([Professions.SOLDIER, Professions.COOK, Professions.OFFICER]);
 
 				var e = new Entity();
-				e.add(new Person(name, gender, SPANISH));
+				e.add(new Person(name, gender));
+				e.add(new Nationality(SPANISH));
+				e.add(new Level(level));
+				e.add(new Profession(prof));
 				e.add(new InSettlement(settlement.id));
 			}
 		}

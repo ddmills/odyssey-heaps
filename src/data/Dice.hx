@@ -1,0 +1,14 @@
+package data;
+
+enum Dice
+{
+	ATK_EMPTY;
+	ATK_SWORD;
+	ATK_BOMB;
+	DEF_EMPTY;
+	DEF_SHIELD;
+	DEF_HEAL;
+	ODD_EMPTY;
+	ODD_SKULL;
+	ODD_BLOOD;
+}
