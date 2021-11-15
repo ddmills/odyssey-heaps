@@ -1,9 +1,10 @@
 package data;
 
-enum Dice
+enum DieFace
 {
 	ATK_EMPTY;
 	ATK_SWORD;
+	ATK_DBL_SWORD;
 	ATK_BOMB;
 	DEF_EMPTY;
 	DEF_SHIELD;

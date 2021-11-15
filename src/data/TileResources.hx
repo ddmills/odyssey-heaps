@@ -27,6 +27,7 @@ class TileResources
 
 	public static var DICE_ATK_EMPTY:h2d.Tile;
 	public static var DICE_ATK_SWORD:h2d.Tile;
+	public static var DICE_ATK_DBL_SWORD:h2d.Tile;
 	public static var DICE_ATK_BOMB:h2d.Tile;
 	public static var DICE_DEF_EMPTY:h2d.Tile;
 	public static var DICE_DEF_SHIELD:h2d.Tile;
@@ -90,7 +91,8 @@ class TileResources
 
 		DICE_ATK_EMPTY = dice[0][0];
 		DICE_ATK_SWORD = dice[0][1];
-		DICE_ATK_BOMB = dice[0][2];
+		DICE_ATK_DBL_SWORD = dice[0][2];
+		DICE_ATK_BOMB = dice[0][3];
 		DICE_DEF_EMPTY = dice[1][0];
 		DICE_DEF_SHIELD = dice[1][1];
 		DICE_DEF_HEAL = dice[1][2];
@@ -109,7 +111,7 @@ class TileResources
 		VIGNETTE_WATER = hxd.Res.img.vignette.vignette_water_png.toTile();
 	}
 
-	public static function getDie(die:Dice):h2d.Tile
+	public static function getDie(die:DieFace):h2d.Tile
 	{
 		switch die
 		{
@@ -117,6 +119,8 @@ class TileResources
 				return DICE_ATK_EMPTY;
 			case ATK_SWORD:
 				return DICE_ATK_SWORD;
+			case ATK_DBL_SWORD:
+				return DICE_ATK_DBL_SWORD;
 			case ATK_BOMB:
 				return DICE_ATK_BOMB;
 			case DEF_EMPTY:

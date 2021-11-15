@@ -1,33 +1,29 @@
 package data;
 
-import hxd.Rand;
-
 class DiceSet
 {
 	var category:DiceCategory;
-	var dice:Array<Array<Array<Dice>>>;
-	var r:Rand;
+	var dice:Array<Array<Die>>;
 
-	public function new(category:DiceCategory, dice:Array<Array<Array<Dice>>>, seed:Int)
+	public function new(category:DiceCategory, dice:Array<Array<Die>>)
 	{
 		this.category = category;
 		this.dice = dice;
-		r = new hxd.Rand(seed);
 	}
 
-	public function roll(level:Int):Array<Dice>
+	public function roll(level:Int, seed:Int):Array<DieRoll>
 	{
-		var sets = getSet(level);
+		var set = getSet(level);
 
-		if (sets == null)
+		if (set == null)
 		{
-			return new Array<Dice>();
+			return new Array<DieRoll>();
 		}
 
-		return sets.map((die) -> r.pick(die));
+		return set.map((die) -> die.roll(seed));
 	}
 
-	public function getSet(level:Int):Array<Array<Dice>>
+	public function getSet(level:Int):Array<Die>
 	{
 		return dice[level - 1];
 	}

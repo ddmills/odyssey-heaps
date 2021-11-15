@@ -1,7 +1,6 @@
 package states.play;
 
 import core.GameState;
-import data.Dice;
 import domain.screens.SailScreen;
 import ecs.components.CrewMember;
 import ecs.prefabs.PersonPrefab;

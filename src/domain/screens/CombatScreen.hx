@@ -1,11 +1,10 @@
 package domain.screens;
 
-import common.struct.Coordinate;
 import common.struct.FloatPoint;
 import common.struct.IntPoint;
 import core.Frame;
 import core.Screen;
-import data.Dice;
+import data.DieRoll;
 import data.TextResource;
 import data.TileResources;
 import ecs.Entity;
@@ -20,7 +19,7 @@ import rand.PoissonDiscSampler;
 
 typedef GameDie =
 {
-	var die:Dice;
+	var roll:DieRoll;
 	var ob:Bitmap;
 	var isSelected:Bool;
 	var origin:IntPoint;
@@ -66,6 +65,7 @@ class CombatScreen extends Screen
 		var rollBtn = new Bitmap(h2d.Tile.fromColor(0x57723a, rollAreaSize, 32));
 		rollBtn.x = 0;
 		rollBtn.y = 512 + dieSize;
+
 		var rollBtnInt = new Interactive(rollAreaSize, 32);
 		rollBtnInt.onClick = (e) -> rollCrewDice();
 		rollBtn.addChild(rollBtnInt);
@@ -89,30 +89,38 @@ class CombatScreen extends Screen
 		}
 		gameDice = new Array();
 
-		var rolls = crewQuery.flatMap((e) ->
+		var disc = new PoissonDiscSampler(256, 256, dieSize + 12, turn);
+		for (e in crewQuery)
 		{
 			var lvl = e.get(Level).lvl;
-			return e.get(Profession).data.dice.roll(lvl);
-		});
-
-		var disc = new PoissonDiscSampler(256, 256, dieSize, turn);
-
-		for (die in rolls)
-		{
+			var dice = e.get(Profession).data.dice;
+			var rolls = dice.roll(lvl, (Math.random() * 10000).floor());
 			var pos = disc.sample();
-			renderDie(pos, die);
-		};
+
+			if (pos == null)
+			{
+				pos = {
+					x: (Math.random() * 256).floor(),
+					y: (Math.random() * 256).floor(),
+				};
+			}
+
+			for (roll in rolls)
+			{
+				renderDie(pos, roll);
+			}
+		}
 
 		turn++;
 	}
 
-	function renderDie(pos:IntPoint, die:Dice)
+	function renderDie(pos:IntPoint, roll:DieRoll)
 	{
-		var tile = TileResources.getDie(die);
+		var tile = TileResources.getDie(roll.value);
 		var bm = new Bitmap(tile);
 		bm.scale(dieSize / 16);
-		bm.x = rollArea.x + pos.x;
-		bm.y = rollArea.y + pos.y;
+		bm.x = rollArea.x + 128;
+		bm.y = rollArea.y + 256 + dieSize / 2;
 
 		var clickSpot = new h2d.Interactive(16, 16);
 		bm.addChild(clickSpot);
@@ -120,7 +128,7 @@ class CombatScreen extends Screen
 		clickSpot.y = 0;
 
 		var gameDie = {
-			die: die,
+			roll: roll,
 			ob: bm,
 			isSelected: false,
 			origin: pos,
@@ -135,12 +143,8 @@ class CombatScreen extends Screen
 
 	function dieClicked(die:GameDie)
 	{
-		trace('clicked die', die);
 		die.isSelected = !die.isSelected;
-		renderSelectedDice();
 	}
-
-	function renderSelectedDice() {}
 
 	override function update(frame:Frame)
 	{

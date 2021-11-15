@@ -50,20 +50,20 @@ class CrewScreen extends Screen
 		var txtHeight = txt.textHeight;
 
 		var setN = 0;
-		for (set in diceSet)
+		for (die in diceSet)
 		{
 			var setOb = new Object();
-			var dieN = 0;
-			for (die in set)
+			var faceN = 0;
+			for (face in die.faces)
 			{
 				var scale = 2;
-				var tile = TileResources.getDie(die);
+				var tile = TileResources.getDie(face);
 				var bm = new Bitmap(tile, setOb);
 				bm.scale(scale);
 				bm.y = setN * (tile.height * scale) + txtHeight;
-				bm.x = dieN * (tile.width * scale);
+				bm.x = faceN * (tile.width * scale);
 				container.addChild(bm);
-				dieN++;
+				faceN++;
 			}
 			setN++;
 			container.addChild(txt);

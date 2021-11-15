@@ -33,3 +33,14 @@ ship, and crew-to-mob combat begins.
 
 Occurs when the crew of a ship is fighting a mob. This can happen when the ship is close range to a mob,
 when boarding a ship, or fighting land mobs. Each crew member has dice, versus the mob dice.
+
+
+## dice rolling
+
+You have 'N' re-rolls.
+
+1. Roll all crew dice
+2. Select dice to "use"
+3. Selected dice are checked for combos
+4. If combo exists, display it's name/effect, and "Attack!" button appears
+5. When "attack" button is pressed, the active dice disappear, and the combo effect applies
