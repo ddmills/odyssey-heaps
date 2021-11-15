@@ -5,4 +5,5 @@ enum DiceCategory
 	ATTACK;
 	DEFENSE;
 	ODD;
+	SQUID;
 }

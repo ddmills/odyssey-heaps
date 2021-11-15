@@ -11,7 +11,7 @@ class WindmillPrefab
 	{
 		var windmill = new Entity();
 
-		var animation = new h2d.Anim(TileResources.WINDMILL, 1);
+		var animation = new h2d.Anim(TileResources.WINDMILL, 2);
 
 		windmill.add(new Sprite(animation, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		windmill.add(new Moniker('Windmill'));

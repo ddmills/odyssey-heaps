@@ -13,6 +13,7 @@ class TileResources
 	public static var TREE:h2d.Tile;
 	public static var FOG:h2d.Tile;
 	public static var SLOOP:h2d.Tile;
+	public static var SQUID:Array<h2d.Tile>;
 
 	public static var UI_BORDER_L:h2d.Tile;
 	public static var UI_BORDER_R:h2d.Tile;
@@ -33,6 +34,11 @@ class TileResources
 	public static var DICE_ODD_EMPTY:h2d.Tile;
 	public static var DICE_ODD_SKULL:h2d.Tile;
 	public static var DICE_ODD_BLOOD:h2d.Tile;
+	public static var DICE_SQUID_EMPTY:h2d.Tile;
+	public static var DICE_SQUID_TENTACLE:h2d.Tile;
+	public static var DICE_SQUID_WAVE:h2d.Tile;
+
+	public static var VIGNETTE_WATER:h2d.Tile;
 
 	public function new() {}
 
@@ -91,6 +97,16 @@ class TileResources
 		DICE_ODD_EMPTY = dice[2][0];
 		DICE_ODD_SKULL = dice[2][1];
 		DICE_ODD_BLOOD = dice[2][2];
+		DICE_SQUID_EMPTY = dice[3][0];
+		DICE_SQUID_TENTACLE = dice[3][1];
+		DICE_SQUID_WAVE = dice[3][2];
+
+		var monsterSheet = hxd.Res.img.monster32.toTile();
+		var monsters = monsterSheet.divide(4, 4);
+
+		SQUID = [monsters[0][0], monsters[0][1], monsters[0][2], monsters[0][1]];
+
+		VIGNETTE_WATER = hxd.Res.img.vignette.vignette_water_png.toTile();
 	}
 
 	public static function getDie(die:Dice):h2d.Tile
@@ -115,6 +131,12 @@ class TileResources
 				return DICE_ODD_SKULL;
 			case ODD_BLOOD:
 				return DICE_ODD_BLOOD;
+			case SQUID_EMPTY:
+				return DICE_SQUID_EMPTY;
+			case SQUID_TENTACLE:
+				return DICE_SQUID_TENTACLE;
+			case SQUID_WAVE:
+				return DICE_SQUID_WAVE;
 		}
 	}
 }

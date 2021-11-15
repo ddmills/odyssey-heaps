@@ -9,6 +9,7 @@ import core.Screen;
 import data.Keybindings.Keybinding;
 import data.TileResources;
 import ecs.Entity;
+import ecs.components.Mob;
 import ecs.components.Path;
 import ecs.components.Settlement;
 import ecs.components.Sprite;
@@ -92,6 +93,14 @@ class SailScreen extends Screen
 		if (settlement != null)
 		{
 			game.screens.push(new SettlementScreen(settlement));
+			return;
+		}
+
+		var mob = entities.find((entity) -> entity.has(Mob));
+
+		if (mob != null)
+		{
+			game.screens.push(new CombatScreen(mob));
 			return;
 		}
 

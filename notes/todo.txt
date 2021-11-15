@@ -31,3 +31,4 @@
 - [x] show settlers members at settlement
 - [x] select settlers member at settlement
 - [ ] add settler member to your own crew
+- [ ] dice audio

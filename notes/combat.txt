@@ -1,0 +1,35 @@
+## Combat
+
+There are a few types of combat:
+1. ship-to-mob combat
+2. crew-to-mob combat
+3. ship-to-fort combat (?)
+4. crew-to-fort combat (?)
+
+
+### ship-to-ship combat
+
+Occurs when a ship is fighting another ship. The ship have dice, and the quality depends on how well each job is done.
+Mobs do damage to parts of the ship, and potentially immobilize the ship.
+
+Ships have two parts:
+1. Mast
+2. Hull
+
+Ship dice:
+1. Cannon ball (damage)
+2. Wood plank (repair)
+3. Rope (repair/assist)
+4. Sail (move)
+
+Ship dice combos:
+1. Rope + cannonball = attempt boarding
+2. sail = move closer or further
+
+Ship and mob have a "distance", which can be made further/closer with dice. Once they are together, you can board the opposing
+ship, and crew-to-mob combat begins.
+
+### crew-to-mob combat
+
+Occurs when the crew of a ship is fighting a mob. This can happen when the ship is close range to a mob,
+when boarding a ship, or fighting land mobs. Each crew member has dice, versus the mob dice.

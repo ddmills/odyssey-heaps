@@ -1,4 +1,5 @@
 using common.extensions.ArrayExtensions;
+using common.extensions.FloatPointExtensions;
 using common.extensions.IterableExtensions;
 using common.extensions.RandExtensions;
 using common.extensions.TileExtensions;
