@@ -2,6 +2,7 @@ package ecs.prefabs;
 
 import data.Gender;
 import data.Professions;
+import ecs.components.Health;
 import ecs.components.Level;
 import ecs.components.Nationality;
 import ecs.components.Person;
@@ -24,6 +25,7 @@ class PersonPrefab
 		e.add(new Nationality(SPANISH));
 		e.add(new Level(level));
 		e.add(new Profession(prof));
+		e.add(new Health(6, 6));
 
 		return e;
 	}

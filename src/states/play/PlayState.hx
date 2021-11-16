@@ -23,8 +23,6 @@ class PlayState extends GameState
 		p1.add(new CrewMember());
 		var p2 = PersonPrefab.Create(2);
 		p2.add(new CrewMember());
-		var p3 = PersonPrefab.Create(3);
-		p3.add(new CrewMember());
 		var p4 = PersonPrefab.Create(6);
 		p4.add(new CrewMember());
 		var p5 = PersonPrefab.Create(5);

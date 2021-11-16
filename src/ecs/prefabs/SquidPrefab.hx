@@ -3,6 +3,7 @@ package ecs.prefabs;
 import core.Game;
 import data.DiceSets;
 import data.TileResources;
+import ecs.components.Health;
 import ecs.components.Mob;
 import ecs.components.Moniker;
 import ecs.components.Sprite;
@@ -18,6 +19,7 @@ class SquidPrefab
 		squid.add(new Sprite(animation, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		squid.add(new Moniker('Giant squid'));
 		squid.add(new Mob(DiceSets.SQUID));
+		squid.add(new Health(12, 12));
 
 		return squid;
 	}

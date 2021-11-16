@@ -11,6 +11,7 @@ import data.TileResources;
 import ecs.Entity;
 import ecs.Query;
 import ecs.components.CrewMember;
+import ecs.components.Health;
 import ecs.components.Level;
 import ecs.components.Person;
 import ecs.components.Profession;
@@ -26,20 +27,32 @@ typedef GameDie =
 	var origin:IntPoint;
 };
 
+typedef Crew =
+{
+	var entity:Entity;
+	var hpOb:h2d.Object;
+};
+
 class CombatScreen extends Screen
 {
-	var mob:Entity;
+	var mobs:Array<Crew>;
 	var ob:h2d.Object;
 	var rollArea:h2d.Object;
 	var gameDice:Array<GameDie>;
 	var crewQuery:Query;
+	var crew:Array<Crew>;
 	var turn:Int;
 	var dieSize:Int = 64;
 	var comboOb:h2d.Object;
 
 	public function new(mob:Entity)
 	{
-		this.mob = mob;
+		mobs = [
+			{
+				entity: mob,
+				hpOb: new h2d.Object()
+			}
+		];
 		ob = new h2d.Object();
 		comboOb = new h2d.Object();
 		turn = 0;
@@ -56,6 +69,23 @@ class CombatScreen extends Screen
 		var bg = new h2d.Bitmap(TileResources.VIGNETTE_WATER);
 		bg.scale(3);
 		ob.addChild(bg);
+
+		crew = crewQuery.map((entity) ->
+		{
+			var c = {
+				entity: entity,
+				hpOb: new h2d.Object(),
+			};
+
+			ob.addChild(c.hpOb);
+
+			return c;
+		});
+
+		for (mob in mobs)
+		{
+			ob.addChild(mob.hpOb);
+		}
 
 		var rollAreaSize = 256 + dieSize;
 
@@ -78,11 +108,54 @@ class CombatScreen extends Screen
 		rollArea.x = 0;
 		rollArea.y = 256;
 
+		renderCrew();
+
 		ob.addChild(comboOb);
 		ob.addChild(rollArea);
 		ob.addChild(rollBtn);
 
 		game.render(HUD, ob);
+	}
+
+	function renderCrew()
+	{
+		var x = 0;
+		for (c in crew)
+		{
+			c.hpOb.removeChildren();
+
+			var health = c.entity.get(Health);
+			var txt = TextResource.MakeText();
+			txt.text = '${health.current}/${health.max}';
+			txt.dropShadow = null;
+			txt.color = 0x57723a.toHxdColor();
+
+			txt.x = 256 + 32 * x;
+			txt.y = 32;
+
+			c.hpOb.addChild(txt);
+
+			x++;
+		}
+
+		x = 0;
+		for (mob in mobs)
+		{
+			mob.hpOb.removeChildren();
+
+			var health = mob.entity.get(Health);
+			var txt = TextResource.MakeText();
+			txt.text = '${health.current}/${health.max}';
+			txt.dropShadow = null;
+			txt.color = 0x57723a.toHxdColor();
+
+			txt.x = 800 + 32 * x;
+			txt.y = 32;
+
+			mob.hpOb.addChild(txt);
+
+			x++;
+		}
 	}
 
 	function rollCrewDice()
@@ -94,10 +167,10 @@ class CombatScreen extends Screen
 		gameDice = new Array();
 
 		var disc = new PoissonDiscSampler(256, 256, dieSize + 12, turn);
-		for (e in crewQuery)
+		for (c in crew)
 		{
-			var lvl = e.get(Level).lvl;
-			var dice = e.get(Profession).data.dice;
+			var lvl = c.entity.get(Level).lvl;
+			var dice = c.entity.get(Profession).data.dice;
 			var rolls = dice.roll(lvl, (Math.random() * 10000).floor());
 			var pos = disc.sample();
 
@@ -156,8 +229,6 @@ class CombatScreen extends Screen
 		{
 			if (combo.appliesTo(selected))
 			{
-				trace('COMBO APPLIES!', combo.title);
-
 				var comboTxt = TextResource.MakeText();
 				comboTxt.text = combo.title;
 				comboTxt.alignCenter;

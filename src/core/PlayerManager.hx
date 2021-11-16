@@ -5,6 +5,7 @@ import data.TileResources;
 import ecs.Entity;
 import ecs.EntityRef;
 import ecs.components.Direction;
+import ecs.components.Health;
 import ecs.components.Moniker;
 import ecs.components.Sprite;
 import ecs.components.Vision;
@@ -35,6 +36,7 @@ class PlayerManager
 		e.add(new Moniker('Sloop'));
 		e.add(new Sprite(new Anim(TileResources.SLOOP.split(8), 0), Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		e.add(new Direction());
+		e.add(new Health(8, 8));
 		e.add(new Vision(10, 1));
 
 		Game.instance.world.add(e);
