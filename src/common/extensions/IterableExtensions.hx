@@ -31,6 +31,23 @@ class IterableExtensions
 		return Lambda.filter(it, fn);
 	}
 
+	public static overload extern inline function each<A>(it:Iterable<A>, fn:(item:A, idx:Int) -> Void)
+	{
+		var i = 0;
+		for (x in it)
+		{
+			fn(x, i++);
+		}
+	}
+
+	public static overload extern inline function each<A>(it:Iterable<A>, fn:(item:A) -> Void)
+	{
+		for (x in it)
+		{
+			fn(x);
+		}
+	}
+
 	public static inline function map<A, B>(it:Iterable<A>, fn:(item:A) -> B):Array<B>
 	{
 		return Lambda.map(it, fn);

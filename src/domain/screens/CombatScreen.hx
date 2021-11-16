@@ -24,6 +24,8 @@ typedef GameDie =
 	var roll:DieRoll;
 	var ob:Bitmap;
 	var isSelected:Bool;
+	var isRetired:Bool;
+	var isSpent:Bool;
 	var origin:IntPoint;
 };
 
@@ -208,6 +210,8 @@ class CombatScreen extends Screen
 			roll: roll,
 			ob: bm,
 			isSelected: false,
+			isRetired: false,
+			isSpent: false,
 			origin: pos,
 		};
 
@@ -218,10 +222,9 @@ class CombatScreen extends Screen
 		ob.addChild(bm);
 	}
 
-	function dieClicked(die:GameDie)
+	function updateCombo()
 	{
 		comboOb.removeChildren();
-		die.isSelected = !die.isSelected;
 
 		var selected = gameDice.filter((d) -> d.isSelected).map((d) -> d.roll.value);
 
@@ -240,7 +243,18 @@ class CombatScreen extends Screen
 				var comboBtn = new Bitmap(h2d.Tile.fromColor(0x57723a, comboAreaSize, 32));
 
 				var comboBtnInt = new Interactive(comboAreaSize, 32);
-				comboBtnInt.onClick = (e) -> combo.apply();
+				comboBtnInt.onClick = (evt) ->
+				{
+					gameDice.filter((d) -> d.isSelected).each((d, idx) ->
+					{
+						d.isSpent = true;
+						d.isSelected = false;
+						d.ob.visible = false;
+						updateCombo();
+					});
+					combo.apply(mobs);
+					renderCrew();
+				}
 
 				comboBtn.addChild(comboBtnInt);
 				comboBtn.addChild(comboTxt);
@@ -251,6 +265,13 @@ class CombatScreen extends Screen
 				break;
 			}
 		}
+	}
+
+	function dieClicked(die:GameDie)
+	{
+		die.isSelected = !die.isSelected;
+
+		updateCombo();
 	}
 
 	override function update(frame:Frame)

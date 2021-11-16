@@ -1,6 +1,7 @@
 package domain.combat.dice;
 
 import data.DieFace;
+import domain.screens.CombatScreen.Crew;
 
 class DiceCombo
 {
@@ -36,5 +37,5 @@ class DiceCombo
 		return true;
 	}
 
-	public function apply() {}
+	public function apply(mobs:Array<Crew>) {}
 }
