@@ -1,6 +1,7 @@
 package data;
 
 import data.DieData.Dice;
+import domain.combat.dice.DiceSet;
 
 class DiceSets
 {

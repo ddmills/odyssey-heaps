@@ -1,4 +1,8 @@
-package data;
+package domain.combat.dice;
+
+import data.DiceCategory;
+import data.DieFace;
+import data.DieRoll;
 
 class Die
 {

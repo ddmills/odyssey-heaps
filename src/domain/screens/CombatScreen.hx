@@ -4,6 +4,7 @@ import common.struct.FloatPoint;
 import common.struct.IntPoint;
 import core.Frame;
 import core.Screen;
+import data.DiceCombos;
 import data.DieRoll;
 import data.TextResource;
 import data.TileResources;
@@ -34,11 +35,13 @@ class CombatScreen extends Screen
 	var crewQuery:Query;
 	var turn:Int;
 	var dieSize:Int = 64;
+	var comboOb:h2d.Object;
 
 	public function new(mob:Entity)
 	{
 		this.mob = mob;
 		ob = new h2d.Object();
+		comboOb = new h2d.Object();
 		turn = 0;
 
 		gameDice = new Array();
@@ -75,6 +78,7 @@ class CombatScreen extends Screen
 		rollArea.x = 0;
 		rollArea.y = 256;
 
+		ob.addChild(comboOb);
 		ob.addChild(rollArea);
 		ob.addChild(rollBtn);
 
@@ -143,7 +147,39 @@ class CombatScreen extends Screen
 
 	function dieClicked(die:GameDie)
 	{
+		comboOb.removeChildren();
 		die.isSelected = !die.isSelected;
+
+		var selected = gameDice.filter((d) -> d.isSelected).map((d) -> d.roll.value);
+
+		for (combo in DiceCombos.PLAYER)
+		{
+			if (combo.appliesTo(selected))
+			{
+				trace('COMBO APPLIES!', combo.title);
+
+				var comboTxt = TextResource.MakeText();
+				comboTxt.text = combo.title;
+				comboTxt.alignCenter;
+				comboTxt.x = 8;
+				comboTxt.y = 8;
+
+				var comboAreaSize = (comboTxt.textWidth + 16).floor();
+
+				var comboBtn = new Bitmap(h2d.Tile.fromColor(0x57723a, comboAreaSize, 32));
+
+				var comboBtnInt = new Interactive(comboAreaSize, 32);
+				comboBtnInt.onClick = (e) -> combo.apply();
+
+				comboBtn.addChild(comboBtnInt);
+				comboBtn.addChild(comboTxt);
+
+				comboOb.x = 512;
+				comboOb.y = 128;
+				comboOb.addChild(comboBtn);
+				break;
+			}
+		}
 	}
 
 	override function update(frame:Frame)

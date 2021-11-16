@@ -1,5 +1,7 @@
 package data;
 
+import domain.combat.dice.DiceSet;
+
 class Profession
 {
 	public var dice(default, null):DiceSet;

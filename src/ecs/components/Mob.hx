@@ -1,6 +1,6 @@
 package ecs.components;
 
-import data.DiceSet;
+import domain.combat.dice.DiceSet;
 
 class Mob extends Component
 {

@@ -2,7 +2,6 @@ package domain.screens;
 
 import common.struct.Coordinate;
 import common.util.AStar;
-import common.util.Bresenham;
 import common.util.Distance;
 import core.Frame;
 import core.Screen;

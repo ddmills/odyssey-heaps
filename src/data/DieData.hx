@@ -1,5 +1,7 @@
 package data;
 
+import domain.combat.dice.Die;
+
 class Dice
 {
 	public static var SOLDIER_LVL_1 = new Die(DiceCategory.ATTACK, [ATK_SWORD, ATK_SWORD, ATK_EMPTY, ATK_EMPTY, ATK_EMPTY, ATK_EMPTY]);

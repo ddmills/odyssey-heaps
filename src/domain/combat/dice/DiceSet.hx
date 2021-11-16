@@ -1,4 +1,7 @@
-package data;
+package domain.combat.dice;
+
+import data.DiceCategory;
+import data.DieRoll;
 
 class DiceSet
 {
