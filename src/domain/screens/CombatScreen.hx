@@ -8,11 +8,15 @@ import data.DiceCombos;
 import data.DieRoll;
 import data.TextResource;
 import data.TileResources;
+import domain.combat.dice.DiceCombo;
+import domain.combat.dice.Die;
+import domain.ui.Button;
 import ecs.Entity;
 import ecs.Query;
 import ecs.components.CrewMember;
 import ecs.components.Health;
 import ecs.components.Level;
+import ecs.components.Mob;
 import ecs.components.Person;
 import ecs.components.Profession;
 import h2d.Bitmap;
@@ -23,6 +27,7 @@ typedef GameDie =
 {
 	var roll:DieRoll;
 	var ob:Bitmap;
+	var die:Die;
 	var isSelected:Bool;
 	var isRetired:Bool;
 	var isSpent:Bool;
@@ -33,31 +38,62 @@ typedef Crew =
 {
 	var entity:Entity;
 	var hpOb:h2d.Object;
+	var gameDice:Array<GameDie>;
 };
+
+enum MobStage
+{
+	ROLLING;
+	SELECTING;
+	EXECUTING;
+	DONE;
+}
 
 class CombatScreen extends Screen
 {
 	var mobs:Array<Crew>;
 	var ob:h2d.Object;
+	var diceOb:h2d.Object;
+	var mobDiceOb:h2d.Object;
 	var rollArea:h2d.Object;
+	var mobRollArea:h2d.Object;
 	var gameDice:Array<GameDie>;
 	var crewQuery:Query;
 	var crew:Array<Crew>;
 	var turn:Int;
+	var rollsRemaining:Int;
 	var dieSize:Int = 64;
-	var comboOb:h2d.Object;
+	var comboInfoOb:h2d.Object;
+	var rollBtn:Button;
+	var turnBtn:Button;
+	var rollingPos:IntPoint;
+	var mobRollingPos:IntPoint;
+	var isPlayerTurn:Bool;
+	var mobStage:MobStage;
+	var lastMobAction:Float;
+	var mobCombo:DiceCombo;
 
 	public function new(mob:Entity)
 	{
 		mobs = [
 			{
 				entity: mob,
-				hpOb: new h2d.Object()
+				hpOb: new h2d.Object(),
+				gameDice: new Array()
 			}
 		];
 		ob = new h2d.Object();
-		comboOb = new h2d.Object();
+		diceOb = new h2d.Object();
+		mobDiceOb = new h2d.Object();
+		diceOb.visible = false;
+		comboInfoOb = new h2d.Object();
+		rollBtn = new Button();
+		turnBtn = new Button();
+		mobStage = DONE;
+
 		turn = 0;
+		rollsRemaining = 0;
+		isPlayerTurn = true;
 
 		gameDice = new Array();
 
@@ -72,17 +108,8 @@ class CombatScreen extends Screen
 		bg.scale(3);
 		ob.addChild(bg);
 
-		crew = crewQuery.map((entity) ->
-		{
-			var c = {
-				entity: entity,
-				hpOb: new h2d.Object(),
-			};
-
-			ob.addChild(c.hpOb);
-
-			return c;
-		});
+		rollsRemaining = 3;
+		lastMobAction = 0;
 
 		for (mob in mobs)
 		{
@@ -91,30 +118,114 @@ class CombatScreen extends Screen
 
 		var rollAreaSize = 256 + dieSize;
 
-		var rollTxt = TextResource.MakeText();
-		rollTxt.text = 'Roll';
-		rollTxt.alignCenter;
-		rollTxt.x = 128;
-		rollTxt.y = 8;
-
-		var rollBtn = new Bitmap(h2d.Tile.fromColor(0x57723a, rollAreaSize, 32));
+		rollBtn.text = 'Roll (${rollsRemaining})';
+		rollBtn.width = rollAreaSize;
+		rollBtn.height = 32;
 		rollBtn.x = 0;
 		rollBtn.y = 512 + dieSize;
+		rollBtn.backgroundColor = 0x57723a;
+		rollBtn.onClick = (e) -> rollCrewDice();
 
-		var rollBtnInt = new Interactive(rollAreaSize, 32);
-		rollBtnInt.onClick = (e) -> rollCrewDice();
-		rollBtn.addChild(rollBtnInt);
-		rollBtn.addChild(rollTxt);
+		turnBtn.text = 'End turn (${turn})';
+		turnBtn.width = rollAreaSize;
+		turnBtn.height = 32;
+		turnBtn.x = 0;
+		turnBtn.y = 512 + dieSize + 32;
+		turnBtn.backgroundColor = 0x804c36;
+		turnBtn.onClick = (e) -> endTurn();
 
 		rollArea = new Bitmap(h2d.Tile.fromColor(0x1b1f23, rollAreaSize, rollAreaSize));
 		rollArea.x = 0;
 		rollArea.y = 256;
 
+		mobRollArea = new Bitmap(h2d.Tile.fromColor(0x333333, rollAreaSize, rollAreaSize));
+		mobRollArea.x = game.camera.width - rollAreaSize;
+		mobRollArea.y = 256;
+
+		rollingPos = new IntPoint((rollArea.x + 128).floor(), (rollArea.y + 256 + dieSize / 2).floor());
+		mobRollingPos = new IntPoint((mobRollArea.x + 128).floor(), (mobRollArea.y + 256 + dieSize / 2).floor());
+
+		mobs.each((mob) ->
+		{
+			var dice = mob.entity.get(Mob).dice.getSet(1);
+
+			mob.gameDice = dice.map((die) ->
+			{
+				var bm = new h2d.Bitmap();
+				bm.scale(dieSize / 16);
+				bm.x = rollingPos.x;
+				bm.y = rollingPos.y;
+
+				mobDiceOb.addChild(bm);
+
+				var gameDie = {
+					roll: null,
+					die: die,
+					ob: bm,
+					isSelected: false,
+					isRetired: false,
+					isSpent: false,
+					origin: new IntPoint(0, 0),
+				};
+
+				return gameDie;
+			});
+		});
+
+		crew = crewQuery.map((entity) ->
+		{
+			var lvl = entity.get(Level).lvl;
+			var dice = entity.get(Profession).data.dice.getSet(lvl);
+
+			var gameDice = dice.map((die) ->
+			{
+				var bm = new h2d.Bitmap();
+				bm.scale(dieSize / 16);
+				bm.x = rollingPos.x;
+				bm.y = rollingPos.y;
+
+				var clickSpot = new h2d.Interactive(16, 16);
+				clickSpot.x = 0;
+				clickSpot.y = 0;
+
+				bm.addChild(clickSpot);
+				diceOb.addChild(bm);
+
+				var gameDie = {
+					roll: null,
+					die: die,
+					ob: bm,
+					isSelected: false,
+					isRetired: false,
+					isSpent: false,
+					origin: new IntPoint(0, 0),
+				};
+
+				clickSpot.onClick = (e:hxd.Event) -> dieClicked(gameDie);
+
+				return gameDie;
+			});
+
+			var c = {
+				entity: entity,
+				hpOb: new h2d.Object(),
+				gameDice: gameDice
+			};
+
+			ob.addChild(c.hpOb);
+
+			return c;
+		});
+
 		renderCrew();
 
-		ob.addChild(comboOb);
+		ob.addChild(comboInfoOb);
 		ob.addChild(rollArea);
+		ob.addChild(mobRollArea);
+		ob.addChild(diceOb);
+		ob.addChild(mobDiceOb);
 		ob.addChild(rollBtn);
+		ob.addChild(turnBtn);
 
 		game.render(HUD, ob);
 	}
@@ -162,108 +273,222 @@ class CombatScreen extends Screen
 
 	function rollCrewDice()
 	{
-		for (die in gameDice)
+		if (rollsRemaining <= 0 || !isPlayerTurn)
 		{
-			die.ob.remove();
+			return;
 		}
-		gameDice = new Array();
 
-		var disc = new PoissonDiscSampler(256, 256, dieSize + 12, turn);
+		diceOb.visible = true;
+		rollsRemaining--;
+		rollBtn.text = 'Roll (${rollsRemaining})';
+
+		var disc = new PoissonDiscSampler(256, 256, dieSize + 12, (Math.random() * 10000).floor());
 		for (c in crew)
 		{
-			var lvl = c.entity.get(Level).lvl;
-			var dice = c.entity.get(Profession).data.dice;
-			var rolls = dice.roll(lvl, (Math.random() * 10000).floor());
-			var pos = disc.sample();
-
-			if (pos == null)
+			for (gameDie in c.gameDice)
 			{
-				pos = {
-					x: (Math.random() * 256).floor(),
-					y: (Math.random() * 256).floor(),
-				};
-			}
+				var pos = disc.sample();
+				if (pos == null)
+				{
+					pos = {
+						x: (Math.random() * 256).floor(),
+						y: (Math.random() * 256).floor(),
+					};
+				}
 
-			for (roll in rolls)
-			{
-				renderDie(pos, roll);
+				if (!gameDie.isSpent && !gameDie.isRetired && !gameDie.isSelected)
+				{
+					gameDie.ob.x = rollingPos.x;
+					gameDie.ob.y = rollingPos.y;
+
+					var seed = (Math.random() * 10000).floor();
+					gameDie.roll = gameDie.die.roll(seed);
+					gameDie.origin = pos;
+					gameDie.ob.tile = TileResources.getDie(gameDie.roll.value);
+				}
 			}
+		}
+	}
+
+	function rollMobDice()
+	{
+		mobDiceOb.visible = true;
+		mobStage = SELECTING;
+		lastMobAction = game.frame.tick;
+
+		var disc = new PoissonDiscSampler(256, 256, dieSize + 12, (Math.random() * 10000).floor());
+		for (m in mobs)
+		{
+			for (gameDie in m.gameDice)
+			{
+				var pos = disc.sample();
+				if (pos == null)
+				{
+					pos = {
+						x: (Math.random() * 256).floor(),
+						y: (Math.random() * 256).floor(),
+					};
+				}
+
+				if (!gameDie.isSpent && !gameDie.isRetired && !gameDie.isSelected)
+				{
+					gameDie.ob.x = mobRollingPos.x;
+					gameDie.ob.y = mobRollingPos.y;
+
+					var seed = (Math.random() * 10000).floor();
+					gameDie.roll = gameDie.die.roll(seed);
+					gameDie.origin = pos;
+					gameDie.ob.tile = TileResources.getDie(gameDie.roll.value);
+				}
+			}
+		}
+	}
+
+	function endMobTurn()
+	{
+		mobs.flatMap((m) -> m.gameDice).each((die) ->
+		{
+			die.isSpent = false;
+			die.isSelected = false;
+			die.ob.visible = true;
+			die.ob.x = mobRollingPos.x;
+			die.ob.y = mobRollingPos.y;
+		});
+		isPlayerTurn = true;
+	}
+
+	function endTurn()
+	{
+		if (!isPlayerTurn)
+		{
+			return;
 		}
 
 		turn++;
+		turnBtn.text = 'End turn (${turn})';
+		diceOb.visible = false;
+
+		crew.flatMap((c) -> c.gameDice).each((die) ->
+		{
+			die.isSpent = false;
+			die.isSelected = false;
+			die.ob.visible = true;
+			die.ob.x = rollingPos.x;
+			die.ob.y = rollingPos.y;
+		});
+
+		rollsRemaining = 3;
+		rollBtn.text = 'Roll (${rollsRemaining})';
+		updateCombo();
+		isPlayerTurn = false;
+
+		rollMobDice();
+		mobTurn();
 	}
 
-	function renderDie(pos:IntPoint, roll:DieRoll)
+	function mobTurn()
 	{
-		var tile = TileResources.getDie(roll.value);
-		var bm = new Bitmap(tile);
-		bm.scale(dieSize / 16);
-		bm.x = rollArea.x + 128;
-		bm.y = rollArea.y + 256 + dieSize / 2;
+		if (mobStage == SELECTING)
+		{
+			var combos = mobs[0].entity.get(Mob).combos;
+			var availableDice = mobs.flatMap((m) -> m.gameDice)
+				.filter((d) -> !d.isRetired && !d.isSpent);
 
-		var clickSpot = new h2d.Interactive(16, 16);
-		bm.addChild(clickSpot);
-		clickSpot.x = 0;
-		clickSpot.y = 0;
+			var availableFaces = availableDice.map((d) -> d.roll.value);
 
-		var gameDie = {
-			roll: roll,
-			ob: bm,
-			isSelected: false,
-			isRetired: false,
-			isSpent: false,
-			origin: pos,
-		};
+			// for each combo, check if we have the dice
+			var valid = combos.filter((combo) ->
+			{
+				var clone = availableFaces.copy();
 
-		clickSpot.onClick = (e:hxd.Event) -> dieClicked(gameDie);
+				for (face in combo.faces)
+				{
+					if (!clone.contains(face))
+					{
+						return false;
+					}
 
-		gameDice.push(gameDie);
+					clone.remove(face);
+				}
 
-		ob.addChild(bm);
+				return true;
+			});
+
+			if (valid.length == 0)
+			{
+				mobStage = DONE;
+				mobDiceOb.visible = false;
+				endMobTurn();
+				return;
+			}
+
+			mobCombo = valid.max((c) -> c.faces.length);
+			trace('combo', turn, mobCombo);
+			for (face in mobCombo.faces)
+			{
+				var die = availableDice.find((d) -> d.roll.value == face);
+				die.isSelected = true;
+			}
+			applyMobCombo();
+		}
+	}
+
+	function applyMobCombo()
+	{
+		mobs.flatMap((m) -> m.gameDice)
+			.filter((d) -> d.isSelected)
+			.each((d) ->
+			{
+				d.isSpent = true;
+				d.isSelected = false;
+				d.ob.visible = false;
+			});
+		mobCombo.apply(crew);
+		mobCombo = null;
+		mobStage = SELECTING;
+		renderCrew();
+		mobTurn();
 	}
 
 	function updateCombo()
 	{
-		comboOb.removeChildren();
+		comboInfoOb.removeChildren();
 
-		var selected = gameDice.filter((d) -> d.isSelected).map((d) -> d.roll.value);
+		var selected = crew.flatMap((c) -> c.gameDice).filter((d) -> d.isSelected).map((d) -> d.roll.value);
 
 		for (combo in DiceCombos.PLAYER)
 		{
-			if (combo.appliesTo(selected))
+			if (!combo.appliesTo(selected))
 			{
-				var comboTxt = TextResource.MakeText();
-				comboTxt.text = combo.title;
-				comboTxt.alignCenter;
-				comboTxt.x = 8;
-				comboTxt.y = 8;
-
-				var comboAreaSize = (comboTxt.textWidth + 16).floor();
-
-				var comboBtn = new Bitmap(h2d.Tile.fromColor(0x57723a, comboAreaSize, 32));
-
-				var comboBtnInt = new Interactive(comboAreaSize, 32);
-				comboBtnInt.onClick = (evt) ->
-				{
-					gameDice.filter((d) -> d.isSelected).each((d, idx) ->
-					{
-						d.isSpent = true;
-						d.isSelected = false;
-						d.ob.visible = false;
-						updateCombo();
-					});
-					combo.apply(mobs);
-					renderCrew();
-				}
-
-				comboBtn.addChild(comboBtnInt);
-				comboBtn.addChild(comboTxt);
-
-				comboOb.x = 512;
-				comboOb.y = 128;
-				comboOb.addChild(comboBtn);
-				break;
+				continue;
 			}
+
+			var comboTxt = TextResource.MakeText();
+			comboTxt.text = combo.title;
+			var comboAreaSize = (comboTxt.textWidth + 16).floor();
+
+			var comboBtn = new Button();
+			comboBtn.backgroundColor = 0x57723a;
+			comboBtn.width = comboAreaSize;
+			comboBtn.height = 32;
+			comboBtn.text = combo.title;
+			comboBtn.onClick = (evt) ->
+			{
+				crew.flatMap((c) -> c.gameDice).filter((d) -> d.isSelected).each((d, idx) ->
+				{
+					d.isSpent = true;
+					d.isSelected = false;
+					d.ob.visible = false;
+					updateCombo();
+				});
+				combo.apply(mobs);
+				renderCrew();
+			}
+
+			comboInfoOb.x = 512;
+			comboInfoOb.y = 128;
+			comboInfoOb.addChild(comboBtn);
+			break;
 		}
 	}
 
@@ -277,7 +502,7 @@ class CombatScreen extends Screen
 	override function update(frame:Frame)
 	{
 		var x = 0;
-		for (die in gameDice)
+		crew.flatMap((c) -> c.gameDice).each((die) ->
 		{
 			var pos:FloatPoint = null;
 			if (die.isSelected)
@@ -302,6 +527,41 @@ class CombatScreen extends Screen
 
 			die.ob.x = newpos.x;
 			die.ob.y = newpos.y;
-		}
+		});
+
+		x = 0;
+		mobs.flatMap((m) -> m.gameDice).each((die) ->
+		{
+			var pos:FloatPoint = null;
+			if (die.isSelected)
+			{
+				pos = {
+					x: ((x++ * dieSize) + 8),
+					y: dieSize,
+				};
+			}
+			else
+			{
+				pos = {
+					x: mobRollArea.x + die.origin.x,
+					y: mobRollArea.y + die.origin.y,
+				};
+			}
+			var cur:FloatPoint = {
+				x: die.ob.x,
+				y: die.ob.y,
+			};
+			var newpos = cur.lerp(pos, frame.tmod * .2);
+
+			die.ob.x = newpos.x;
+			die.ob.y = newpos.y;
+		});
+
+		// if (!isPlayerTurn)
+		// {
+		// 	frame.elapsed;
+		// }
+		// if mobs turn...
+		// roll dice
 	}
 }

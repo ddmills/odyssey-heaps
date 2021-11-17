@@ -1,6 +1,7 @@
 package ecs.prefabs;
 
 import core.Game;
+import data.DiceCombos;
 import data.DiceSets;
 import data.TileResources;
 import ecs.components.Health;
@@ -18,7 +19,7 @@ class SquidPrefab
 
 		squid.add(new Sprite(animation, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		squid.add(new Moniker('Giant squid'));
-		squid.add(new Mob(DiceSets.SQUID));
+		squid.add(new Mob(DiceSets.SQUID, DiceCombos.SQUID));
 		squid.add(new Health(12, 12));
 
 		return squid;
