@@ -21,7 +21,7 @@
 - [ ] extract h2d.Text creation
 - [x] screen for settlements
 - [x] random spanish name generator
-- [ ] weight table
+- [ ] weight tables
 - [x] pathfinding
 - [ ] identity component
 - [x] minimap
@@ -30,5 +30,8 @@
 - [ ] jump flood algorithm + sin wave shader
 - [x] show settlers members at settlement
 - [x] select settlers member at settlement
-- [ ] add settler member to your own crew
+- [x] add settler member to your own crew
 - [ ] dice audio
+- [ ] show current turn "Player turn!/Mob Turn"
+- [ ] show mob combo name/effect
+- [ ] when crew member reaches zero hp, dice should be retired

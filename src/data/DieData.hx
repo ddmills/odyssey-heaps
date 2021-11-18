@@ -19,8 +19,8 @@ class Dice
 	public static var SQUID = new Die(DiceCategory.SQUID, [
 		SQUID_TENTACLE,
 		SQUID_TENTACLE,
-		SQUID_TENTACLE,
-		SQUID_TENTACLE,
+		SQUID_WAVE,
+		SQUID_WAVE,
 		SQUID_EMPTY,
 		SQUID_EMPTY,
 	]);

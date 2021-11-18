@@ -2,6 +2,7 @@ package domain.screens;
 
 import common.struct.FloatPoint;
 import common.struct.IntPoint;
+import common.util.Timeout;
 import core.Frame;
 import core.Screen;
 import data.DiceCombos;
@@ -72,6 +73,7 @@ class CombatScreen extends Screen
 	var mobStage:MobStage;
 	var lastMobAction:Float;
 	var mobCombo:DiceCombo;
+	var timeout:Timeout;
 
 	public function new(mob:Entity)
 	{
@@ -90,6 +92,7 @@ class CombatScreen extends Screen
 		rollBtn = new Button();
 		turnBtn = new Button();
 		mobStage = DONE;
+		timeout = new Timeout(1);
 
 		turn = 0;
 		rollsRemaining = 0;
@@ -342,6 +345,8 @@ class CombatScreen extends Screen
 				}
 			}
 		}
+		timeout.onComplete = () -> mobTurn();
+		timeout.reset();
 	}
 
 	function endMobTurn()
@@ -383,7 +388,6 @@ class CombatScreen extends Screen
 		isPlayerTurn = false;
 
 		rollMobDice();
-		mobTurn();
 	}
 
 	function mobTurn()
@@ -429,7 +433,8 @@ class CombatScreen extends Screen
 				var die = availableDice.find((d) -> d.roll.value == face);
 				die.isSelected = true;
 			}
-			applyMobCombo();
+			timeout.onComplete = () -> applyMobCombo();
+			timeout.reset();
 		}
 	}
 
@@ -446,6 +451,7 @@ class CombatScreen extends Screen
 		mobCombo.apply(crew);
 		mobCombo = null;
 		mobStage = SELECTING;
+
 		renderCrew();
 		mobTurn();
 	}
@@ -557,11 +563,6 @@ class CombatScreen extends Screen
 			die.ob.y = newpos.y;
 		});
 
-		// if (!isPlayerTurn)
-		// {
-		// 	frame.elapsed;
-		// }
-		// if mobs turn...
-		// roll dice
+		timeout.update();
 	}
 }
