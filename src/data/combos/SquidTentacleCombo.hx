@@ -13,11 +13,8 @@ class SquidTentacleCombo extends DiceCombo
 
 	public override function apply(mobs:Array<Crew>)
 	{
-		trace('TENTACLE COMBO', mobs);
-
 		for (mob in mobs)
 		{
-			trace('dmg', mob);
 			var hp = mob.entity.get(Health);
 			hp.current -= 1;
 		}

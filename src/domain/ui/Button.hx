@@ -46,6 +46,7 @@ class Button extends h2d.Object
 		bm.width = value;
 		interactive.width = value;
 		textOb.x = value / 2;
+		width = value;
 		return value;
 	}
 
@@ -54,24 +55,28 @@ class Button extends h2d.Object
 		bm.height = value;
 		interactive.height = value;
 		textOb.y = (value / 2) - 4;
+		height = value;
 		return value;
 	}
 
 	function set_text(value:String):String
 	{
 		textOb.text = value;
+		text = value;
 		return value;
 	}
 
 	function set_backgroundColor(value:Int):Int
 	{
 		bm.tile = h2d.Tile.fromColor(value, width, height);
+		backgroundColor = value;
 		return value;
 	}
 
 	function set_textColor(value:Int):Int
 	{
 		textOb.color = value.toHxdColor();
+		textColor = value;
 		return value;
 	}
 
