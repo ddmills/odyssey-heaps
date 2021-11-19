@@ -11,6 +11,7 @@ import data.TextResource;
 import data.TileResources;
 import domain.combat.dice.DiceCombo;
 import domain.combat.dice.Die;
+import domain.screens.components.CrewMemberCard;
 import domain.ui.Button;
 import ecs.Entity;
 import ecs.Query;
@@ -40,6 +41,7 @@ typedef Crew =
 	var entity:Entity;
 	var hpOb:h2d.Object;
 	var gameDice:Array<GameDie>;
+	var cardOb:CrewMemberCard;
 };
 
 class CombatScreen extends Screen
@@ -71,7 +73,8 @@ class CombatScreen extends Screen
 			{
 				entity: mob,
 				hpOb: new h2d.Object(),
-				gameDice: new Array()
+				gameDice: new Array(),
+				cardOb: null,
 			}
 		];
 		ob = new h2d.Object();
@@ -97,9 +100,9 @@ class CombatScreen extends Screen
 
 	public override function onEnter()
 	{
-		var bg = new h2d.Bitmap(TileResources.VIGNETTE_WATER);
-		bg.scale(3);
-		ob.addChild(bg);
+		// var bg = new h2d.Bitmap(TileResources.VIGNETTE_WATER);
+		// bg.scale(3);
+		// ob.addChild(bg);
 
 		rollsRemaining = 3;
 
@@ -153,7 +156,14 @@ class CombatScreen extends Screen
 			var lvl = entity.get(Level).lvl;
 			var dice = entity.get(Profession).data.dice.getSet(lvl);
 
-			var gameDice = dice.map((die) ->
+			var c = {
+				entity: entity,
+				hpOb: new h2d.Object(),
+				gameDice: new Array<GameDie>(),
+				cardOb: new CrewMemberCard(entity),
+			};
+
+			c.gameDice = dice.map((die) ->
 			{
 				var bm = new h2d.Bitmap();
 				bm.scale(dieSize / 16);
@@ -182,13 +192,8 @@ class CombatScreen extends Screen
 				return gameDie;
 			});
 
-			var c = {
-				entity: entity,
-				hpOb: new h2d.Object(),
-				gameDice: gameDice
-			};
-
 			ob.addChild(c.hpOb);
+			ob.addChild(c.cardOb);
 
 			return c;
 		});
@@ -208,26 +213,10 @@ class CombatScreen extends Screen
 
 	function renderCrew()
 	{
+		crew.each((c) -> c.cardOb.updateHp());
+		crew.each((c) -> c.cardOb.updateDice(c.gameDice));
+
 		var x = 0;
-		for (c in crew)
-		{
-			c.hpOb.removeChildren();
-
-			var health = c.entity.get(Health);
-			var txt = TextResource.MakeText();
-			txt.text = '${health.current}/${health.max}';
-			txt.dropShadow = null;
-			txt.color = 0x57723a.toHxdColor();
-
-			txt.x = 256 + 32 * x;
-			txt.y = 32;
-
-			c.hpOb.addChild(txt);
-
-			x++;
-		}
-
-		x = 0;
 		for (mob in mobs)
 		{
 			mob.hpOb.removeChildren();
@@ -272,6 +261,8 @@ class CombatScreen extends Screen
 					};
 				}
 
+				gameDie.origin = pos;
+
 				if (!gameDie.isSpent && !gameDie.isRetired && !gameDie.isSelected)
 				{
 					gameDie.ob.x = rollingPos.x;
@@ -279,10 +270,10 @@ class CombatScreen extends Screen
 
 					var seed = (Math.random() * 10000).floor();
 					gameDie.roll = gameDie.die.roll(seed);
-					gameDie.origin = pos;
 					gameDie.ob.tile = TileResources.getDie(gameDie.roll.value);
 				}
 			}
+			c.cardOb.updateDice(c.gameDice);
 		}
 	}
 
@@ -304,6 +295,8 @@ class CombatScreen extends Screen
 					};
 				}
 
+				gameDie.origin = pos;
+
 				if (!gameDie.isSpent && !gameDie.isRetired && !gameDie.isSelected)
 				{
 					gameDie.ob.x = mobRollingPos.x;
@@ -311,7 +304,6 @@ class CombatScreen extends Screen
 
 					var seed = (Math.random() * 10000).floor();
 					gameDie.roll = gameDie.die.roll(seed);
-					gameDie.origin = pos;
 					gameDie.ob.tile = TileResources.getDie(gameDie.roll.value);
 				}
 			}
@@ -349,12 +341,14 @@ class CombatScreen extends Screen
 			die.isSpent = false;
 			die.isSelected = false;
 			die.ob.visible = true;
+			die.roll = null;
 			die.ob.x = rollingPos.x;
 			die.ob.y = rollingPos.y;
 		});
 
 		rollsRemaining = 3;
 		rollBtn.text = 'Roll (${rollsRemaining})';
+		crew.each((c) -> c.cardOb.updateDice(c.gameDice));
 		updateCombo();
 		isPlayerTurn = false;
 
@@ -497,6 +491,12 @@ class CombatScreen extends Screen
 		var selectedBounds = selectedDiceOb.getBounds();
 		selectedDiceOb.x = (game.window.width / 2) - (selectedBounds.width / 2);
 		selectedDiceOb.y = comboBtn.y - (dieSize + comboBtn.height);
+
+		crew.each((c, i) ->
+		{
+			c.cardOb.x = 8;
+			c.cardOb.y = 80 * i + ((i + 1) * 8);
+		});
 	}
 
 	override function update(frame:Frame)
@@ -572,5 +572,7 @@ class CombatScreen extends Screen
 		repositionHud();
 
 		timeout.update();
+
+		world.updateSystems();
 	}
 }

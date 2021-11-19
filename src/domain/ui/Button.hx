@@ -54,7 +54,7 @@ class Button extends h2d.Object
 	{
 		bm.height = value;
 		interactive.height = value;
-		textOb.y = (value / 2) - 4;
+		textOb.y = (value / 2) - 8;
 		height = value;
 		return value;
 	}

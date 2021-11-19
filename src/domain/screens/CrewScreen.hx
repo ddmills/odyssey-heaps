@@ -2,7 +2,6 @@ package domain.screens;
 
 import core.Screen;
 import data.Keybindings.Keybinding;
-import data.Nationality;
 import data.TextResource;
 import data.TileResources;
 import ecs.Entity;
