@@ -34,7 +34,11 @@ class CrewMemberCard extends h2d.Object
 		var level = entity.get(Level);
 		var profession = entity.get(Profession);
 
-		avatarOb = new h2d.Bitmap(Tile.fromColor(0x333333, 80, 80));
+		var portrait = hxd.Res.img.portraits.portrait1.toTile();
+		var portraitOb = new h2d.Bitmap(portrait);
+		portraitOb.scale(2);
+		avatarOb = new h2d.Bitmap(Tile.fromColor(0x111111, 80, 80));
+		avatarOb.addChild(portraitOb);
 		backgroundOb = new h2d.Bitmap(Tile.fromColor(0x111111, 320, 80));
 		diceOb = new h2d.Object();
 		diceOb.scale(2);
