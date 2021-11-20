@@ -15,6 +15,7 @@ import domain.screens.components.CrewMemberCard;
 import domain.ui.Button;
 import ecs.Entity;
 import ecs.Query;
+import ecs.components.Combatant;
 import ecs.components.CrewMember;
 import ecs.components.Health;
 import ecs.components.Level;
@@ -48,7 +49,8 @@ typedef Crew =
 
 class CombatScreen extends Screen
 {
-	var mobs:Array<Crew>;
+	var mob:Entity;
+	var enemies:Array<Crew>;
 	var ob:h2d.Object;
 	var diceOb:h2d.Object;
 	var mobDiceOb:h2d.Object;
@@ -71,15 +73,15 @@ class CombatScreen extends Screen
 
 	public function new(mob:Entity)
 	{
-		mobs = [
-			{
-				entity: mob,
-				hpOb: new h2d.Object(),
-				gameDice: new Array(),
-				cardOb: null,
-				isTarget: true,
-			}
-		];
+		this.mob = mob;
+		enemies = mob.get(Mob).spawn().map((entity) -> {
+			entity: entity,
+			hpOb: new h2d.Object(),
+			gameDice: new Array(),
+			cardOb: null,
+			isTarget: true,
+		});
+
 		ob = new h2d.Object();
 		diceOb = new h2d.Object();
 		mobDiceOb = new h2d.Object();
@@ -105,9 +107,9 @@ class CombatScreen extends Screen
 	{
 		rollsRemaining = 3;
 
-		for (mob in mobs)
+		for (enemy in enemies)
 		{
-			ob.addChild(mob.hpOb);
+			ob.addChild(enemy.hpOb);
 		}
 
 		rollBtn.text = 'Roll (${rollsRemaining})';
@@ -123,11 +125,11 @@ class CombatScreen extends Screen
 		rollingPos = new IntPoint(0, 0);
 		mobRollingPos = new IntPoint(0, 0);
 
-		mobs.each((mob) ->
+		enemies.each((enemy) ->
 		{
-			var dice = mob.entity.get(Mob).dice.getSet(1);
+			var dice = enemy.entity.get(Combatant).dice.getSet(1);
 
-			mob.gameDice = dice.map((die) ->
+			enemy.gameDice = dice.map((die) ->
 			{
 				var bm = new h2d.Bitmap();
 				bm.scale(dieSize / 16);
@@ -217,11 +219,11 @@ class CombatScreen extends Screen
 		crew.each((c) -> c.cardOb.updateDice(c.gameDice));
 
 		var x = 0;
-		for (mob in mobs)
+		for (enemy in enemies)
 		{
-			mob.hpOb.removeChildren();
+			enemy.hpOb.removeChildren();
 
-			var health = mob.entity.get(Health);
+			var health = enemy.entity.get(Health);
 			var txt = TextResource.MakeText();
 			txt.text = '${health.current}/${health.max}';
 			txt.dropShadow = null;
@@ -230,7 +232,7 @@ class CombatScreen extends Screen
 			txt.x = 800 + 32 * x;
 			txt.y = 32;
 
-			mob.hpOb.addChild(txt);
+			enemy.hpOb.addChild(txt);
 
 			x++;
 		}
@@ -282,9 +284,9 @@ class CombatScreen extends Screen
 		mobDiceOb.visible = true;
 
 		var disc = new PoissonDiscSampler(512 - dieSize, 256 - dieSize, dieSize + 12, (Math.random() * 10000).floor());
-		for (m in mobs)
+		for (enemy in enemies)
 		{
-			for (gameDie in m.gameDice)
+			for (gameDie in enemy.gameDice)
 			{
 				var pos = disc.sample();
 				if (pos == null)
@@ -314,7 +316,7 @@ class CombatScreen extends Screen
 
 	function endMobTurn()
 	{
-		mobs.flatMap((m) -> m.gameDice).each((die) ->
+		enemies.flatMap((m) -> m.gameDice).each((die) ->
 		{
 			die.isSpent = false;
 			die.isSelected = false;
@@ -357,8 +359,8 @@ class CombatScreen extends Screen
 
 	function mobTurn()
 	{
-		var combos = mobs[0].entity.get(Mob).combos;
-		var availableDice = mobs.flatMap((m) -> m.gameDice)
+		var combos = mob.get(Mob).combos;
+		var availableDice = enemies.flatMap((m) -> m.gameDice)
 			.filter((d) -> !d.isRetired && !d.isSpent);
 
 		var availableFaces = availableDice.map((d) -> d.roll.value);
@@ -400,7 +402,7 @@ class CombatScreen extends Screen
 
 	function applyMobCombo()
 	{
-		mobs.flatMap((m) -> m.gameDice)
+		enemies.flatMap((e) -> e.gameDice)
 			.filter((d) -> d.isSelected)
 			.each((d) ->
 			{
@@ -412,7 +414,7 @@ class CombatScreen extends Screen
 		var r = Rand.create();
 		r.pick(crew).isTarget = true;
 
-		mobCombo.apply(crew, mobs);
+		mobCombo.apply(crew, enemies);
 		mobCombo = null;
 
 		crew.each((c) -> c.isTarget = false);
@@ -452,7 +454,7 @@ class CombatScreen extends Screen
 					d.ob.visible = false;
 					updateCombo();
 				});
-				combo.apply(mobs, crew);
+				combo.apply(enemies, crew);
 				renderCrew();
 			}
 
@@ -542,12 +544,12 @@ class CombatScreen extends Screen
 			die.ob.y = newpos.y;
 		});
 
-		var numMobSelected = mobs.flatMap((c) -> c.gameDice).filter((d) -> d.isSelected).count();
-		var mobWidth = (numMobSelected * dieSize) + ((numMobSelected - 1) * 8);
+		var numEnemyDiceSelected = enemies.flatMap((e) -> e.gameDice).filter((d) -> d.isSelected).count();
+		var mobWidth = (numEnemyDiceSelected * dieSize) + ((numEnemyDiceSelected - 1) * 8);
 		var mobLeft = center - mobWidth / 2;
 
 		x = 0;
-		mobs.flatMap((m) -> m.gameDice).each((die) ->
+		enemies.flatMap((e) -> e.gameDice).each((die) ->
 		{
 			var pos:FloatPoint = null;
 			if (die.isSelected)

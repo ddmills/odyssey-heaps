@@ -15,7 +15,7 @@ class PersonPrefab
 	public static function Create(seed:Int)
 	{
 		var r = new hxd.Rand(seed);
-		var gender:Gender = r.pick([MALE, FEMALE]);
+		var gender:Gender = r.rand() < .25 ? FEMALE : MALE;
 		var name = SpanishNameGenerator.getName(seed, gender);
 		var level = r.pick([1, 2, 3]);
 		var prof = r.pick([Professions.SOLDIER, Professions.COOK, Professions.OFFICER]);

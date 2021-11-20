@@ -19,13 +19,13 @@ class PlayState extends GameState
 
 		scene.add(world.layers.root, 0);
 
-		var p1 = PersonPrefab.Create(30);
+		var p1 = PersonPrefab.Create(50);
 		p1.add(new CrewMember());
-		var p2 = PersonPrefab.Create(2);
+		var p2 = PersonPrefab.Create(51);
 		p2.add(new CrewMember());
-		var p4 = PersonPrefab.Create(6);
+		var p4 = PersonPrefab.Create(52);
 		p4.add(new CrewMember());
-		var p5 = PersonPrefab.Create(5);
+		var p5 = PersonPrefab.Create(53);
 		p5.add(new CrewMember());
 
 		var squid = SquidPrefab.Create(1);

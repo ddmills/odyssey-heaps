@@ -67,8 +67,7 @@ class CrewMemberCard extends h2d.Object
 		var name2Txt = TextResource.MakeText();
 		name2Txt.text = person.name.split(' ')[0].toUpperCase();
 		name2Txt.textAlign = Center;
-		trace(name2Txt.textWidth);
-		name2Txt.x = (80 / 2); // - (name2Txt.textWidth / 2);
+		name2Txt.x = (80 / 2);
 		name2Txt.y = 120 - 16 - 4;
 
 		addChild(backgroundOb);
