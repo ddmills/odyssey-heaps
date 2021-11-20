@@ -1,23 +1,36 @@
 package data;
 
-import data.combos.DoubleSlash2Combo;
-import data.combos.DoubleSlashCombo;
 import data.combos.ShieldBashCombo;
-import data.combos.SlashCombo;
-import data.combos.SquidTentacleCombo;
-import data.combos.SquidWaveCombo;
+import data.combos.SimpleDamageCombo;
+import data.combos.SimpleGroupDamageCombo;
 import domain.combat.dice.DiceCombo;
 
 class DiceCombos
 {
-	public static var SLASH = new SlashCombo();
-	public static var SLASH_2 = new DoubleSlash2Combo();
-	public static var DOUBLE_SLASH = new DoubleSlashCombo();
+	public static var SLASH = new SimpleDamageCombo('Slash', [ATK_SWORD], 1);
+	public static var SLASH_2 = new SimpleDamageCombo('Double slash', [ATK_SWORD, ATK_SWORD], 2);
+	public static var SLASH_3 = new SimpleDamageCombo('Triple slash', [ATK_SWORD, ATK_SWORD, ATK_SWORD], 3);
+	public static var SLASH_4 = new SimpleDamageCombo('Quadruple slash', [ATK_SWORD, ATK_SWORD, ATK_SWORD, ATK_SWORD], 4);
+	public static var SLASH_2_2 = new SimpleDamageCombo('Double slash', [ATK_DBL_SWORD], 2);
+	public static var SLASH_2_3 = new SimpleDamageCombo('Triple slash', [ATK_DBL_SWORD, ATK_SWORD], 3);
+	public static var SLASH_2_4 = new SimpleDamageCombo('Quadruple slash', [ATK_DBL_SWORD, ATK_DBL_SWORD], 4);
+	public static var SLASH_2_2_4 = new SimpleDamageCombo('Quadruple slash', [ATK_DBL_SWORD, ATK_SWORD, ATK_SWORD], 4);
+
 	public static var SHIELD_BASH = new ShieldBashCombo();
 
-	public static var SQUID_TENTACLE = new SquidTentacleCombo();
-	public static var SQUID_WAVE = new SquidWaveCombo();
+	public static var SQUID_LASH = new SimpleDamageCombo('Tentacle lash', [SQUID_TENTACLE], 1);
+	public static var SQUID_WAVES = new SimpleGroupDamageCombo('Wave', [SQUID_TENTACLE, SQUID_WAVE], 1);
 
-	public static var PLAYER:Array<DiceCombo> = [SLASH, SLASH_2, DOUBLE_SLASH, SHIELD_BASH];
-	public static var SQUID:Array<DiceCombo> = [SQUID_TENTACLE, SQUID_WAVE];
+	public static var PLAYER:Array<DiceCombo> = [
+		SLASH,
+		SLASH_2,
+		SLASH_3,
+		SLASH_4,
+		SLASH_2_2,
+		SLASH_2_3,
+		SLASH_2_4,
+		SLASH_2_2_4,
+		SHIELD_BASH
+	];
+	public static var SQUID:Array<DiceCombo> = [SQUID_LASH, SQUID_WAVES];
 }

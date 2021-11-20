@@ -37,5 +37,10 @@ class DiceCombo
 		return true;
 	}
 
-	public function apply(mobs:Array<Crew>) {}
+	public function getTarget(crew:Array<Crew>)
+	{
+		return crew.find((c) -> c.isTarget);
+	}
+
+	public function apply(enemies:Array<Crew>, allies:Array<Crew>) {}
 }

@@ -23,6 +23,7 @@ import ecs.components.Person;
 import ecs.components.Profession;
 import h2d.Bitmap;
 import h2d.Interactive;
+import hxd.Rand;
 import rand.PoissonDiscSampler;
 
 typedef GameDie =
@@ -42,6 +43,7 @@ typedef Crew =
 	var hpOb:h2d.Object;
 	var gameDice:Array<GameDie>;
 	var cardOb:CrewMemberCard;
+	var isTarget:Bool;
 };
 
 class CombatScreen extends Screen
@@ -75,6 +77,7 @@ class CombatScreen extends Screen
 				hpOb: new h2d.Object(),
 				gameDice: new Array(),
 				cardOb: null,
+				isTarget: true,
 			}
 		];
 		ob = new h2d.Object();
@@ -100,10 +103,6 @@ class CombatScreen extends Screen
 
 	public override function onEnter()
 	{
-		// var bg = new h2d.Bitmap(TileResources.VIGNETTE_WATER);
-		// bg.scale(3);
-		// ob.addChild(bg);
-
 		rollsRemaining = 3;
 
 		for (mob in mobs)
@@ -161,6 +160,7 @@ class CombatScreen extends Screen
 				hpOb: new h2d.Object(),
 				gameDice: new Array<GameDie>(),
 				cardOb: new CrewMemberCard(entity),
+				isTarget: false,
 			};
 
 			c.gameDice = dice.map((die) ->
@@ -408,8 +408,14 @@ class CombatScreen extends Screen
 				d.isSelected = false;
 				d.ob.visible = false;
 			});
-		mobCombo.apply(crew);
+
+		var r = Rand.create();
+		r.pick(crew).isTarget = true;
+
+		mobCombo.apply(crew, mobs);
 		mobCombo = null;
+
+		crew.each((c) -> c.isTarget = false);
 
 		renderCrew();
 		mobTurn();
@@ -446,7 +452,7 @@ class CombatScreen extends Screen
 					d.ob.visible = false;
 					updateCombo();
 				});
-				combo.apply(mobs);
+				combo.apply(mobs, crew);
 				renderCrew();
 			}
 

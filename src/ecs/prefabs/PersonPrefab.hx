@@ -25,7 +25,7 @@ class PersonPrefab
 		e.add(new Nationality(SPANISH));
 		e.add(new Level(level));
 		e.add(new Profession(prof));
-		e.add(new Health(6, 6));
+		e.add(new Health(5 + level, 5 + level));
 
 		return e;
 	}

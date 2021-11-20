@@ -4,17 +4,20 @@ import domain.combat.dice.DiceCombo;
 import domain.screens.CombatScreen.Crew;
 import ecs.components.Health;
 
-class ShieldBashCombo extends DiceCombo
+class SimpleDamageCombo extends DiceCombo
 {
-	public function new()
+	var damage:Int;
+
+	public function new(name:String, dice:Array<DieFace>, damage:Int)
 	{
-		super('Shield bash', '', [DieFace.ATK_SWORD, DieFace.DEF_SHIELD]);
+		super(name, 'Deal ${damage} damage to target enemy.', dice);
+		this.damage = damage;
 	}
 
 	public override function apply(enemies:Array<Crew>, allies:Array<Crew>)
 	{
 		var target = getTarget(enemies);
 		var hp = target.entity.get(Health);
-		hp.current -= 1;
+		hp.current -= damage;
 	}
 }
