@@ -8,13 +8,15 @@ import domain.combat.dice.DiceCombo;
 class DiceCombos
 {
 	public static var SLASH = new SimpleDamageCombo('Slash', [ATK_SWORD], 1);
-	public static var SLASH_2 = new SimpleDamageCombo('Double slash', [ATK_SWORD, ATK_SWORD], 2);
-	public static var SLASH_3 = new SimpleDamageCombo('Triple slash', [ATK_SWORD, ATK_SWORD, ATK_SWORD], 3);
-	public static var SLASH_4 = new SimpleDamageCombo('Quadruple slash', [ATK_SWORD, ATK_SWORD, ATK_SWORD, ATK_SWORD], 4);
-	public static var SLASH_2_2 = new SimpleDamageCombo('Double slash', [ATK_DBL_SWORD], 2);
-	public static var SLASH_2_3 = new SimpleDamageCombo('Triple slash', [ATK_DBL_SWORD, ATK_SWORD], 3);
-	public static var SLASH_2_4 = new SimpleDamageCombo('Quadruple slash', [ATK_DBL_SWORD, ATK_DBL_SWORD], 4);
-	public static var SLASH_2_2_4 = new SimpleDamageCombo('Quadruple slash', [ATK_DBL_SWORD, ATK_SWORD, ATK_SWORD], 4);
+	public static var SLASH_2 = new SimpleDamageCombo('Slash', [ATK_SWORD, ATK_SWORD], 2);
+	public static var SLASH_2_2 = new SimpleDamageCombo('Slash', [ATK_DBL_SWORD], 2);
+
+	public static var SLASH_3 = new SimpleGroupDamageCombo('Flurry', [ATK_SWORD, ATK_SWORD, ATK_SWORD], 1);
+	public static var SLASH_2_3 = new SimpleGroupDamageCombo('Flurry', [ATK_DBL_SWORD, ATK_SWORD], 1);
+
+	public static var SLASH_4 = new SimpleGroupDamageCombo('Mad flurry', [ATK_SWORD, ATK_SWORD, ATK_SWORD, ATK_SWORD], 2);
+	public static var SLASH_2_2_4 = new SimpleGroupDamageCombo('Mad flurry', [ATK_DBL_SWORD, ATK_SWORD, ATK_SWORD], 2);
+	public static var SLASH_2_4 = new SimpleDamageCombo('Mad flurry', [ATK_DBL_SWORD, ATK_DBL_SWORD], 2);
 
 	public static var SHIELD_BASH = new ShieldBashCombo();
 

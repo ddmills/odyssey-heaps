@@ -6,6 +6,7 @@ import data.TextResource;
 import data.TileResources;
 import ecs.Entity;
 import ecs.Query;
+import ecs.components.Combatant;
 import ecs.components.CrewMember;
 import ecs.components.Level;
 import ecs.components.Nationality;
@@ -42,7 +43,8 @@ class CrewScreen extends Screen
 		var nationality = e.get(Nationality).nation;
 		var level = e.get(Level).lvl;
 		var profession = e.get(Profession);
-		var diceSet = profession.data.dice.getSet(level);
+		var combatant = e.get(Combatant);
+		var diceSet = combatant.dice.getSet(level);
 
 		txt.text = person.name;
 		txt.text += '\n${nationality} Level ${level} ${profession.data.name}';

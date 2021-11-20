@@ -18,6 +18,7 @@ import ecs.Query;
 import ecs.components.Combatant;
 import ecs.components.CrewMember;
 import ecs.components.Health;
+import ecs.components.Incapacitated;
 import ecs.components.Level;
 import ecs.components.Mob;
 import ecs.components.Person;
@@ -143,7 +144,7 @@ class CombatScreen extends Screen
 					die: die,
 					ob: bm,
 					isSelected: false,
-					isRetired: false,
+					isRetired: enemy.entity.has(Incapacitated),
 					isSpent: false,
 					origin: new IntPoint(0, 0),
 				};
@@ -155,7 +156,7 @@ class CombatScreen extends Screen
 		crew = crewQuery.map((entity) ->
 		{
 			var lvl = entity.get(Level).lvl;
-			var dice = entity.get(Profession).data.dice.getSet(lvl);
+			var dice = entity.get(Combatant).dice.getSet(lvl);
 
 			var c = {
 				entity: entity,
@@ -184,7 +185,7 @@ class CombatScreen extends Screen
 					die: die,
 					ob: bm,
 					isSelected: false,
-					isRetired: false,
+					isRetired: c.entity.has(Incapacitated),
 					isSpent: false,
 					origin: new IntPoint(0, 0),
 				};
@@ -264,6 +265,12 @@ class CombatScreen extends Screen
 				}
 
 				gameDie.origin = pos;
+				gameDie.isRetired = c.entity.has(Incapacitated);
+
+				if (gameDie.isRetired)
+				{
+					gameDie.ob.visible = false;
+				}
 
 				if (!gameDie.isSpent && !gameDie.isRetired && !gameDie.isSelected)
 				{
@@ -298,6 +305,12 @@ class CombatScreen extends Screen
 				}
 
 				gameDie.origin = pos;
+				gameDie.isRetired = enemy.entity.has(Incapacitated);
+
+				if (gameDie.isRetired)
+				{
+					gameDie.ob.visible = false;
+				}
 
 				if (!gameDie.isSpent && !gameDie.isRetired && !gameDie.isSelected)
 				{
@@ -320,7 +333,10 @@ class CombatScreen extends Screen
 		{
 			die.isSpent = false;
 			die.isSelected = false;
-			die.ob.visible = true;
+			if (!die.isRetired)
+			{
+				die.ob.visible = true;
+			}
 			die.ob.x = mobRollingPos.x;
 			die.ob.y = mobRollingPos.y;
 		});
@@ -338,14 +354,17 @@ class CombatScreen extends Screen
 		turnBtn.text = 'End turn (${turn})';
 		diceOb.visible = false;
 
-		crew.flatMap((c) -> c.gameDice).each((die) ->
+		crew.each((c) ->
 		{
-			die.isSpent = false;
-			die.isSelected = false;
-			die.ob.visible = true;
-			die.roll = null;
-			die.ob.x = rollingPos.x;
-			die.ob.y = rollingPos.y;
+			c.gameDice.each((die) ->
+			{
+				die.isSpent = false;
+				die.isSelected = false;
+				die.ob.visible = !die.isRetired;
+				die.roll = null;
+				die.ob.x = rollingPos.x;
+				die.ob.y = rollingPos.y;
+			});
 		});
 
 		rollsRemaining = 3;
@@ -509,14 +528,15 @@ class CombatScreen extends Screen
 
 	override function update(frame:Frame)
 	{
-		var x = 0;
-		var numSelected = crew.flatMap((c) -> c.gameDice).filter((d) -> d.isSelected).count();
+		var crewDice = crew.flatMap((c) -> c.gameDice);
+		var numSelected = crewDice.filter((d) -> d.isSelected).count();
 		var center = (game.window.width / 2).floor();
 		var width = (numSelected * dieSize) + ((numSelected - 1) * 8);
 		var left = center - width / 2;
 		var diceY = comboBtn.y - (dieSize + dieSize / 2);
 
-		crew.flatMap((c) -> c.gameDice).each((die) ->
+		var x = 0;
+		crewDice.each((die) ->
 		{
 			var pos:FloatPoint = null;
 			if (die.isSelected)
@@ -544,12 +564,13 @@ class CombatScreen extends Screen
 			die.ob.y = newpos.y;
 		});
 
-		var numEnemyDiceSelected = enemies.flatMap((e) -> e.gameDice).filter((d) -> d.isSelected).count();
+		var enemyDice = enemies.flatMap((e) -> e.gameDice);
+		var numEnemyDiceSelected = enemyDice.filter((d) -> d.isSelected).count();
 		var mobWidth = (numEnemyDiceSelected * dieSize) + ((numEnemyDiceSelected - 1) * 8);
 		var mobLeft = center - mobWidth / 2;
 
 		x = 0;
-		enemies.flatMap((e) -> e.gameDice).each((die) ->
+		enemyDice.each((die) ->
 		{
 			var pos:FloatPoint = null;
 			if (die.isSelected)

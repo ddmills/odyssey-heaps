@@ -6,6 +6,7 @@ import data.TileResources;
 import domain.screens.CombatScreen.GameDie;
 import ecs.Entity;
 import ecs.components.Health;
+import ecs.components.Incapacitated;
 import ecs.components.Level;
 import ecs.components.Person;
 import ecs.components.Profession;
@@ -110,7 +111,7 @@ class CrewMemberCard extends h2d.Object
 
 		dice.each((die, i) ->
 		{
-			if (!die.isSpent && die.roll != null)
+			if (!die.isSpent && !die.isRetired && die.roll != null)
 			{
 				var tile = TileResources.getDie(die.roll.value);
 				var bm = new h2d.Bitmap(tile);

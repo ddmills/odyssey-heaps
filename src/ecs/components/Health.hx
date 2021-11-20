@@ -15,6 +15,15 @@ class Health extends Component
 	{
 		current = value <= 0 ? 0 : value;
 
+		if (isAttached && entity.has(Incapacitated) && current > 0)
+		{
+			entity.remove(Incapacitated);
+		}
+		else if (current <= 0)
+		{
+			entity.add(new Incapacitated());
+		}
+
 		return current;
 	}
 }
