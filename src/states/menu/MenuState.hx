@@ -2,6 +2,7 @@ package states.menu;
 
 import core.GameState;
 import data.TileResources;
+import data.portraits.PortraitData;
 import states.play.PlayState;
 
 class MenuState extends GameState
@@ -11,6 +12,7 @@ class MenuState extends GameState
 	override function create()
 	{
 		TileResources.Init();
+		PortraitData.Init();
 		game.setState(new PlayState());
 	}
 }

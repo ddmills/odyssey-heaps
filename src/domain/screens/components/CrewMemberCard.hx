@@ -13,6 +13,7 @@ import h2d.Bitmap;
 import h2d.Object;
 import h2d.Text;
 import h2d.Tile;
+import rand.portrait.PortraitGenerator;
 
 class CrewMemberCard extends h2d.Object
 {
@@ -34,16 +35,20 @@ class CrewMemberCard extends h2d.Object
 		var level = entity.get(Level);
 		var profession = entity.get(Profession);
 
-		var portrait = hxd.Res.img.portraits.portrait1.toTile();
-		var portraitOb = new h2d.Bitmap(portrait);
+		var cardHeight = 120;
+		var cardWidth = 320;
+
+		var portrait = PortraitGenerator.getPortrait(person.seed, person.gender);
+		var portraitOb = portrait.gen();
+
 		portraitOb.scale(2);
-		avatarOb = new h2d.Bitmap(Tile.fromColor(0x111111, 80, 80));
+		avatarOb = new h2d.Bitmap(Tile.fromColor(0x1b1f23, 80, cardHeight));
 		avatarOb.addChild(portraitOb);
-		backgroundOb = new h2d.Bitmap(Tile.fromColor(0x111111, 320, 80));
+		backgroundOb = new h2d.Bitmap(Tile.fromColor(0x1b1f23, cardWidth, cardHeight));
 		diceOb = new h2d.Object();
 		diceOb.scale(2);
-		diceOb.x = 320 - 32;
-		diceOb.y = 80 - 32;
+		diceOb.x = cardWidth - 32;
+		diceOb.y = cardHeight - 32;
 
 		nameTxt = TextResource.MakeText();
 		nameTxt.text = person.name;
@@ -57,12 +62,20 @@ class CrewMemberCard extends h2d.Object
 
 		hpOb = new Object();
 		hpOb.x = 80 + 8;
-		hpOb.y = 80 - 16 - 8;
+		hpOb.y = cardHeight - 16 - 8;
+
+		var name2Txt = TextResource.MakeText();
+		name2Txt.text = person.name.split(' ')[0].toUpperCase();
+		name2Txt.textAlign = Center;
+		trace(name2Txt.textWidth);
+		name2Txt.x = (80 / 2); // - (name2Txt.textWidth / 2);
+		name2Txt.y = 120 - 16 - 4;
 
 		addChild(backgroundOb);
 		addChild(avatarOb);
 		addChild(diceOb);
 		addChild(nameTxt);
+		addChild(name2Txt);
 		addChild(lvlTxt);
 		addChild(hpOb);
 
@@ -111,6 +124,6 @@ class CrewMemberCard extends h2d.Object
 		});
 
 		diceOb.x = 320 - (x * (32 + 8));
-		diceOb.y = 80 - 32 - 8;
+		diceOb.y = 120 - 32 - 8;
 	}
 }

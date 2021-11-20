@@ -1,0 +1,17 @@
+Ship Roles
+
+- Navigator
+- Lookout
+- Cook
+- Carpenter
+- Boatswain (aka bosun) (sails)
+- Quartermaster
+- Parson (chaplain, clergy)
+- Purser ($)
+- Doctor
+- Deckhand
+- Gunner
+- Powder Monkey
+
+
+## navigation tools https://www.thepirateking.com/historical/navigation.htm

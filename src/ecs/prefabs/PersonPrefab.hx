@@ -21,7 +21,7 @@ class PersonPrefab
 		var prof = r.pick([Professions.SOLDIER, Professions.COOK, Professions.OFFICER]);
 
 		var e = new Entity();
-		e.add(new Person(name, gender));
+		e.add(new Person(name, gender, seed));
 		e.add(new Nationality(SPANISH));
 		e.add(new Level(level));
 		e.add(new Profession(prof));

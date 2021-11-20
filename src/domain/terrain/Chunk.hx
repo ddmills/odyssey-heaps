@@ -163,7 +163,7 @@ class Chunk
 			case SHALLOWS | RIVER:
 				return TileResources.GROUND_SHALLOWS;
 			case SAND:
-				return TileResources.GROUND_SAND;
+				return TileResources.GROUND_GRASS;
 			case GRASS:
 				return TileResources.GROUND_GRASS;
 		}

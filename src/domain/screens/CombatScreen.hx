@@ -495,7 +495,7 @@ class CombatScreen extends Screen
 		crew.each((c, i) ->
 		{
 			c.cardOb.x = 8;
-			c.cardOb.y = 80 * i + ((i + 1) * 8);
+			c.cardOb.y = 120 * i + ((i + 1) * 8);
 		});
 	}
 
