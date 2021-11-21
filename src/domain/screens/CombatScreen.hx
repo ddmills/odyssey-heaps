@@ -11,13 +11,14 @@ import data.TextResource;
 import data.TileResources;
 import domain.combat.dice.DiceCombo;
 import domain.combat.dice.Die;
+import domain.screens.components.CombatantCard;
 import domain.screens.components.CrewMemberCard;
+import domain.screens.components.EnemyCard;
 import domain.ui.Button;
 import ecs.Entity;
 import ecs.Query;
 import ecs.components.Combatant;
 import ecs.components.CrewMember;
-import ecs.components.Health;
 import ecs.components.Incapacitated;
 import ecs.components.Level;
 import ecs.components.Mob;
@@ -42,9 +43,8 @@ typedef GameDie =
 typedef Crew =
 {
 	var entity:Entity;
-	var hpOb:h2d.Object;
 	var gameDice:Array<GameDie>;
-	var cardOb:CrewMemberCard;
+	var cardOb:CombatantCard;
 	var isTarget:Bool;
 };
 
@@ -77,9 +77,8 @@ class CombatScreen extends Screen
 		this.mob = mob;
 		enemies = mob.get(Mob).spawn().map((entity) -> {
 			entity: entity,
-			hpOb: new h2d.Object(),
 			gameDice: new Array(),
-			cardOb: null,
+			cardOb: cast new EnemyCard(entity),
 			isTarget: true,
 		});
 
@@ -91,7 +90,7 @@ class CombatScreen extends Screen
 		rollBtn = new Button();
 		turnBtn = new Button();
 		comboBtn = new Button();
-		timeout = new Timeout(1);
+		timeout = new Timeout(1.5);
 
 		turn = 0;
 		rollsRemaining = 0;
@@ -110,7 +109,7 @@ class CombatScreen extends Screen
 
 		for (enemy in enemies)
 		{
-			ob.addChild(enemy.hpOb);
+			ob.addChild(enemy.cardOb);
 		}
 
 		rollBtn.text = 'Roll (${rollsRemaining})';
@@ -151,18 +150,19 @@ class CombatScreen extends Screen
 
 				return gameDie;
 			});
+			enemy.cardOb.onClick = (e) -> setTarget(enemy);
 		});
 
 		crew = crewQuery.map((entity) ->
 		{
 			var lvl = entity.get(Level).lvl;
 			var dice = entity.get(Combatant).dice.getSet(lvl);
+			var cardOb:CombatantCard = new CrewMemberCard(entity);
 
 			var c = {
 				entity: entity,
-				hpOb: new h2d.Object(),
 				gameDice: new Array<GameDie>(),
-				cardOb: new CrewMemberCard(entity),
+				cardOb: cardOb,
 				isTarget: false,
 			};
 
@@ -195,7 +195,6 @@ class CombatScreen extends Screen
 				return gameDie;
 			});
 
-			ob.addChild(c.hpOb);
 			ob.addChild(c.cardOb);
 
 			return c;
@@ -216,27 +215,24 @@ class CombatScreen extends Screen
 
 	function renderCrew()
 	{
-		crew.each((c) -> c.cardOb.updateHp());
-		crew.each((c) -> c.cardOb.updateDice(c.gameDice));
-
-		var x = 0;
-		for (enemy in enemies)
+		crew.each((c) ->
 		{
-			enemy.hpOb.removeChildren();
+			c.cardOb.updateHp();
+			c.cardOb.updateDice(c.gameDice);
+		});
+		enemies.each((enemy) ->
+		{
+			enemy.cardOb.updateHp();
+			enemy.cardOb.updateDice(enemy.gameDice);
+		});
+	}
 
-			var health = enemy.entity.get(Health);
-			var txt = TextResource.MakeText();
-			txt.text = '${health.current}/${health.max}';
-			txt.dropShadow = null;
-			txt.color = 0x57723a.toHxdColor();
-
-			txt.x = 800 + 32 * x;
-			txt.y = 32;
-
-			enemy.hpOb.addChild(txt);
-
-			x++;
-		}
+	function setTarget(target:Crew)
+	{
+		enemies.each((enemy) ->
+		{
+			enemy.isTarget = (enemy == target);
+		});
 	}
 
 	function rollCrewDice()
@@ -323,22 +319,26 @@ class CombatScreen extends Screen
 				}
 			}
 		}
+		renderCrew();
 		timeout.onComplete = () -> mobTurn();
 		timeout.reset();
 	}
 
 	function endMobTurn()
 	{
-		enemies.flatMap((m) -> m.gameDice).each((die) ->
+		enemies.each((enemy) ->
 		{
-			die.isSpent = false;
-			die.isSelected = false;
-			if (!die.isRetired)
+			enemy.gameDice.each((die) ->
 			{
-				die.ob.visible = true;
-			}
-			die.ob.x = mobRollingPos.x;
-			die.ob.y = mobRollingPos.y;
+				die.isSpent = false;
+				die.isSelected = false;
+				die.roll = null;
+				die.ob.visible = !die.isRetired;
+				die.ob.x = mobRollingPos.x;
+				die.ob.y = mobRollingPos.y;
+			});
+			enemy.cardOb.updateHp();
+			enemy.cardOb.updateDice(enemy.gameDice);
 		});
 		isPlayerTurn = true;
 	}
@@ -381,7 +381,6 @@ class CombatScreen extends Screen
 		var combos = mob.get(Mob).combos;
 		var availableDice = enemies.flatMap((m) -> m.gameDice)
 			.filter((d) -> !d.isRetired && !d.isSpent);
-
 		var availableFaces = availableDice.map((d) -> d.roll.value);
 
 		// for each combo, check if we have the dice
@@ -417,6 +416,7 @@ class CombatScreen extends Screen
 		}
 		timeout.onComplete = () -> applyMobCombo();
 		timeout.reset();
+		renderCrew();
 	}
 
 	function applyMobCombo()
@@ -523,6 +523,11 @@ class CombatScreen extends Screen
 		{
 			c.cardOb.x = 8;
 			c.cardOb.y = 120 * i + ((i + 1) * 8);
+		});
+		enemies.each((e, i) ->
+		{
+			e.cardOb.x = game.window.width - 8 - 320;
+			e.cardOb.y = 120 * i + ((i + 1) * 8);
 		});
 	}
 

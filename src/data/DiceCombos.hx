@@ -16,7 +16,7 @@ class DiceCombos
 
 	public static var SLASH_4 = new SimpleGroupDamageCombo('Mad flurry', [ATK_SWORD, ATK_SWORD, ATK_SWORD, ATK_SWORD], 2);
 	public static var SLASH_2_2_4 = new SimpleGroupDamageCombo('Mad flurry', [ATK_DBL_SWORD, ATK_SWORD, ATK_SWORD], 2);
-	public static var SLASH_2_4 = new SimpleDamageCombo('Mad flurry', [ATK_DBL_SWORD, ATK_DBL_SWORD], 2);
+	public static var SLASH_2_4 = new SimpleGroupDamageCombo('Mad flurry', [ATK_DBL_SWORD, ATK_DBL_SWORD], 2);
 
 	public static var SHIELD_BASH = new ShieldBashCombo();
 

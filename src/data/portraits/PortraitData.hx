@@ -17,6 +17,7 @@ class PortraitData
 {
 	public static var PORTRAIT_BG:h2d.Tile;
 	public static var PORTRAIT_TRIM:h2d.Tile;
+	public static var PORTRAIT_TENTACLE:h2d.Tile;
 
 	public static var BASE_1:PortraitBase;
 	public static var BASE_2:PortraitBase;
@@ -69,6 +70,8 @@ class PortraitData
 
 		PORTRAIT_BG = dat.portrait_bg.toTile();
 		PORTRAIT_TRIM = dat.portrait_trim.toTile();
+
+		PORTRAIT_TENTACLE = dat.monster.tentacle.toTile();
 
 		BASE_1 = new PortraitBase(dat.base1.toTile());
 		BASE_2 = new PortraitBase(dat.base2.toTile());
