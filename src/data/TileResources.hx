@@ -11,7 +11,6 @@ class TileResources
 	public static var GROUND_GRASS:h2d.Tile;
 	public static var CURSOR:h2d.Tile;
 	public static var TREE:h2d.Tile;
-	public static var FOG:h2d.Tile;
 	public static var SLOOP:h2d.Tile;
 	public static var SQUID:Array<h2d.Tile>;
 
@@ -52,26 +51,21 @@ class TileResources
 		FARM = landmarks[0][1];
 		WINDMILL = [landmarks[0][2], landmarks[0][3]];
 
-		var terrainSheet = hxd.Res.img.iso32_png.toTile();
-		var terrains = terrainSheet.divide(4, 2);
+		var terrainSheet = hxd.Res.img.iso40.toTile();
+		var terrains = terrainSheet.divide(4, 4);
 
 		GROUND_WATER = terrains[0][1];
-		GROUND_SHALLOWS = terrains[1][1];
-		GROUND_SAND = terrains[0][0];
-		GROUND_GRASS = terrains[0][2];
-		CURSOR = terrains[0][3];
+		GROUND_SHALLOWS = terrains[0][0];
+		GROUND_SAND = terrains[0][2];
+		GROUND_GRASS = terrains[0][3];
+		CURSOR = terrains[1][0];
 
 		var treeSheet = hxd.Res.img.trees.toTile();
 		var trees = treeSheet.divide(2, 1);
 
 		TREE = trees[0][1];
 
-		var fogSheet = hxd.Res.img.mask32.toTile();
-		var fogs = fogSheet.divide(4, 1);
-
-		FOG = fogs[0][0];
-
-		SLOOP = hxd.Res.img.sloop_png.toTile();
+		SLOOP = hxd.Res.img.sloop40.toTile();
 
 		var uiSheet = hxd.Res.img.ui16_png.toTile();
 		var ui = uiSheet.divide(8, 8);
@@ -108,7 +102,7 @@ class TileResources
 
 		SQUID = [monsters[0][0], monsters[0][1], monsters[0][2], monsters[0][1]];
 
-		VIGNETTE_WATER = hxd.Res.img.vignette.vignette_water_png.toTile();
+		VIGNETTE_WATER = hxd.Res.img.vignette.water2.toTile();
 	}
 
 	public static function getDie(die:DieFace):h2d.Tile

@@ -53,6 +53,7 @@ class CombatScreen extends Screen
 	var mob:Entity;
 	var enemies:Array<Crew>;
 	var ob:h2d.Object;
+	var backgroundOb:Bitmap;
 	var diceOb:h2d.Object;
 	var mobDiceOb:h2d.Object;
 	var rollArea:h2d.Object;
@@ -61,7 +62,7 @@ class CombatScreen extends Screen
 	var crew:Array<Crew>;
 	var turn:Int;
 	var rollsRemaining:Int;
-	var dieSize:Int = 64;
+	var dieSize:Int = 16 * 3;
 	var selectedDiceOb:h2d.Object;
 	var rollBtn:Button;
 	var turnBtn:Button;
@@ -105,6 +106,10 @@ class CombatScreen extends Screen
 
 	public override function onEnter()
 	{
+		backgroundOb = new h2d.Bitmap(TileResources.VIGNETTE_WATER);
+		backgroundOb.scale(2);
+		ob.addChild(backgroundOb);
+
 		rollsRemaining = 3;
 
 		for (enemy in enemies)
@@ -490,6 +495,9 @@ class CombatScreen extends Screen
 
 	function repositionHud()
 	{
+		backgroundOb.x = (game.window.width / 2) - 320;
+		backgroundOb.y = (game.window.height / 2) - 216;
+
 		var rollAreaWidth = 512;
 		var rollAreaHeight = 256;
 

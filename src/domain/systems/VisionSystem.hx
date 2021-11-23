@@ -48,12 +48,12 @@ class VisionSystem extends System
 
 		var visibles = new Query({
 			all: [Sprite],
-			any: [Visible, Explored]
+			any: [Visible, Explored],
 		});
 
 		var shrouded = new Query({
-			all: [Sprite],
-			any: [Visible, Explored]
+			all: [Sprite, Explored],
+			none: [Visible],
 		});
 
 		visibles.onEntityAdded((entity) ->
@@ -66,7 +66,7 @@ class VisionSystem extends System
 			entity.get(Sprite).visible = false;
 		});
 
-		var shroud = new ShroudShader(.2, .8);
+		var shroud = new ShroudShader(.16, .7);
 
 		shrouded.onEntityAdded((entity) ->
 		{

@@ -8,8 +8,8 @@ import tools.Performance;
 
 class Game
 {
-	public var TILE_W:Int = 32;
-	public var TILE_H:Int = 16;
+	public var TILE_W:Int = 40;
+	public var TILE_H:Int = 20;
 
 	public var TILE_W_HALF(get, never):Int;
 	public var TILE_H_HALF(get, never):Int;

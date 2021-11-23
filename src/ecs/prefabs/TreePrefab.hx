@@ -1,6 +1,5 @@
 package ecs.prefabs;
 
-import core.Game;
 import data.TileResources;
 import ecs.components.Moniker;
 import ecs.components.Sprite;
@@ -12,7 +11,7 @@ class TreePrefab
 	{
 		var tree = new Entity();
 		var bm = new Bitmap(TileResources.TREE);
-		tree.add(new Sprite(bm, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
+		tree.add(new Sprite(bm, 16, 16));
 		tree.add(new Moniker('Tree'));
 
 		return tree;

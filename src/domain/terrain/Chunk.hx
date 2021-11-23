@@ -1,6 +1,5 @@
 package domain.terrain;
 
-import common.struct.Coordinate;
 import common.struct.Grid;
 import common.struct.GridMap;
 import common.util.Projection;
@@ -9,15 +8,16 @@ import data.TileResources;
 import ecs.Entity;
 import h2d.Bitmap;
 import h2d.Tile;
-import h2d.TileGroup;
+import shaders.ShroudShader;
 
 class Chunk
 {
-	var tiles:TileGroup;
-	var fog:h2d.Object;
+	var tiles:h2d.Object; // TODO: switch to h2d.SpriteBatch
+	var shroud:ShroudShader;
 
 	public var exploration(default, null):Grid<Null<Bool>>;
 	public var entities(default, null):GridMap<String>;
+	public var bitmaps(default, null):Grid<Bitmap>;
 	public var isLoaded(default, null):Bool;
 
 	public var size(default, null):Int;
@@ -36,6 +36,8 @@ class Chunk
 		cy = chunkY;
 		exploration = new Grid(size, size);
 		entities = new GridMap(size, size);
+		bitmaps = new Grid(size, size);
+		shroud = new ShroudShader(.16, .7);
 	}
 
 	public function setExplore(x:Int, y:Int, isExplored:Bool, isVisible:Bool)
@@ -53,42 +55,27 @@ class Chunk
 
 		exploration.setIdx(idx, isExplored);
 
-		var child = fog.getChildAt(idx);
-		if (child != null)
+		var bm = bitmaps.get(x, y);
+
+		if (bm == null)
 		{
-			child.remove();
+			return;
 		}
+
+		bm.removeShader(shroud);
 
 		if (isExplored)
 		{
-			if (isVisible)
+			bm.visible = true;
+			if (!isVisible)
 			{
-				fog.addChildAt(new h2d.Object(), idx);
-			}
-			else
-			{
-				var pix = Projection.worldToPx(x, y);
-				var offsetX = pix.x - Game.instance.TILE_W_HALF;
-				var offsetY = pix.y;
-				var ob = new Bitmap(TileResources.FOG);
-				ob.alpha = .5;
-				ob.x = offsetX;
-				ob.y = offsetY;
-
-				fog.addChildAt(ob, idx);
+				bm.addShader(shroud);
 			}
 		}
 		else
 		{
-			var pix = Projection.worldToPx(x, y);
-			var offsetX = pix.x - Game.instance.TILE_W_HALF;
-			var offsetY = pix.y;
-			var ob = new Bitmap(TileResources.FOG);
-
-			ob.x = offsetX;
-			ob.y = offsetY;
-
-			fog.addChildAt(ob, idx);
+			bm.addShader(shroud);
+			bm.visible = false;
 		}
 	}
 
@@ -102,17 +89,13 @@ class Chunk
 		Game.instance.world.chunkGen.generate(this);
 		exploration.fill(false);
 
-		tiles = buildTerrainTileGroup();
-		fog = buildFogObject();
+		buildTiles();
 
 		Game.instance.render(GROUND, tiles);
-		Game.instance.render(FOG, fog);
 
 		var pix = Projection.chunkToPx(cx, cy);
 		tiles.x = pix.x;
 		tiles.y = pix.y;
-		fog.x = pix.x;
-		fog.y = pix.y;
 
 		isLoaded = true;
 	}
@@ -124,34 +107,37 @@ class Chunk
 			return;
 		}
 
-		tiles.clear();
 		tiles.remove();
+		tiles.removeChildren();
+		bitmaps.clear();
 		tiles = null;
-		fog.remove();
-		fog = null;
 		isLoaded = false;
 	}
 
-	public function buildTerrainTileGroup():TileGroup
+	function buildTiles()
 	{
-		var tiles = new h2d.TileGroup();
+		tiles = new h2d.Object();
 
-		for (t in exploration)
+		for (t in bitmaps)
 		{
 			var wx = cx * size + t.x;
 			var wy = cy * size + t.y;
 
 			var terrain = Game.instance.world.map.getTerrain(wx, wy);
 			var tile = getTerrainTile(terrain);
-			var pix = Projection.worldToPx(t.x, t.y);
+			var bm = new h2d.Bitmap(tile);
+			bm.visible = false;
 
+			var pix = Projection.worldToPx(t.x, t.y);
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
 			var offsetY = pix.y;
 
-			tiles.add(offsetX, offsetY, tile);
-		}
+			bm.x = offsetX;
+			bm.y = offsetY;
 
-		return tiles;
+			tiles.addChildAt(bm, t.idx);
+			bitmaps.set(t.x, t.y, bm);
+		}
 	}
 
 	function getTerrainTile(type:TerrainType):Tile
@@ -167,32 +153,6 @@ class Chunk
 			case GRASS:
 				return TileResources.GROUND_GRASS;
 		}
-	}
-
-	public function buildFogObject():h2d.Object
-	{
-		var tiles = new h2d.Object();
-
-		for (t in exploration)
-		{
-			if (!t.value)
-			{
-				var pix = Projection.worldToPx(t.x, t.y);
-				var offsetX = pix.x - Game.instance.TILE_W_HALF;
-				var offsetY = pix.y;
-				var ob = new Bitmap(TileResources.FOG);
-				ob.x = offsetX;
-				ob.y = offsetY;
-
-				tiles.addChildAt(ob, t.idx);
-			}
-			else
-			{
-				tiles.addChildAt(new h2d.Object(), t.idx);
-			}
-		}
-
-		return tiles;
 	}
 
 	function get_wx():Int
