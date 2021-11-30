@@ -34,6 +34,8 @@ class StatsOverlay extends h2d.Object
 		var world = game.world;
 
 		var p = game.camera.mouse.toPx().floor();
+		var f = game.camera.focus.toPx();
+		var cam = game.camera.pos.toPx();
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
 
@@ -41,6 +43,8 @@ class StatsOverlay extends h2d.Object
 
 		var txt = '';
 		txt += '\n' + game.frame.fps.round().toString();
+		txt += '\nfocus ${f.toString()}';
+		txt += '\ncamera ${cam.toString()}';
 		txt += '\npixel ${p.toString()}';
 		txt += '\nworld ${w.toString()}';
 		txt += '\nchunk ${c.toString()} (${c.toChunkIdx()})';

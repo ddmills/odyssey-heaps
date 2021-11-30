@@ -16,6 +16,11 @@ class CoordinateExtensions
 		return new Coordinate(c.x.floor(), c.y.floor(), c.space);
 	}
 
+	static public inline function round(c:Coordinate):Coordinate
+	{
+		return new Coordinate(c.x.round(), c.y.round(), c.space);
+	}
+
 	static public inline function toSpace(c:Coordinate, space:Space):Coordinate
 	{
 		var px = c.toPx();
@@ -99,11 +104,11 @@ class CoordinateExtensions
 		return a.sub(chunk);
 	}
 
-	static public inline function lerp(a:Coordinate, b:Coordinate, time:Float):Coordinate
+	static public inline function lerp(a:Coordinate, b:Coordinate, time:Float, snap:Float = 0):Coordinate
 	{
 		var projected = b.toSpace(a.space);
 
-		return new Coordinate(a.x.lerp(projected.x, time), a.y.lerp(projected.y, time), a.space);
+		return new Coordinate(a.x.lerp(projected.x, time, snap), a.y.lerp(projected.y, time, snap), a.space);
 	}
 
 	static public inline function sub(a:Coordinate, b:Coordinate):Coordinate

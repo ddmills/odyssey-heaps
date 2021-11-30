@@ -22,9 +22,16 @@ class FloatExtensions
 		return Math.round(n);
 	}
 
-	static public inline function lerp(n:Float, target:Float, time:Float):Float
+	static public inline function lerp(n:Float, target:Float, time:Float, snap:Float = 0):Float
 	{
-		return n + time * (target - n);
+		var pos = n + time * (target - n);
+
+		if ((target - pos).abs() < snap)
+		{
+			return target;
+		}
+
+		return ((target - pos).abs() < snap) ? target : pos;
 	}
 
 	static public inline function abs(n:Float):Float

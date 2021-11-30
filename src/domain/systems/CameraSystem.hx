@@ -10,7 +10,7 @@ class CameraSystem extends System
 	{
 		if (game.camera.follow != null)
 		{
-			game.camera.focus = game.camera.focus.lerp(game.camera.follow.pos, .1 * frame.tmod);
+			game.camera.focus = game.camera.focus.toPx().lerp(game.camera.follow.pos.toPx(), .1 * frame.tmod, 1);
 		}
 		world.layers.sort(OBJECTS);
 	}
