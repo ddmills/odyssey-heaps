@@ -69,7 +69,7 @@ class EnemyCard extends CombatantCard
 		addChild(avatarOb);
 		addChild(diceOb);
 		addChild(nameTxt);
-		addChild(name2Txt);
+		// addChild(name2Txt);
 		addChild(hpOb);
 		addChild(interactive);
 

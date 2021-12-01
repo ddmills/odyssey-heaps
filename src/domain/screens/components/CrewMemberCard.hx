@@ -71,7 +71,7 @@ class CrewMemberCard extends CombatantCard
 		addChild(avatarOb);
 		addChild(diceOb);
 		addChild(nameTxt);
-		addChild(name2Txt);
+		// addChild(name2Txt);
 		addChild(lvlTxt);
 		addChild(hpOb);
 
