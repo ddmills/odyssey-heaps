@@ -8,7 +8,7 @@ class ShieldBashCombo extends DiceCombo
 {
 	public function new()
 	{
-		super('Shield bash', '', [DieFace.ATK_SWORD, DieFace.DEF_SHIELD]);
+		super('Shield bash', 'Deal 1 damage to target and add 2 armor.', [DieFace.ATK_SWORD, DieFace.DEF_SHIELD]);
 	}
 
 	public override function apply(enemies:Array<Crew>, allies:Array<Crew>)

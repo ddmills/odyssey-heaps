@@ -26,6 +26,7 @@ import ecs.components.Person;
 import ecs.components.Profession;
 import h2d.Bitmap;
 import h2d.Interactive;
+import h2d.Tile;
 import hxd.Rand;
 import rand.PoissonDiscSampler;
 
@@ -53,7 +54,6 @@ class CombatScreen extends Screen
 	var mob:Entity;
 	var enemies:Array<Crew>;
 	var ob:h2d.Object;
-	var backgroundOb:Bitmap;
 	var diceOb:h2d.Object;
 	var mobDiceOb:h2d.Object;
 	var rollArea:h2d.Object;
@@ -72,6 +72,9 @@ class CombatScreen extends Screen
 	var isPlayerTurn:Bool;
 	var mobCombo:DiceCombo;
 	var timeout:Timeout;
+	var comboTxt:h2d.Text;
+	var comboDescTxt:h2d.Text;
+	var background:Bitmap;
 
 	public function new(mob:Entity)
 	{
@@ -86,12 +89,15 @@ class CombatScreen extends Screen
 		ob = new h2d.Object();
 		diceOb = new h2d.Object();
 		mobDiceOb = new h2d.Object();
+		background = new h2d.Bitmap();
 		diceOb.visible = false;
 		selectedDiceOb = new h2d.Object();
 		rollBtn = new Button();
 		turnBtn = new Button();
 		comboBtn = new Button();
 		timeout = new Timeout(1.5);
+		comboTxt = TextResource.MakeText();
+		comboDescTxt = TextResource.MakeText();
 
 		turn = 0;
 		rollsRemaining = 0;
@@ -106,9 +112,8 @@ class CombatScreen extends Screen
 
 	public override function onEnter()
 	{
-		backgroundOb = new h2d.Bitmap(TileResources.VIGNETTE_WATER);
-		backgroundOb.scale(2);
-		ob.addChild(backgroundOb);
+		background.tile = Tile.fromColor(0x1a1d22, game.window.width, game.window.height);
+		ob.addChild(background);
 
 		rollsRemaining = 3;
 
@@ -124,6 +129,10 @@ class CombatScreen extends Screen
 		turnBtn.text = 'End turn (${turn})';
 		turnBtn.backgroundColor = 0x804c36;
 		turnBtn.onClick = (e) -> endTurn();
+
+		comboTxt.scale(2);
+		comboTxt.textAlign = Center;
+		comboDescTxt.textAlign = Center;
 
 		rollArea = new Bitmap(h2d.Tile.fromColor(0x333333, 512, 256));
 
@@ -214,6 +223,8 @@ class CombatScreen extends Screen
 		ob.addChild(rollBtn);
 		ob.addChild(turnBtn);
 		ob.addChild(comboBtn);
+		ob.addChild(comboTxt);
+		ob.addChild(comboDescTxt);
 
 		game.render(HUD, ob);
 	}
@@ -419,9 +430,28 @@ class CombatScreen extends Screen
 			var die = availableDice.find((d) -> d.roll.value == face);
 			die.isSelected = true;
 		}
+
+		showComboText(mobCombo);
+
 		timeout.onComplete = () -> applyMobCombo();
 		timeout.reset();
 		renderCrew();
+	}
+
+	function showComboText(combo:DiceCombo)
+	{
+		comboTxt.text = combo.title;
+		comboDescTxt.text = combo.description;
+		comboTxt.visible = true;
+		comboDescTxt.visible = true;
+	}
+
+	function hideComboText()
+	{
+		comboTxt.text = '';
+		comboDescTxt.text = '';
+		comboTxt.visible = true;
+		comboDescTxt.visible = true;
 	}
 
 	function applyMobCombo()
@@ -442,6 +472,7 @@ class CombatScreen extends Screen
 		mobCombo = null;
 
 		crew.each((c) -> c.isTarget = false);
+		hideComboText();
 
 		renderCrew();
 		mobTurn();
@@ -451,6 +482,7 @@ class CombatScreen extends Screen
 	{
 		selectedDiceOb.removeChildren();
 		comboBtn.visible = false;
+		hideComboText();
 
 		var selected = crew.flatMap((c) -> c.gameDice).filter((d) -> d.isSelected).map((d) -> d.roll.value);
 
@@ -463,6 +495,7 @@ class CombatScreen extends Screen
 
 			var comboTxt = TextResource.MakeText();
 			comboTxt.text = combo.title;
+			showComboText(combo);
 
 			comboBtn.visible = true;
 			comboBtn.backgroundColor = 0x57723a;
@@ -479,6 +512,7 @@ class CombatScreen extends Screen
 					updateCombo();
 				});
 				combo.apply(enemies, crew);
+
 				renderCrew();
 			}
 
@@ -495,8 +529,7 @@ class CombatScreen extends Screen
 
 	function repositionHud()
 	{
-		backgroundOb.x = (game.window.width / 2) - 320;
-		backgroundOb.y = (game.window.height / 2) - 216;
+		background.tile = Tile.fromColor(0x1a1d22, game.window.width, game.window.height);
 
 		var rollAreaWidth = 512;
 		var rollAreaHeight = 256;
@@ -522,6 +555,12 @@ class CombatScreen extends Screen
 
 		comboBtn.x = (game.window.width / 2) - (comboBtn.width / 2);
 		comboBtn.y = rollArea.y - (comboBtn.height + (dieSize / 2));
+
+		comboTxt.x = (game.window.width / 2);
+		comboTxt.y = 64;
+
+		comboDescTxt.x = (game.window.width / 2);
+		comboDescTxt.y = 120;
 
 		var selectedBounds = selectedDiceOb.getBounds();
 		selectedDiceOb.x = (game.window.width / 2) - (selectedBounds.width / 2);
