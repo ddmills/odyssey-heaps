@@ -34,5 +34,8 @@
 - [ ] dice audio
 - [ ] show current turn "Player turn!/Mob Turn"
 - [x] mob targeting
-- [ ] show mob combo name/effect
+- [x] show mob combo name/effect
+- [ ] click to skip waiting on enemy turn
 - [x] when crew member reaches zero hp, dice should be retired
+- [ ] game over screen
+- [ ] victory screen?

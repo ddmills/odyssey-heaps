@@ -77,6 +77,13 @@ class Registry
 		entityMap.set(entity.id, entity);
 	}
 
+	@:allow(ecs.Entity)
+	function unregisterEntity(entity:Entity)
+	{
+		size--;
+		entityMap.remove(entity.id);
+	}
+
 	public function iterator()
 	{
 		return entityMap.iterator();

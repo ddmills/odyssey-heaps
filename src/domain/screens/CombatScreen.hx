@@ -19,6 +19,7 @@ import ecs.Entity;
 import ecs.Query;
 import ecs.components.Combatant;
 import ecs.components.CrewMember;
+import ecs.components.Health;
 import ecs.components.Incapacitated;
 import ecs.components.Level;
 import ecs.components.Mob;
@@ -75,6 +76,7 @@ class CombatScreen extends Screen
 	var comboTxt:h2d.Text;
 	var comboDescTxt:h2d.Text;
 	var background:Bitmap;
+	var isCombatOver:Bool;
 
 	public function new(mob:Entity)
 	{
@@ -102,6 +104,7 @@ class CombatScreen extends Screen
 		turn = 0;
 		rollsRemaining = 0;
 		isPlayerTurn = true;
+		isCombatOver = false;
 
 		gameDice = new Array();
 
@@ -122,13 +125,13 @@ class CombatScreen extends Screen
 			ob.addChild(enemy.cardOb);
 		}
 
-		rollBtn.text = 'Roll (${rollsRemaining})';
 		rollBtn.backgroundColor = 0x57723a;
 		rollBtn.onClick = (e) -> rollCrewDice();
 
-		turnBtn.text = 'End turn (${turn})';
 		turnBtn.backgroundColor = 0x804c36;
 		turnBtn.onClick = (e) -> endTurn();
+
+		updateBtns();
 
 		comboTxt.scale(2);
 		comboTxt.textAlign = Center;
@@ -227,6 +230,20 @@ class CombatScreen extends Screen
 		ob.addChild(comboDescTxt);
 
 		game.render(HUD, ob);
+
+		checkCombatEnd();
+	}
+
+	override function onDestroy()
+	{
+		ob.removeChildren();
+		crewQuery.dispose();
+
+		enemies.each((e) ->
+		{
+			e.entity.destroy();
+		});
+		enemies = [];
 	}
 
 	function renderCrew()
@@ -251,6 +268,22 @@ class CombatScreen extends Screen
 		});
 	}
 
+	function updateBtns()
+	{
+		if (isPlayerTurn)
+		{
+			rollBtn.visible = true;
+			rollBtn.text = 'Roll (${rollsRemaining})';
+			turnBtn.visible = true;
+			turnBtn.text = 'End turn (${turn})';
+		}
+		else
+		{
+			turnBtn.visible = false;
+			rollBtn.visible = false;
+		}
+	}
+
 	function rollCrewDice()
 	{
 		if (rollsRemaining <= 0 || !isPlayerTurn)
@@ -260,7 +293,7 @@ class CombatScreen extends Screen
 
 		diceOb.visible = true;
 		rollsRemaining--;
-		rollBtn.text = 'Roll (${rollsRemaining})';
+		updateBtns();
 
 		var disc = new PoissonDiscSampler(512 - dieSize, 256 - dieSize, dieSize + 4, (Math.random() * 10000).floor());
 		for (c in crew)
@@ -357,6 +390,8 @@ class CombatScreen extends Screen
 			enemy.cardOb.updateDice(enemy.gameDice);
 		});
 		isPlayerTurn = true;
+		updateBtns();
+		checkCombatEnd();
 	}
 
 	function endTurn()
@@ -367,7 +402,6 @@ class CombatScreen extends Screen
 		}
 
 		turn++;
-		turnBtn.text = 'End turn (${turn})';
 		diceOb.visible = false;
 
 		crew.each((c) ->
@@ -384,12 +418,17 @@ class CombatScreen extends Screen
 		});
 
 		rollsRemaining = 3;
-		rollBtn.text = 'Roll (${rollsRemaining})';
+		rollBtn.text = 'Roll (${rollsRemaining} remaining)';
 		crew.each((c) -> c.cardOb.updateDice(c.gameDice));
 		updateCombo();
 		isPlayerTurn = false;
+		updateBtns();
+		checkCombatEnd();
 
-		rollMobDice();
+		if (!isCombatOver)
+		{
+			rollMobDice();
+		}
 	}
 
 	function mobTurn()
@@ -543,14 +582,14 @@ class CombatScreen extends Screen
 		rollingPos = new IntPoint(rx, ry);
 		mobRollingPos = new IntPoint(rx + rollAreaWidth, ry);
 
-		rollBtn.x = rx - 128 - 64;
+		rollBtn.x = rx - 180 - 64;
 		rollBtn.y = ry - 32;
-		rollBtn.width = 128;
+		rollBtn.width = 180;
 		rollBtn.height = 64;
 
 		turnBtn.x = rx + 512 + 64;
 		turnBtn.y = ry - 32;
-		turnBtn.width = 128;
+		turnBtn.width = 180;
 		turnBtn.height = 64;
 
 		comboBtn.x = (game.window.width / 2) - (comboBtn.width / 2);
@@ -576,6 +615,21 @@ class CombatScreen extends Screen
 			e.cardOb.x = game.window.width - 8 - 320;
 			e.cardOb.y = 120 * i + ((i + 1) * 8);
 		});
+	}
+
+	function checkCombatEnd()
+	{
+		if (enemies.every((e) -> e.entity.get(Health).current <= 0))
+		{
+			isCombatOver = true;
+			game.screens.pop();
+		}
+
+		if (crew.every((c) -> c.entity.get(Health).current <= 0))
+		{
+			isCombatOver = true;
+			game.screens.pop();
+		}
 	}
 
 	override function update(frame:Frame)

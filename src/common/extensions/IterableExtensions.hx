@@ -21,6 +21,11 @@ class IterableExtensions
 		return cur;
 	}
 
+	public static inline function every<T>(it:Iterable<T>, fn:(value:T) -> Bool):Bool
+	{
+		return !it.exists((v) -> !fn(v));
+	}
+
 	public static inline function exists<T>(it:Iterable<T>, fn:(value:T) -> Bool):Bool
 	{
 		return Lambda.exists(it, fn);

@@ -120,6 +120,7 @@ class Entity
 		{
 			remove(component);
 		}
+		registry.unregisterEntity(this);
 	}
 
 	public function add(component:Component)
