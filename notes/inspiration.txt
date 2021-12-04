@@ -1,3 +1,10 @@
+
+- Quarriers - dice building game
+- Dice Forge - customizable dice (https://en.boardgamearena.com/gamepanel?game=diceforge)
+
+
+
+
 ## Commodities
 - Buccaneers = Wood Cutters
 - Use Logwood trees for dye (blue, purple, black (mixed with iron))

@@ -1,4 +1,13 @@
 
+# Goal
+Manage your crew to progressively defeat increasing levels of challenge.
+
+As the game progresses, the difficulty should increase:
+- More aggressive enemies
+- increase costs?
+
+
+
 ## Discovery/Exploration
 - landmarks (old trees, view, mountain, river)
 - collectables
@@ -12,5 +21,4 @@
     - resources
 - clear goals (quests?)
     - go from a to b
--
 

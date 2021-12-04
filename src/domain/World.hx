@@ -5,12 +5,12 @@ import core.Clock;
 import core.Game;
 import core.PlayerManager;
 import core.rendering.RenderLayerManager;
+import domain.systems.AISystem.AI;
 import domain.systems.CameraSystem;
 import domain.systems.EnergySystem;
 import domain.systems.MovementSystem;
 import domain.systems.PathFollowSystem;
 import domain.systems.StatsSystem;
-import domain.systems.TurnSystem;
 import domain.systems.VisionSystem;
 import domain.terrain.ChunkManager;
 import ecs.Entity;
@@ -31,9 +31,9 @@ class World
 	public var chunkGen(default, null):ChunkGen;
 
 	public var clock(default, null):Clock;
+	public var ai(default, null):AI;
 	public var movement(default, null):MovementSystem;
 	public var energy(default, null):EnergySystem;
-	public var turns(default, null):TurnSystem;
 	public var vision(default, null):VisionSystem;
 	public var camera(default, null):CameraSystem;
 	public var pathing(default, null):PathFollowSystem;
@@ -61,7 +61,7 @@ class World
 		visible = new Array<Coordinate>();
 
 		clock = new Clock();
-		turns = new TurnSystem();
+		ai = new AI();
 		energy = new EnergySystem();
 		movement = new MovementSystem();
 		vision = new VisionSystem();
@@ -187,7 +187,6 @@ class World
 		var frame = game.frame;
 
 		energy.update(frame);
-		turns.update(frame);
 		movement.update(frame);
 		vision.update(frame);
 		camera.update(frame);

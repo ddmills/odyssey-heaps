@@ -1,8 +1,11 @@
 ## energy system
 
 - Move order in game is based on energy
-- The entity with the lowest energy gets to take an action
-- Performing an action (moving, using item, etc) gives the entity energy
+- Entites have -INFINITY to 0 energy
+- The entity with zero energy gets to take an action
+- Performing an action (moving, using item, etc) subtracts energy from the entity
+- if no entity has zero energy, the game advances by that many "ticks"
+- On each game "tick", every entity gains +1 energy
 - Repeat
 
 In this fashion, different entities can have different "move speeds." An entity with a higher move speed will have a lower movement energy cost.

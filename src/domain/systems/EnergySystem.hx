@@ -1,35 +1,32 @@
 package domain.systems;
 
 import core.Frame;
+import ecs.Entity;
 import ecs.Query;
 import ecs.components.Energy;
-import ecs.components.Turn;
+import ecs.components.IsPlayer;
 
 class EnergySystem extends System
 {
+	public var isPlayersTurn(default, null):Bool;
+
 	var query:Query;
 
 	public function new()
 	{
+		isPlayersTurn = false;
 		query = new Query({
 			all: [Energy]
 		});
 	}
 
-	override function update(frame:Frame)
+	function getNext(entities:Array<Entity>):Entity
 	{
-		if (world.turns.current.entity != null)
-		{
-			return;
-		}
-
 		world.clock.clearDeltas();
-
-		var entity = query.max((e) -> e.get(Energy).value);
-
+		var entity = entities.max((e) -> e.get(Energy).value);
 		if (entity == null)
 		{
-			return;
+			return null;
 		}
 
 		var energy = entity.get(Energy);
@@ -41,10 +38,36 @@ class EnergySystem extends System
 			query.each((e) -> e.get(Energy).addEnergy(tickAmount));
 		}
 
-		if (!entity.has(Turn))
+		entities.remove(entity);
+
+		return entity;
+	}
+
+	override function update(frame:Frame)
+	{
+		if (isPlayersTurn && world.player.entity.get(Energy).hasEnergy)
 		{
-			entity.add(new Turn());
-			world.turns.current.entity = entity;
+			return;
+		}
+
+		var entities = query.toArray();
+
+		while (entities.length > 0)
+		{
+			var entity = getNext(entities);
+
+			if (entity.has(IsPlayer))
+			{
+				trace('START PLAYERS TURN');
+				isPlayersTurn = true;
+				world.player.startTurn();
+				break;
+			}
+			else
+			{
+				isPlayersTurn = false;
+				world.ai.takeAction(entity);
+			}
 		}
 	}
 }

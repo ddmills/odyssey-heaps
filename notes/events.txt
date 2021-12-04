@@ -2,7 +2,7 @@
 
 ## theives
 - A group of shady figures jump out and point a knife at you. "Hand over the loot!"
-- Fight? Hand over loot.
+- Fight? Bargain? Hand over loot.
 
 ## danger
 - You hear a rustling in the trees nearby.
@@ -17,4 +17,17 @@
 ## rations
 - As you look over the remaining food stores, you find there is less here than you
     - Food - n
-    -
+
+
+## mysterious stranger
+- A shady figure at the tavern tells you about a treasure at an island
+
+
+## Storylines
+- choice nodes
+- combat nodes
+- wait nodes
+- effect node
+- end node
+
+A quest is a tree of triggers & decisions

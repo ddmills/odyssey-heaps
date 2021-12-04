@@ -27,12 +27,12 @@ class Clock
 
 	inline function get_turn():Int
 	{
-		return (tick / 1000).floor();
+		return (tick / 100).floor();
 	}
 
 	inline function get_subTurn():Int
 	{
-		return (tick % 1000).floor();
+		return (tick % 100).floor();
 	}
 
 	public function clearDeltas()

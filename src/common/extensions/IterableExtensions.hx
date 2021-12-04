@@ -59,6 +59,11 @@ class IterableExtensions
 		return arr;
 	}
 
+	public static inline function toArray<T>(it:Iterable<T>):Array<T>
+	{
+		return Lambda.array(it);
+	}
+
 	public static inline function exists<T>(it:Iterable<T>, fn:(value:T) -> Bool):Bool
 	{
 		return Lambda.exists(it, fn);

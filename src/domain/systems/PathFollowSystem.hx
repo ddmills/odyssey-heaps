@@ -3,6 +3,7 @@ package domain.systems;
 import common.struct.Coordinate;
 import core.Frame;
 import ecs.Query;
+import ecs.components.Energy;
 import ecs.components.Move;
 import ecs.components.MoveComplete;
 import ecs.components.Path;
