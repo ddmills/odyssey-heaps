@@ -1,7 +1,7 @@
 -cp src
+--macro macros.ResourceMacros.Init()
 -lib heaps
 -lib hldx
---macro macros.ResourceMacros.Init()
 -hl output.hl
 -D windowSize=1366x768
 -main Main

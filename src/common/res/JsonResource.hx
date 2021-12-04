@@ -1,6 +1,5 @@
 package common.res;
 
-import haxe.Json;
 import hxd.res.Resource;
 
 class JsonResource extends Resource
