@@ -33,12 +33,12 @@ class PlayState extends GameState
 		squid.y = 420;
 		world.add(squid);
 
-		var squid = SquidPrefab.Create(1);
+		var squid = SquidPrefab.Create(2);
 		squid.x = 367;
 		squid.y = 424;
 		world.add(squid);
 
-		var squid = SquidPrefab.Create(1);
+		var squid = SquidPrefab.Create(3);
 		squid.x = 362;
 		squid.y = 424;
 		world.add(squid);

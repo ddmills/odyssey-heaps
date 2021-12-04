@@ -5,7 +5,7 @@ class IterableExtensions
 	public static function max<T>(it:Iterable<T>, fn:(value:T) -> Float):T
 	{
 		var cur = null;
-		var curWeight = -1.0;
+		var curWeight = Math.NEGATIVE_INFINITY;
 
 		for (value in it)
 		{
@@ -21,9 +21,42 @@ class IterableExtensions
 		return cur;
 	}
 
+	public static function min<T>(it:Iterable<T>, fn:(value:T) -> Float):T
+	{
+		var cur = null;
+		var curWeight = Math.POSITIVE_INFINITY;
+
+		for (value in it)
+		{
+			var weight = fn(value);
+
+			if (cur == null || weight < curWeight)
+			{
+				curWeight = weight;
+				cur = value;
+			}
+		}
+
+		return cur;
+	}
+
 	public static inline function every<T>(it:Iterable<T>, fn:(value:T) -> Bool):Bool
 	{
 		return !it.exists((v) -> !fn(v));
+	}
+
+	public static inline function first<T>(it:Iterable<T>):T
+	{
+		return it.iterator().next();
+	}
+
+	public static inline function sort<T>(it:Iterable<T>, fn:(a:T, b:T) -> Int):Array<T>
+	{
+		var arr = Lambda.array(it);
+
+		arr.sort(fn);
+
+		return arr;
 	}
 
 	public static inline function exists<T>(it:Iterable<T>, fn:(value:T) -> Bool):Bool

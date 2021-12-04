@@ -1,0 +1,24 @@
+## energy system
+
+- Move order in game is based on energy
+- The entity with the lowest energy gets to take an action
+- Performing an action (moving, using item, etc) gives the entity energy
+- Repeat
+
+In this fashion, different entities can have different "move speeds." An entity with a higher move speed will have a lower movement energy cost.
+
+-------------
+
+- get all entities that have energy, sort them lowest to highest
+
+- get the zeroeth element in the list
+    - if is player:
+        - check for player action
+        - if player action, perform
+    - if other entity:
+        - perform entities actions
+    - else:
+        - advance time by lowest energy cost
+
+- update world
+- update render

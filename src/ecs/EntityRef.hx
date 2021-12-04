@@ -20,7 +20,8 @@ class EntityRef
 
 	inline function set_entity(value:Entity):Entity
 	{
-		entityId = value.id;
+		entityId = value == null ? '' : value.id;
+
 		return value;
 	}
 }

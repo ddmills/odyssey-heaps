@@ -1,15 +1,11 @@
 package core;
 
 import common.struct.Coordinate;
-import data.TileResources;
+import common.util.Timeout;
 import ecs.Entity;
 import ecs.EntityRef;
-import ecs.components.Direction;
-import ecs.components.Health;
-import ecs.components.Moniker;
-import ecs.components.Sprite;
-import ecs.components.Vision;
-import h2d.Anim;
+import ecs.components.Energy;
+import ecs.prefabs.PlayerPrefab;
 
 class PlayerManager
 {
@@ -32,16 +28,30 @@ class PlayerManager
 
 	public function initialize()
 	{
-		var e = new Entity();
-		e.add(new Moniker('Sloop'));
-		e.add(new Sprite(new Anim(TileResources.SLOOP.split(8), 0), Game.instance.TILE_W_HALF, Game.instance.TILE_H));
-		e.add(new Direction());
-		e.add(new Health(8, 8));
-		e.add(new Vision(10, 1));
+		var e = PlayerPrefab.Create();
 
 		Game.instance.world.add(e);
 
 		entityRef.entity = e;
+	}
+
+	public function getNextAction():() -> Void
+	{
+		// return () ->
+		// {
+		// 	entity.get(Energy).consumeEnergy(1);
+		// };
+		return null;
+	}
+
+	public function startTurn()
+	{
+		var action = getNextAction();
+
+		if (action != null)
+		{
+			action();
+		}
 	}
 
 	inline function get_x():Float

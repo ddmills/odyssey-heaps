@@ -36,6 +36,9 @@ abstract class Component
 	function onRemove() {}
 
 	@:allow(ecs.Entity)
+	function onEvent(evt:EntityEvent) {}
+
+	@:allow(ecs.Entity)
 	function _attach(entity:Entity)
 	{
 		this.entity = entity;

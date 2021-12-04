@@ -5,9 +5,11 @@ import common.struct.Coordinate;
 import core.Frame;
 import ecs.Query;
 import ecs.components.Direction;
+import ecs.components.Energy;
 import ecs.components.Move;
 import ecs.components.MoveComplete;
 import ecs.components.Moved;
+import ecs.components.Turn;
 
 class MovementSystem extends System
 {
@@ -18,7 +20,7 @@ class MovementSystem extends System
 	public function new()
 	{
 		query = new Query({
-			all: [Move],
+			all: [Move, Turn],
 			none: [MoveComplete]
 		});
 		completed = new Query({
@@ -72,6 +74,11 @@ class MovementSystem extends System
 				entity.pos = move.goal;
 				entity.remove(move);
 				entity.add(new MoveComplete());
+
+				if (entity.has(Energy))
+				{
+					entity.get(Energy).consumeEnergy(500);
+				}
 			}
 			else
 			{

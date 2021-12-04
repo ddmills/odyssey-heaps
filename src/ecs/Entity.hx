@@ -154,6 +154,15 @@ class Entity
 		}
 	}
 
+	public function fireEvent(name:String):EntityEvent
+	{
+		var evt = new EntityEvent(name);
+
+		components.each((c) -> c.onEvent(evt));
+
+		return evt;
+	}
+
 	public overload extern inline function remove(component:Component)
 	{
 		removeInstance(component);
