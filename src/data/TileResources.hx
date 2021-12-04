@@ -97,7 +97,7 @@ class TileResources
 		DICE_SQUID_TENTACLE = dice[3][1];
 		DICE_SQUID_WAVE = dice[3][2];
 
-		var monsterSheet = hxd.Res.img.monster32.toTile();
+		var monsterSheet = hxd.Res.img.monster40.toTile();
 		var monsters = monsterSheet.divide(4, 4);
 
 		SQUID = [monsters[0][0], monsters[0][1], monsters[0][2], monsters[0][1]];

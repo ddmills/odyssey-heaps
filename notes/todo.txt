@@ -39,3 +39,5 @@
 - [x] when crew member reaches zero hp, dice should be retired
 - [ ] game over screen
 - [ ] victory screen?
+- [ ] deploy to gh-pages
+- [ ] show controls on screen
