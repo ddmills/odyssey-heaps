@@ -16,10 +16,6 @@ class MenuState extends GameState
 		PortraitData.Init();
 		Stories.Init();
 
-		var story = Stories.TEST_STORY;
-
-		trace(story);
-
 		game.setState(new PlayState());
 	}
 }

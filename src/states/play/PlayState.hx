@@ -1,6 +1,7 @@
 package states.play;
 
 import core.GameState;
+import data.storylines.Stories;
 import domain.screens.SailScreen;
 import ecs.components.CrewMember;
 import ecs.prefabs.PersonPrefab;
@@ -27,6 +28,10 @@ class PlayState extends GameState
 		p3.add(new CrewMember());
 		var p4 = PersonPrefab.Create(52);
 		p4.add(new CrewMember());
+
+		var story = world.storylines.tryAddStory(Stories.TEST_STORY, p1);
+
+		trace(story);
 
 		var squid = SquidPrefab.Create(1);
 		squid.x = 365;

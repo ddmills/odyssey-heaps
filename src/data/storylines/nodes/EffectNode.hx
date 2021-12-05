@@ -7,8 +7,6 @@ typedef EffectNodeArgs =
 {
 	var key:String;
 	var type:String;
-	var prompt:String;
-	var actionText:String;
 	var effects:Array<StoryEffct>;
 	var nextNode:String;
 }
@@ -30,8 +28,6 @@ class EffectNode extends StoryNode
 		return new EffectNode({
 			key: json.key,
 			type: json.type,
-			prompt: json.prompt,
-			actionText: json.actionText,
 			effects: effects,
 			nextNode: json.nextNode,
 		});

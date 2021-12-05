@@ -18,6 +18,6 @@ class StoryFactory
 			return StoryNodeFactory.FromJson(node);
 		});
 
-		return new Story(name, parameters, nodes);
+		return new Story(name, parameters, nodes, json.startNode);
 	}
 }

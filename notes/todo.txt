@@ -41,3 +41,5 @@
 - [ ] victory screen?
 - [ ] deploy to gh-pages
 - [ ] show controls on screen
+- [ ] storyline criteria
+- [ ] storyline triggers

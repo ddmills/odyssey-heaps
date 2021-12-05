@@ -8,10 +8,10 @@
             "diceCategory": "ATTACK"
         }
     ],
-    "startNode": "start",
+    "startNode": "choose",
     "nodes": [
         {
-            "key": "start",
+            "key": "choose",
             "type": "CHOICE",
             "prompt": "You come across a canyon. [c] wants to jump across it to prove their worth.",
             "options": [
@@ -39,8 +39,6 @@
         {
             "key": "level-up",
             "type": "EFFECT",
-            "prompt": "SUCCESS!",
-            "actionText": "I knew [c] could do it!",
             "effects": [
                 {
                     "type": "ADD_LVL",
@@ -48,26 +46,38 @@
                     "person": "c"
                 }
             ],
+            "nextNode": "level-up-text"
+        },
+        {
+            "key": "level-up-text",
+            "type": "TEXT",
+            "prompt": "[c] successfully jumped the canyon and gained a level.",
+            "actionText": "I knew [c] could do it!",
             "nextNode": "END"
         },
         {
             "key": "death",
             "type": "EFFECT",
-            "prompt": "OH NO!, [c] slipped and fell, tumbling to their death.",
-            "actionText": "What a tragedy!",
             "effects": [
                 {
                     "type": "KILL",
                     "person": "c"
                 }
             ],
+            "nextNode": "death-text"
+        },
+        {
+            "key": "death-text",
+            "type": "TEXT",
+            "prompt": "Oh dear!, [c] slipped and fell, tumbling to their death.",
+            "actionText": "What a tragedy!",
             "nextNode": "END"
         },
         {
             "key": "pass",
             "type": "TEXT",
             "prompt": "[c] is disappointed.",
-            "actionText": "Accept",
+            "actionText": "They will have to cope.",
             "nextNode": "END"
         }
     ]
