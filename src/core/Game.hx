@@ -1,8 +1,10 @@
 package core;
 
 import core.rendering.RenderLayerManager.RenderLayerType;
+import data.DieFace;
 import domain.World;
 import ecs.Registry;
+import haxe.EnumTools;
 import hxd.Window;
 import tools.Performance;
 

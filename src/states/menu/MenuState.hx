@@ -3,6 +3,7 @@ package states.menu;
 import core.GameState;
 import data.TileResources;
 import data.portraits.PortraitData;
+import data.storylines.Stories;
 import states.play.PlayState;
 
 class MenuState extends GameState
@@ -13,6 +14,12 @@ class MenuState extends GameState
 	{
 		TileResources.Init();
 		PortraitData.Init();
+		Stories.Init();
+
+		var story = Stories.TEST_STORY;
+
+		trace(story);
+
 		game.setState(new PlayState());
 	}
 }

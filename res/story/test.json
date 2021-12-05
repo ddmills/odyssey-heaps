@@ -1,0 +1,74 @@
+{
+    "name": "Test story",
+    "parameters": [
+        {
+            "key": "c",
+            "type": "PERSON",
+            "inCrew": "YES",
+            "diceCategory": "ATTACK"
+        }
+    ],
+    "startNode": "start",
+    "nodes": [
+        {
+            "key": "start",
+            "type": "CHOICE",
+            "prompt": "You come across a canyon. [c] wants to jump across it to prove their worth.",
+            "options": [
+                {
+                    "key": "jump",
+                    "title": "Jump!",
+                    "nextNode": "jump"
+                },
+                {
+                    "key": "pass",
+                    "title": "It's too risky.",
+                    "nextNode": "pass"
+                }
+            ]
+        },
+        {
+            "key": "jump",
+            "type": "ROLL",
+            "prompt": "[c] will attempt the jump!",
+            "person": "c",
+            "face": "ATK_SWORD",
+            "onSuccessNode": "level-up",
+            "onFailureNode": "death"
+        },
+        {
+            "key": "level-up",
+            "type": "EFFECT",
+            "prompt": "SUCCESS!",
+            "actionText": "I knew [c] could do it!",
+            "effects": [
+                {
+                    "type": "ADD_LVL",
+                    "count": 1,
+                    "person": "c"
+                }
+            ],
+            "nextNode": "END"
+        },
+        {
+            "key": "death",
+            "type": "EFFECT",
+            "prompt": "OH NO!, [c] slipped and fell, tumbling to their death.",
+            "actionText": "What a tragedy!",
+            "effects": [
+                {
+                    "type": "KILL",
+                    "person": "c"
+                }
+            ],
+            "nextNode": "END"
+        },
+        {
+            "key": "pass",
+            "type": "TEXT",
+            "prompt": "[c] is disappointed.",
+            "actionText": "Accept",
+            "nextNode": "END"
+        }
+    ]
+}
