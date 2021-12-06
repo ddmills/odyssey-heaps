@@ -66,9 +66,6 @@ class MapData
 		generateSettlements();
 		generatePeople();
 		Performance.stop('map');
-
-		trace(Performance.friendly('map'));
-		trace('islands', islands.length);
 	}
 
 	function perlin(x:Float, y:Float, octaves:Int)

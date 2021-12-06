@@ -6,7 +6,7 @@ typedef TextNodeArgs =
 	var type:String;
 	var prompt:String;
 	var actionText:String;
-	var node:String;
+	var nextNode:String;
 }
 
 class TextNode extends StoryNode
@@ -15,7 +15,7 @@ class TextNode extends StoryNode
 
 	public function new(params:TextNodeArgs)
 	{
-		super(params.key, params.type);
+		super(params.type, params.key);
 		this.params = params;
 	}
 }

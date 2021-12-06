@@ -43,3 +43,5 @@
 - [ ] show controls on screen
 - [ ] storyline criteria
 - [ ] storyline triggers
+- [ ] storyline rerolls
+- [ ] dialog component (?)

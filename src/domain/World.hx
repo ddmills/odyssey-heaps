@@ -5,13 +5,13 @@ import core.Clock;
 import core.Game;
 import core.PlayerManager;
 import core.rendering.RenderLayerManager;
-import domain.storylines.Storylines;
 import domain.systems.AISystem.AI;
 import domain.systems.CameraSystem;
 import domain.systems.EnergySystem;
 import domain.systems.MovementSystem;
 import domain.systems.PathFollowSystem;
 import domain.systems.StatsSystem;
+import domain.systems.StorylineSystem;
 import domain.systems.VisionSystem;
 import domain.terrain.ChunkManager;
 import ecs.Entity;
@@ -33,7 +33,7 @@ class World
 
 	public var clock(default, null):Clock;
 	public var ai(default, null):AI;
-	public var storylines(default, null):Storylines;
+	public var storylines(default, null):StorylineSystem;
 	public var movement(default, null):MovementSystem;
 	public var energy(default, null):EnergySystem;
 	public var vision(default, null):VisionSystem;
@@ -64,7 +64,7 @@ class World
 
 		clock = new Clock();
 		ai = new AI();
-		storylines = new Storylines();
+		storylines = new StorylineSystem();
 		energy = new EnergySystem();
 		movement = new MovementSystem();
 		vision = new VisionSystem();

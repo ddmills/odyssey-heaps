@@ -12,9 +12,9 @@ class Button extends h2d.Object
 	public var text(default, set):String;
 	public var backgroundColor(default, set):Int;
 	public var textColor(default, set):Int;
+	public var textOb(default, null):Text;
 
 	var bm:h2d.Bitmap;
-	var textOb:Text;
 	var interactive:h2d.Interactive;
 
 	public function new()

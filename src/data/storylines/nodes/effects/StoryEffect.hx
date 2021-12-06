@@ -1,5 +1,7 @@
 package data.storylines.nodes.effects;
 
+import domain.storylines.Storyline;
+
 class StoryEffct
 {
 	public var type(default, null):String;
@@ -8,4 +10,6 @@ class StoryEffct
 	{
 		this.type = type;
 	}
+
+	public function applyToStoryline(storyline:Storyline) {}
 }

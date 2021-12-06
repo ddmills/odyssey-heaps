@@ -58,7 +58,6 @@ class EnergySystem extends System
 
 			if (entity.has(IsPlayer))
 			{
-				trace('START PLAYERS TURN');
 				isPlayersTurn = true;
 				world.player.startTurn();
 				break;

@@ -2,7 +2,7 @@ package ecs.components;
 
 class Level extends Component
 {
-	public var lvl(default, null):Int;
+	public var lvl:Int;
 
 	public function new(lvl:Int = 1)
 	{

@@ -1,6 +1,10 @@
 package data.storylines.nodes.effects;
 
 import data.storylines.nodes.effects.StoryEffect.StoryEffct;
+import domain.storylines.Storyline;
+import ecs.components.Health;
+import ecs.components.Moniker;
+import ecs.components.Person;
 
 typedef KillEffectArgs =
 {
@@ -16,5 +20,11 @@ class KillEffect extends StoryEffct
 	{
 		super(params.type);
 		this.params = params;
+	}
+
+	override function applyToStoryline(storyline:Storyline)
+	{
+		var person = storyline.getPerson(params.person);
+		person.get(Health).current = 0;
 	}
 }

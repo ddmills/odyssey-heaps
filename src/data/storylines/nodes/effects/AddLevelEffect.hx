@@ -1,6 +1,8 @@
 package data.storylines.nodes.effects;
 
 import data.storylines.nodes.effects.StoryEffect.StoryEffct;
+import domain.storylines.Storyline;
+import ecs.components.Level;
 
 typedef AddLevelEffectArgs =
 {
@@ -17,5 +19,11 @@ class AddLevelEffect extends StoryEffct
 	{
 		super(params.type);
 		this.params = params;
+	}
+
+	override function applyToStoryline(storyline:Storyline)
+	{
+		var person = storyline.getPerson(params.person);
+		person.get(Level).lvl += params.count;
 	}
 }
