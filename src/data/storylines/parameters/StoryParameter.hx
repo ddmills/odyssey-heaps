@@ -1,5 +1,7 @@
 package data.storylines.parameters;
 
+import domain.storylines.Storyline;
+
 class StoryParameter
 {
 	public var type(default, null):String;
@@ -9,5 +11,10 @@ class StoryParameter
 	{
 		this.type = type;
 		this.key = key;
+	}
+
+	public function tryPopulate(storyline:Storyline):Bool
+	{
+		return true;
 	}
 }

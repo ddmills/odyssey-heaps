@@ -4,6 +4,7 @@ import core.Game;
 import data.storylines.Story;
 import data.storylines.nodes.StoryNode;
 import ecs.Entity;
+import hxd.Rand;
 
 typedef Param =
 {
@@ -19,12 +20,16 @@ class Storyline
 	public var currentNodeKey:String;
 	public var currentNode(get, null):StoryNode;
 	public var isEnd(get, never):Bool;
+	public var seed:Int;
+	public var rand:Rand;
 
-	public function new(story:Story)
+	public function new(story:Story, seed:Int)
 	{
 		this.story = story;
 		parameters = new Array();
 		currentNodeKey = story.startNode.key;
+		this.seed = seed;
+		rand = new Rand(seed);
 	}
 
 	function get_currentNode():StoryNode

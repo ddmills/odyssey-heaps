@@ -7,7 +7,7 @@ class StoryParameterFactory
 		switch json.type
 		{
 			case 'PERSON':
-				return new PersonParameter(json);
+				return PersonParameter.FromJson(json);
 		}
 
 		trace('StoryParameter not found', json);

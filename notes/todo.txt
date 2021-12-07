@@ -41,7 +41,10 @@
 - [ ] victory screen?
 - [ ] deploy to gh-pages
 - [ ] show controls on screen
+- [x] storyline seed
 - [ ] storyline criteria
 - [ ] storyline triggers
 - [ ] storyline rerolls
 - [ ] dialog component (?)
+- [ ] push storyline textReplace to StoryParameter class
+- [x] storyline parameter building to StoryParameter class

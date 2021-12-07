@@ -2,6 +2,7 @@ package domain.systems;
 
 import core.Frame;
 import data.storylines.Story;
+import data.storylines.parameters.StoryParameter;
 import domain.screens.storylines.StoryChoiceScreen;
 import domain.screens.storylines.StoryEffectScreen;
 import domain.screens.storylines.StoryRollScreen;
@@ -20,19 +21,22 @@ class StorylineSystem extends System
 		active = new Array<Storyline>();
 	}
 
-	public function tryAddStory(story:Story, e:Entity)
+	public function tryAddStory(story:Story)
 	{
-		var storyline = new Storyline(story);
+		var storyline = new Storyline(story, 2);
 
-		storyline.parameters.push({
-			key: 'c',
-			entityId: e.id,
-			display: e.get(Person).name,
-		});
+		// for each parameter, find a suitable candidate
+		var populated = story.parameters.every((p:StoryParameter) -> p.tryPopulate(storyline));
 
-		active.push(storyline);
+		if (populated)
+		{
+			active.push(storyline);
+			return storyline;
+		}
 
-		return storyline;
+		trace('Could not fulfill requirements for story');
+
+		return null;
 	}
 
 	override function update(frame:Frame)

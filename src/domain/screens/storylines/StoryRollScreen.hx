@@ -69,7 +69,7 @@ class StoryRollScreen extends Screen
 		var i = 0;
 		var results = dice.map((die:Die) ->
 		{
-			var res = die.roll(Std.random(0x7FFFFFFF));
+			var res = die.roll(storyline.rand.random(100));
 
 			var bm = new h2d.Bitmap();
 			bm.scale(3);
@@ -81,7 +81,7 @@ class StoryRollScreen extends Screen
 			return res.value;
 		});
 
-		var success = results.contains(rollNode.params.face);
+		var success = results.exists(((v) -> rollNode.params.faces.contains(v)));
 
 		var nextBtnText = '';
 		var nextBtnColor = 0;

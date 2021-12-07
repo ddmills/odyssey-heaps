@@ -4,7 +4,7 @@
         {
             "key": "c",
             "type": "PERSON",
-            "inCrew": "YES",
+            "inCrew": true,
             "diceCategory": "ATTACK"
         }
     ],
@@ -32,7 +32,7 @@
             "type": "ROLL",
             "prompt": "[c] will attempt the jump!",
             "person": "c",
-            "face": "ATK_SWORD",
+            "faces": ["ATK_SWORD", "ATK_DBL_SWORD"],
             "onSuccessNode": "level-up",
             "onFailureNode": "death"
         },

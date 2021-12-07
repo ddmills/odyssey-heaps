@@ -9,7 +9,7 @@ typedef RollNodeArgs =
 	var type:String;
 	var prompt:String;
 	var person:String;
-	var face:DieFace;
+	var faces:Array<DieFace>;
 	var onSuccessNode:String;
 	var onFailureNode:String;
 }
@@ -26,7 +26,7 @@ class RollNode extends StoryNode
 
 	public static function FromJson(json:Dynamic):StoryNode
 	{
-		var face = EnumTools.createByName(DieFace, json.face);
+		var faces = json.faces.map((face) -> EnumTools.createByName(DieFace, face));
 
 		return new RollNode({
 			key: json.key,
@@ -35,7 +35,7 @@ class RollNode extends StoryNode
 			person: json.person,
 			onSuccessNode: json.onSuccessNode,
 			onFailureNode: json.onFailureNode,
-			face: face
+			faces: faces
 		});
 	}
 }
