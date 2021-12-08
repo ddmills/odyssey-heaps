@@ -71,7 +71,7 @@ class PersonType extends StoryType
 		// remove any that are already as params
 		entities = entities.filter((e) ->
 		{
-			return !storyline.parameters.exists((p) -> p.entityId == e.id);
+			return !(storyline.parameters.toArray().exists((p) -> p.entityId == e.id));
 		});
 
 		if (params.diceCategory != null)
@@ -91,7 +91,7 @@ class PersonType extends StoryType
 
 		var entity = storyline.rand.pick(entities);
 
-		storyline.parameters.push({
+		storyline.setParameter(key, {
 			key: this.key,
 			entityId: entity.id,
 			display: entity.get(Person).name,

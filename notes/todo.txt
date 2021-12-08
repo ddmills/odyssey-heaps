@@ -42,7 +42,7 @@
 - [ ] deploy to gh-pages
 - [ ] show controls on screen
 - [x] storyline seed
-- [ ] storyline data as Map
+- [x] storyline data as Map
 - [ ] storyline criteria
 - [ ] storyline triggers
 - [ ] storyline rerolls

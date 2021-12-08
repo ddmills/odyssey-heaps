@@ -115,4 +115,9 @@ class IterableExtensions
 	{
 		return Lambda.count(it);
 	}
+
+	public static function toMap<K:String, V>(it:Iterable<V>, keyFn:(item:V) -> K):Map<K, V>
+	{
+		return [for (v in it) keyFn(v) => v];
+	}
 }

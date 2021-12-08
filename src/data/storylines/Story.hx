@@ -6,9 +6,9 @@ import data.storylines.types.StoryType;
 class Story
 {
 	public var name(default, null):String;
-	public var parameters(default, null):Array<StoryType>;
-	public var variables(default, null):Array<StoryType>;
-	public var nodes(default, null):Array<StoryNode>;
+	public var parameters(default, null):Map<String, StoryType>;
+	public var variables(default, null):Map<String, StoryType>;
+	public var nodes(default, null):Map<String, StoryNode>;
 	public var startNode(get, never):StoryNode;
 
 	var startNodeName:String;
@@ -16,20 +16,25 @@ class Story
 	public function new(name:String, parameters:Array<StoryType>, variables:Array<StoryType>, nodes:Array<StoryNode>, startNodeName:String)
 	{
 		this.name = name;
-		this.parameters = parameters;
-		this.variables = variables;
-		this.nodes = nodes;
+		this.parameters = parameters.toMap((p) -> p.key);
+		this.variables = variables.toMap((v) -> v.key);
+		this.nodes = nodes.toMap((n) -> n.key);
 		this.startNodeName = startNodeName;
 	}
 
 	public function getNode(key:String):StoryNode
 	{
-		return nodes.find((n) -> n.key == key);
+		return nodes.get(key);
 	}
 
 	public function getParameter(key:String):StoryType
 	{
-		return parameters.find((p) -> p.key == key);
+		return parameters.get(key);
+	}
+
+	public function getVariable(key:String):StoryType
+	{
+		return variables.get(key);
 	}
 
 	function get_startNode():StoryNode

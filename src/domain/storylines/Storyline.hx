@@ -16,8 +16,8 @@ typedef Param =
 class Storyline
 {
 	public var story(default, null):Story;
-	public var parameters:Array<Param>;
-	public var variables:Array<Param>;
+	public var parameters:Map<String, Param>;
+	public var variables:Map<String, Param>;
 	public var currentNodeKey:String;
 	public var currentNode(get, null):StoryNode;
 	public var isEnd(get, never):Bool;
@@ -27,8 +27,8 @@ class Storyline
 	public function new(story:Story, seed:Int)
 	{
 		this.story = story;
-		parameters = new Array();
-		variables = new Array();
+		parameters = new Map();
+		variables = new Map();
 		currentNodeKey = story.startNode.key;
 		this.seed = seed;
 		rand = new Rand(seed);
@@ -56,20 +56,20 @@ class Storyline
 
 	public function setVariable(key:String, data:Param)
 	{
-		var v = getVariable(key);
-		if (v == null)
-		{
-			variables.push({
-				key: key,
-				entityId: data.entityId,
-				display: data.display,
-			});
-		}
-		else
-		{
-			v.entityId = data.entityId;
-			v.display = data.display;
-		}
+		variables.set(key, {
+			key: key,
+			entityId: data.entityId,
+			display: data.display,
+		});
+	}
+
+	public function setParameter(key:String, data:Param)
+	{
+		parameters.set(key, {
+			key: key,
+			entityId: data.entityId,
+			display: data.display,
+		});
 	}
 
 	public function textReplace(text:String):String
