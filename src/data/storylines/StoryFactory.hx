@@ -1,7 +1,7 @@
 package data.storylines;
 
 import data.storylines.nodes.StoryNodeFactory;
-import data.storylines.parameters.StoryParameterFactory;
+import data.storylines.types.StoryTypeFactory;
 
 class StoryFactory
 {
@@ -10,7 +10,12 @@ class StoryFactory
 		var name = json.name;
 		var parameters = json.parameters.map((param) ->
 		{
-			return StoryParameterFactory.FromJson(param);
+			return StoryTypeFactory.FromJson(param);
+		});
+
+		var variables = json.variables.map((param) ->
+		{
+			return StoryTypeFactory.FromJson(param);
 		});
 
 		var nodes = json.nodes.map((node) ->
@@ -18,6 +23,6 @@ class StoryFactory
 			return StoryNodeFactory.FromJson(node);
 		});
 
-		return new Story(name, parameters, nodes, json.startNode);
+		return new Story(name, parameters, variables, nodes, json.startNode);
 	}
 }

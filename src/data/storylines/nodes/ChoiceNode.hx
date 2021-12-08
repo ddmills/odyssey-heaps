@@ -5,6 +5,7 @@ typedef ChoiceNodeOption =
 	var title:String;
 	var key:String;
 	var nextNode:String;
+	var ?resultVal:String;
 }
 
 typedef ChoiceNodeArgs =
@@ -13,6 +14,7 @@ typedef ChoiceNodeArgs =
 	var type:String;
 	var prompt:String;
 	var options:Array<ChoiceNodeOption>;
+	var ?resultVar:String;
 }
 
 class ChoiceNode extends StoryNode

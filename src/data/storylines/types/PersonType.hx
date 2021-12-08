@@ -1,4 +1,4 @@
-package data.storylines.parameters;
+package data.storylines.types;
 
 import data.DiceCategory;
 import domain.storylines.Storyline;
@@ -9,7 +9,7 @@ import ecs.components.Level;
 import ecs.components.Person;
 import haxe.EnumTools;
 
-typedef PersonParameterArgs =
+typedef PersonTypeArgs =
 {
 	var key:String;
 	var type:String;
@@ -17,21 +17,21 @@ typedef PersonParameterArgs =
 	var ?diceCategory:DiceCategory;
 }
 
-class PersonParameter extends StoryParameter
+class PersonType extends StoryType
 {
-	var params:PersonParameterArgs;
+	var params:PersonTypeArgs;
 
-	public function new(params:PersonParameterArgs)
+	public function new(params:PersonTypeArgs)
 	{
 		super(params.type, params.key);
 		this.params = params;
 	}
 
-	public static function FromJson(json:Dynamic):StoryParameter
+	public static function FromJson(json:Dynamic):StoryType
 	{
 		var diceCategory = json.diceCategory != null ? EnumTools.createByName(DiceCategory, json.diceCategory) : null;
 
-		return new PersonParameter({
+		return new PersonType({
 			key: json.key,
 			type: json.type,
 			inCrew: json.inCrew,
@@ -67,6 +67,12 @@ class PersonParameter extends StoryParameter
 		var query = new Query(filter);
 		var entities = query.toArray();
 		query.dispose();
+
+		// remove any that are already as params
+		entities = entities.filter((e) ->
+		{
+			return !storyline.parameters.exists((p) -> p.entityId == e.id);
+		});
 
 		if (params.diceCategory != null)
 		{

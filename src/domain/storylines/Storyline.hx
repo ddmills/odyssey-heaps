@@ -17,6 +17,7 @@ class Storyline
 {
 	public var story(default, null):Story;
 	public var parameters:Array<Param>;
+	public var variables:Array<Param>;
 	public var currentNodeKey:String;
 	public var currentNode(get, null):StoryNode;
 	public var isEnd(get, never):Bool;
@@ -27,6 +28,7 @@ class Storyline
 	{
 		this.story = story;
 		parameters = new Array();
+		variables = new Array();
 		currentNodeKey = story.startNode.key;
 		this.seed = seed;
 		rand = new Rand(seed);
@@ -37,14 +39,54 @@ class Storyline
 		return story.getNode(currentNodeKey);
 	}
 
+	public function getParameter(key:String):Param
+	{
+		return parameters.find((p) -> p.key == key);
+	}
+
+	public function getVariable(key:String):Param
+	{
+		return variables.find((v) -> v.key == key);
+	}
+
+	public function getData(key:String):Param
+	{
+		return getParameter(key);
+	}
+
+	public function setVariable(key:String, data:Param)
+	{
+		var v = getVariable(key);
+		if (v == null)
+		{
+			variables.push({
+				key: key,
+				entityId: data.entityId,
+				display: data.display,
+			});
+		}
+		else
+		{
+			v.entityId = data.entityId;
+			v.display = data.display;
+		}
+	}
+
 	public function textReplace(text:String):String
 	{
-		return parameters.fold((p, res) ->
+		var text2 = parameters.fold((p, res) ->
 		{
 			var key = '[${p.key}]';
 
 			return StringTools.replace(res, key, p.display);
 		}, text);
+
+		return variables.fold((v, res) ->
+		{
+			var key = '[${v.key}]';
+
+			return StringTools.replace(res, key, v.display);
+		}, text2);
 	}
 
 	public function getPerson(key:String):Entity

@@ -1,0 +1,62 @@
+{
+    "name": "A dusty book",
+    "parameters": [
+        {
+            "key": "c1",
+            "type": "PERSON",
+            "inCrew": true
+        },
+        {
+            "key": "c2",
+            "type": "PERSON",
+            "inCrew": true
+        },
+        {
+            "key": "c3",
+            "type": "PERSON",
+            "inCrew": true
+        }
+    ],
+    "variables": [
+        {
+            "key": "c",
+            "type": "PERSON"
+        }
+    ],
+    "startNode": "choose",
+    "nodes": [
+        {
+            "key": "choose",
+            "type": "CHOICE",
+            "prompt": "You find a dusty old book on the art of navigation. Perhaps one of your crew members could learn something from it?",
+            "resultVar": "c",
+            "options": [
+                {
+                    "key": "c1",
+                    "title": "Give the book to [c1]",
+                    "nextNode": "show",
+                    "resultVal": "c1"
+                },
+                {
+                    "key": "c2",
+                    "title": "Give the book to [c2]",
+                    "nextNode": "show",
+                    "resultVal": "c2"
+                },
+                {
+                    "key": "c3",
+                    "title": "Give the book to [c3]",
+                    "nextNode": "show",
+                    "resultVal": "c3"
+                }
+            ]
+        },
+        {
+            "key": "show",
+            "type": "TEXT",
+            "prompt": "[c] was selected.",
+            "actionText": "NICE.",
+            "nextNode": "END"
+        }
+    ]
+}

@@ -1,8 +1,8 @@
-package data.storylines.parameters;
+package data.storylines.types;
 
 import domain.storylines.Storyline;
 
-class StoryParameter
+class StoryType
 {
 	public var type(default, null):String;
 	public var key(default, null):String;

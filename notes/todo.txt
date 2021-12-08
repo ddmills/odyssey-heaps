@@ -42,9 +42,11 @@
 - [ ] deploy to gh-pages
 - [ ] show controls on screen
 - [x] storyline seed
+- [ ] storyline data as Map
 - [ ] storyline criteria
 - [ ] storyline triggers
 - [ ] storyline rerolls
+- [x] storyline variables
 - [ ] dialog component (?)
 - [ ] push storyline textReplace to StoryParameter class
 - [x] storyline parameter building to StoryParameter class

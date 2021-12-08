@@ -2,7 +2,7 @@ package domain.systems;
 
 import core.Frame;
 import data.storylines.Story;
-import data.storylines.parameters.StoryParameter;
+import data.storylines.types.StoryType;
 import domain.screens.storylines.StoryChoiceScreen;
 import domain.screens.storylines.StoryEffectScreen;
 import domain.screens.storylines.StoryRollScreen;
@@ -26,7 +26,7 @@ class StorylineSystem extends System
 		var storyline = new Storyline(story, 2);
 
 		// for each parameter, find a suitable candidate
-		var populated = story.parameters.every((p:StoryParameter) -> p.tryPopulate(storyline));
+		var populated = story.parameters.every((p) -> p.tryPopulate(storyline));
 
 		if (populated)
 		{
