@@ -23,8 +23,19 @@
             "type": "PERSON"
         }
     ],
-    "startNode": "choose",
+    "startNode": "delay",
     "nodes": [
+        {
+            "key": "delay",
+            "type": "TRIGGER",
+            "triggers": [
+                {
+                    "type": "WAIT",
+                    "turns": 5
+                }
+            ],
+            "nextNode": "choose"
+        },
         {
             "key": "choose",
             "type": "CHOICE",

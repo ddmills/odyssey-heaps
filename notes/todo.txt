@@ -44,7 +44,7 @@
 - [x] storyline seed
 - [x] storyline data as Map
 - [ ] storyline criteria
-- [ ] storyline triggers
+- [x] storyline triggers
 - [ ] storyline rerolls
 - [x] storyline variables
 - [ ] dialog component (?)
