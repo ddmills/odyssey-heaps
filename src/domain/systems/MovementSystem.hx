@@ -6,6 +6,7 @@ import core.Frame;
 import ecs.Query;
 import ecs.components.Direction;
 import ecs.components.Energy;
+import ecs.components.IsPlayer;
 import ecs.components.Move;
 import ecs.components.MoveComplete;
 import ecs.components.Moved;
@@ -73,6 +74,10 @@ class MovementSystem extends System
 				entity.pos = move.goal;
 				entity.remove(move);
 				entity.add(new MoveComplete());
+				if (entity.has(IsPlayer))
+				{
+					entity.get(Energy).consumeEnergy(50);
+				}
 			}
 			else
 			{

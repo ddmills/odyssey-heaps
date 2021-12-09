@@ -7,6 +7,7 @@ import domain.screens.storylines.StoryChoiceScreen;
 import domain.screens.storylines.StoryEffectScreen;
 import domain.screens.storylines.StoryRollScreen;
 import domain.screens.storylines.StoryTextScreen;
+import domain.screens.storylines.StoryTriggerScreen;
 import domain.storylines.Storyline;
 import domain.systems.System;
 import ecs.Entity;
@@ -63,6 +64,8 @@ class StorylineSystem extends System
 				game.screens.push(new StoryRollScreen(s));
 			case 'EFFECT':
 				game.screens.push(new StoryEffectScreen(s));
+			case 'TRIGGER':
+				game.screens.push(new StoryTriggerScreen(s));
 			case 'TEXT':
 				game.screens.push(new StoryTextScreen(s));
 		}

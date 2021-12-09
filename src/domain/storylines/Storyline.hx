@@ -18,6 +18,7 @@ class Storyline
 	public var story(default, null):Story;
 	public var parameters:Map<String, Param>;
 	public var variables:Map<String, Param>;
+	public var triggerData:Map<String, Dynamic>;
 	public var currentNodeKey:String;
 	public var currentNode(get, null):StoryNode;
 	public var isEnd(get, never):Bool;
@@ -29,6 +30,7 @@ class Storyline
 		this.story = story;
 		parameters = new Map();
 		variables = new Map();
+		triggerData = new Map();
 		currentNodeKey = story.startNode.key;
 		this.seed = seed;
 		rand = new Rand(seed);
@@ -49,9 +51,25 @@ class Storyline
 		return variables.find((v) -> v.key == key);
 	}
 
+	public function getTriggerData(key:String):Dynamic
+	{
+		return triggerData.get(key);
+	}
+
+	public function setTriggerData(key:String, data:Dynamic)
+	{
+		triggerData.set(key, data);
+	}
+
 	public function getData(key:String):Param
 	{
-		return getParameter(key);
+		var param = getParameter(key);
+		if (param != null)
+		{
+			return param;
+		}
+		var variable = getVariable(key);
+		return variable;
 	}
 
 	public function setVariable(key:String, data:Param)
@@ -91,9 +109,9 @@ class Storyline
 
 	public function getPerson(key:String):Entity
 	{
-		var param = parameters.find((p) -> p.key == key);
+		var data = getData(key);
 
-		return Game.instance.registry.getEntity(param.entityId);
+		return Game.instance.registry.getEntity(data.entityId);
 	}
 
 	function get_isEnd():Bool

@@ -34,28 +34,51 @@
                 {
                     "key": "c1",
                     "title": "Give the book to [c1]",
-                    "nextNode": "show",
+                    "nextNode": "reading",
                     "resultVal": "c1"
                 },
                 {
                     "key": "c2",
                     "title": "Give the book to [c2]",
-                    "nextNode": "show",
+                    "nextNode": "reading",
                     "resultVal": "c2"
                 },
                 {
                     "key": "c3",
                     "title": "Give the book to [c3]",
-                    "nextNode": "show",
+                    "nextNode": "reading",
                     "resultVal": "c3"
                 }
             ]
         },
         {
-            "key": "show",
+            "key": "reading",
+            "type": "TRIGGER",
+            "triggers": [
+                {
+                    "type": "WAIT",
+                    "turns": 5
+                }
+            ],
+            "nextNode": "level-up"
+        },
+        {
+            "key": "level-up",
+            "type": "EFFECT",
+            "effects": [
+                {
+                    "type": "ADD_LVL",
+                    "count": 1,
+                    "person": "c"
+                }
+            ],
+            "nextNode": "level-up-text"
+        },
+        {
+            "key": "level-up-text",
             "type": "TEXT",
-            "prompt": "[c] was selected.",
-            "actionText": "NICE.",
+            "prompt": "[c] has finished reading the book and gained a level!",
+            "actionText": "Okay.",
             "nextNode": "END"
         }
     ]

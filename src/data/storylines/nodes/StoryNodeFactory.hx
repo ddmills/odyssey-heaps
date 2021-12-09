@@ -12,6 +12,8 @@ class StoryNodeFactory
 				return RollNode.FromJson(json);
 			case 'EFFECT':
 				return EffectNode.FromJson(json);
+			case 'TRIGGER':
+				return TriggerNode.FromJson(json);
 			case 'TEXT':
 				return new TextNode(json);
 		}

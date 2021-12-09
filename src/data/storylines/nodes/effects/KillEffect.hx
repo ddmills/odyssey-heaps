@@ -3,8 +3,6 @@ package data.storylines.nodes.effects;
 import data.storylines.nodes.effects.StoryEffect.StoryEffct;
 import domain.storylines.Storyline;
 import ecs.components.Health;
-import ecs.components.Moniker;
-import ecs.components.Person;
 
 typedef KillEffectArgs =
 {

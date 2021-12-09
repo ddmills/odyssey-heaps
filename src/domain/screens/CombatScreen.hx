@@ -170,7 +170,7 @@ class CombatScreen extends Screen
 			enemy.cardOb.onClick = (e) -> setTarget(enemy);
 		});
 
-		crew = crewQuery.map((entity) ->
+		crew = crewQuery.map((entity:Entity) ->
 		{
 			var lvl = entity.get(Level).lvl;
 			var dice = entity.get(Combatant).dice.getSet(lvl);
