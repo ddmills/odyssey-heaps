@@ -10,15 +10,14 @@ import ecs.components.Sprite;
 
 class SquidPrefab
 {
-	public static function Create(seed:Int)
+	public static function Create()
 	{
 		var squid = new Entity();
-
 		var animation = new h2d.Anim(TileResources.SQUID, 6);
 
 		squid.add(new Sprite(animation, Game.instance.TILE_W_HALF, Game.instance.TILE_H));
 		squid.add(new Moniker('Giant squid'));
-		squid.add(new Energy(-seed));
+		squid.add(new Energy(-5));
 		squid.add(new Mob([TENTACLE, TENTACLE], DiceCombos.SQUID));
 
 		return squid;

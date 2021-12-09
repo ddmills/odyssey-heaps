@@ -45,22 +45,29 @@
                 {
                     "key": "c1",
                     "title": "Give the book to [c1]",
-                    "nextNode": "reading",
-                    "resultVal": "c1"
+                    "nextNode": "given",
+                    "resultVar": "c1"
                 },
                 {
                     "key": "c2",
                     "title": "Give the book to [c2]",
-                    "nextNode": "reading",
-                    "resultVal": "c2"
+                    "nextNode": "given",
+                    "resultVar": "c2"
                 },
                 {
                     "key": "c3",
                     "title": "Give the book to [c3]",
-                    "nextNode": "reading",
-                    "resultVal": "c3"
+                    "nextNode": "given",
+                    "resultVar": "c3"
                 }
             ]
+        },
+        {
+            "key": "given",
+            "type": "TEXT",
+            "prompt": "[c] takes the book and begins reading.",
+            "actionText": "Okay",
+            "nextNode": "reading"
         },
         {
             "key": "reading",
@@ -68,7 +75,7 @@
             "triggers": [
                 {
                     "type": "WAIT",
-                    "turns": 5
+                    "turns": 25
                 }
             ],
             "nextNode": "level-up"
@@ -89,7 +96,7 @@
             "key": "level-up-text",
             "type": "TEXT",
             "prompt": "[c] has finished reading the book and gained a level!",
-            "actionText": "Okay.",
+            "actionText": "Okay",
             "nextNode": "END"
         }
     ]

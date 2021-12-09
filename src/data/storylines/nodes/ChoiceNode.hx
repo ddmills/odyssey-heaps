@@ -5,7 +5,7 @@ typedef ChoiceNodeOption =
 	var title:String;
 	var key:String;
 	var nextNode:String;
-	var ?resultVal:String;
+	var ?resultVar:String;
 }
 
 typedef ChoiceNodeArgs =

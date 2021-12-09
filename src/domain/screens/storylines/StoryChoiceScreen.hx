@@ -53,7 +53,7 @@ class StoryChoiceScreen extends Screen
 			{
 				if (choice.params.resultVar != null)
 				{
-					var data = storyline.getData(opt.resultVal);
+					var data = storyline.getData(opt.resultVar);
 					storyline.setVariable(choice.params.resultVar, data);
 				}
 

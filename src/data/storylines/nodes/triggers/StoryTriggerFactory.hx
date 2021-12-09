@@ -12,6 +12,12 @@ class StoryTriggerFactory
 					turns: json.turns,
 					key: key,
 				});
+			case 'DEAD':
+				return new DeadTrigger({
+					type: json.type,
+					key: key,
+					entity: json.entity,
+				});
 		}
 
 		trace('StoryTrigger not found', json);

@@ -1,0 +1,51 @@
+{
+    "name": "Kill the squid",
+    "parameters": [],
+    "variables": [
+        {
+            "key": "e",
+            "type": "ENTITY"
+        }
+    ],
+    "startNode": "spawn",
+    "nodes": [
+        {
+            "key": "spawn",
+            "type": "EFFECT",
+            "effects": [
+                {
+                    "type": "SPAWN",
+                    "spawnable": "SQUID",
+                    "position": "???",
+                    "outVar": "e"
+                }
+            ],
+            "nextNode": "hunt"
+        },
+        {
+            "key": "hunt",
+            "type": "TEXT",
+            "prompt": "A squid has spawned, go kill it!",
+            "actionText": "Fine.",
+            "nextNode": "hunting"
+        },
+        {
+            "key": "hunting",
+            "type": "TRIGGER",
+            "triggers": [
+                {
+                    "type": "DEAD",
+                    "entity": "e"
+                }
+            ],
+            "nextNode": "award"
+        },
+        {
+            "key": "award",
+            "type": "TEXT",
+            "prompt": "You killed the squid!",
+            "actionText": "Nice.",
+            "nextNode": "END"
+        }
+    ]
+}

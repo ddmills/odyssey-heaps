@@ -4,6 +4,7 @@ class Stories
 {
 	public static var TEST_STORY:Story;
 	public static var BOOK_STORY:Story;
+	public static var SQUID_STORY:Story;
 
 	public static function Init()
 	{
@@ -12,5 +13,8 @@ class Stories
 
 		var book = hxd.Res.story.book.toJson();
 		BOOK_STORY = StoryFactory.FromJson(book);
+
+		var squid = hxd.Res.story.squid.toJson();
+		SQUID_STORY = StoryFactory.FromJson(squid);
 	}
 }

@@ -21,6 +21,7 @@ import ecs.components.Combatant;
 import ecs.components.CrewMember;
 import ecs.components.Health;
 import ecs.components.Incapacitated;
+import ecs.components.IsDead;
 import ecs.components.Level;
 import ecs.components.Mob;
 import ecs.components.Person;
@@ -622,6 +623,7 @@ class CombatScreen extends Screen
 		if (enemies.every((e) -> e.entity.get(Health).current <= 0))
 		{
 			isCombatOver = true;
+			mob.add(new IsDead());
 			game.screens.pop();
 		}
 

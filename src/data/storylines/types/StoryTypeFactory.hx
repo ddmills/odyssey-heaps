@@ -8,6 +8,8 @@ class StoryTypeFactory
 		{
 			case 'PERSON':
 				return PersonType.FromJson(json);
+			case 'ENTITY':
+				return EntityType.FromJson(json);
 		}
 
 		trace('StoryType not found', json);

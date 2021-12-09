@@ -19,6 +19,8 @@ class StoryEffectFactory
 					type: json.type,
 					person: json.person,
 				});
+			case 'SPAWN':
+				return SpawnEffect.FromJson(json);
 		}
 
 		trace('StoryEffect not found', json);

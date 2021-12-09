@@ -8,6 +8,8 @@ class Spawner
 		{
 			case TENTACLE:
 				return new SpawnableTentacle();
+			case SQUID:
+				return new SpawnableSquid();
 		}
 	}
 

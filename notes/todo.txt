@@ -45,8 +45,14 @@
 - [x] storyline data as Map
 - [ ] storyline criteria
 - [x] storyline triggers
+- [x] storyline spawnables
 - [ ] storyline rerolls
 - [x] storyline variables
+- [ ] show portraits on storyline dialog
+- [ ] spawnable positions
+- [x] storyline "entity dead" trigger
+- [ ] cleanup dead entities
+- [ ] storyline button types
 - [ ] dialog component (?)
 - [ ] push storyline textReplace to StoryParameter class
 - [x] storyline parameter building to StoryParameter class
