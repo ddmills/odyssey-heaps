@@ -7,6 +7,7 @@ import core.PlayerManager;
 import core.rendering.RenderLayerManager;
 import domain.systems.AISystem.AI;
 import domain.systems.CameraSystem;
+import domain.systems.DeathSystem;
 import domain.systems.EnergySystem;
 import domain.systems.MovementSystem;
 import domain.systems.PathFollowSystem;
@@ -34,6 +35,7 @@ class World
 	public var clock(default, null):Clock;
 	public var ai(default, null):AI;
 	public var storylines(default, null):StorylineSystem;
+	public var death(default, null):DeathSystem;
 	public var movement(default, null):MovementSystem;
 	public var energy(default, null):EnergySystem;
 	public var vision(default, null):VisionSystem;
@@ -65,6 +67,7 @@ class World
 		clock = new Clock();
 		ai = new AI();
 		storylines = new StorylineSystem();
+		death = new DeathSystem();
 		energy = new EnergySystem();
 		movement = new MovementSystem();
 		vision = new VisionSystem();
@@ -190,6 +193,7 @@ class World
 		var frame = game.frame;
 
 		storylines.update(frame);
+		death.update(frame);
 		energy.update(frame);
 		movement.update(frame);
 		vision.update(frame);

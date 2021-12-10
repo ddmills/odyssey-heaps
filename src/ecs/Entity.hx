@@ -120,6 +120,7 @@ class Entity
 		{
 			remove(component);
 		}
+		chunk.removeEntity(this);
 		registry.unregisterEntity(this);
 	}
 

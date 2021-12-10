@@ -20,7 +20,7 @@ class Meter
 
 	inline function now():Float
 	{
-		return Sys.time() * 1000.0;
+		return haxe.Timer.stamp() * 1000.0;
 	}
 
 	public function start()

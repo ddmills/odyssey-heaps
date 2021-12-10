@@ -63,7 +63,11 @@ class VisionSystem extends System
 
 		visibles.onEntityRemoved((entity) ->
 		{
-			entity.get(Sprite).visible = false;
+			var sprite = entity.get(Sprite);
+			if (sprite != null)
+			{
+				sprite.visible = false;
+			}
 		});
 
 		var shroud = new ShroudShader(.16, .7);

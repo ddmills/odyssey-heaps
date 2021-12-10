@@ -35,7 +35,7 @@ class SpawnEffect extends StoryEffct
 			display: 'TEST',
 		});
 
-		entity.pos = Game.instance.world.player.pos;
+		entity.pos = Game.instance.world.player.pos.toWorld().floor();
 		Game.instance.world.add(entity);
 	}
 

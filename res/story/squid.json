@@ -7,8 +7,19 @@
             "type": "ENTITY"
         }
     ],
-    "startNode": "spawn",
+    "startNode": "wait",
     "nodes": [
+        {
+            "key": "wait",
+            "type": "TRIGGER",
+            "triggers": [
+                {
+                    "type": "WAIT",
+                    "turns": 6
+                }
+            ],
+            "nextNode": "spawn"
+        },
         {
             "key": "spawn",
             "type": "EFFECT",

@@ -51,7 +51,8 @@
 - [ ] show portraits on storyline dialog
 - [ ] spawnable positions
 - [x] storyline "entity dead" trigger
-- [ ] cleanup dead entities
+- [x] cleanup dead entities
+- [ ] destroy system
 - [ ] storyline button types
 - [ ] dialog component (?)
 - [ ] push storyline textReplace to StoryParameter class
