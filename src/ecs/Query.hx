@@ -98,7 +98,7 @@ class Query
 		}
 	}
 
-	public inline function iterator()
+	public inline function iterator():Iterator<Entity>
 	{
 		return cache.iterator();
 	}

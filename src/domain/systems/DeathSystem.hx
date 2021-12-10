@@ -1,7 +1,9 @@
 package domain.systems;
 
+import core.Frame;
 import ecs.Query;
 import ecs.components.IsDead;
+import ecs.components.IsDestroying;
 import ecs.components.IsPlayer;
 
 class DeathSystem extends System
@@ -12,12 +14,15 @@ class DeathSystem extends System
 	{
 		query = new Query({
 			all: [IsDead],
-			none: [IsPlayer]
+			none: [IsPlayer, IsDestroying]
 		});
+	}
 
-		query.onEntityAdded((e) ->
+	public override function update(frame:Frame)
+	{
+		query.each((e) ->
 		{
-			e.destroy();
+			e.add(new IsDestroying());
 		});
 	}
 }

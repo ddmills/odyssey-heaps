@@ -8,6 +8,7 @@ import core.rendering.RenderLayerManager;
 import domain.systems.AISystem.AI;
 import domain.systems.CameraSystem;
 import domain.systems.DeathSystem;
+import domain.systems.DestroySystem;
 import domain.systems.EnergySystem;
 import domain.systems.MovementSystem;
 import domain.systems.PathFollowSystem;
@@ -35,13 +36,14 @@ class World
 	public var clock(default, null):Clock;
 	public var ai(default, null):AI;
 	public var storylines(default, null):StorylineSystem;
-	public var death(default, null):DeathSystem;
 	public var movement(default, null):MovementSystem;
 	public var energy(default, null):EnergySystem;
 	public var vision(default, null):VisionSystem;
 	public var camera(default, null):CameraSystem;
 	public var pathing(default, null):PathFollowSystem;
 	public var stats(default, null):StatsSystem;
+	public var death(default, null):DeathSystem;
+	public var destroy(default, null):DestroySystem;
 
 	public var layers(default, null):RenderLayerManager;
 	public var player(default, null):PlayerManager;
@@ -67,13 +69,14 @@ class World
 		clock = new Clock();
 		ai = new AI();
 		storylines = new StorylineSystem();
-		death = new DeathSystem();
 		energy = new EnergySystem();
 		movement = new MovementSystem();
 		vision = new VisionSystem();
 		camera = new CameraSystem();
 		pathing = new PathFollowSystem();
 		stats = new StatsSystem();
+		death = new DeathSystem();
+		destroy = new DestroySystem();
 
 		map = new MapData(12);
 	}
@@ -193,12 +196,13 @@ class World
 		var frame = game.frame;
 
 		storylines.update(frame);
-		death.update(frame);
 		energy.update(frame);
 		movement.update(frame);
 		vision.update(frame);
 		camera.update(frame);
 		pathing.update(frame);
 		stats.update(frame);
+		death.update(frame);
+		destroy.update(frame);
 	}
 }

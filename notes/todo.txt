@@ -52,7 +52,8 @@
 - [ ] spawnable positions
 - [x] storyline "entity dead" trigger
 - [x] cleanup dead entities
-- [ ] destroy system
+- [x] destroy system
+- [ ] stop player current path on dialog screen popped
 - [ ] storyline button types
 - [ ] dialog component (?)
 - [ ] push storyline textReplace to StoryParameter class
