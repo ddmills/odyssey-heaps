@@ -5,6 +5,20 @@ import h2d.Bitmap;
 import h2d.Interactive;
 import h2d.Text;
 
+enum ButtonType
+{
+	DEFAULT;
+	DANGER;
+	SUCCESS;
+}
+
+typedef ButtonOptions =
+{
+	var text:String;
+	var onClick:(e:hxd.Event) -> Void;
+	var type:ButtonType;
+}
+
 class Button extends h2d.Object
 {
 	public var width(default, set):Int;
@@ -13,6 +27,7 @@ class Button extends h2d.Object
 	public var backgroundColor(default, set):Int;
 	public var textColor(default, set):Int;
 	public var textOb(default, null):Text;
+	public var type(null, set):ButtonType;
 
 	var bm:h2d.Bitmap;
 	var interactive:h2d.Interactive;
@@ -63,6 +78,7 @@ class Button extends h2d.Object
 	{
 		textOb.text = value;
 		text = value;
+		width = textOb.textWidth.round() + 32;
 		return value;
 	}
 
@@ -81,4 +97,19 @@ class Button extends h2d.Object
 	}
 
 	public dynamic function onClick(e:hxd.Event) {}
+
+	function set_type(value:ButtonType):ButtonType
+	{
+		switch value
+		{
+			case DEFAULT:
+				backgroundColor = 0x1c3e4e;
+			case DANGER:
+				backgroundColor = 0x804c36;
+			case SUCCESS:
+				backgroundColor = 0x57723a;
+		}
+
+		return value;
+	}
 }

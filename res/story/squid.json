@@ -37,7 +37,7 @@
             "key": "hunt",
             "type": "TEXT",
             "prompt": "A squid has spawned, go kill it!",
-            "actionText": "Fine.",
+            "actionText": "We shall go forth and vanquish this foe!",
             "nextNode": "hunting"
         },
         {
@@ -54,8 +54,8 @@
         {
             "key": "award",
             "type": "TEXT",
-            "prompt": "You killed the squid!",
-            "actionText": "Nice.",
+            "prompt": "The squid has perished.",
+            "actionText": "Huzzah!",
             "nextNode": "END"
         }
     ]

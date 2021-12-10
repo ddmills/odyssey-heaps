@@ -67,7 +67,7 @@ class TileResources
 
 		SLOOP = hxd.Res.img.sloop40.toTile();
 
-		var uiSheet = hxd.Res.img.ui16_png.toTile();
+		var uiSheet = hxd.Res.img.ui16_2.toTile();
 		var ui = uiSheet.divide(8, 8);
 
 		UI_FILL = ui[1][1];

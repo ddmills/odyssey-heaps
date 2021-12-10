@@ -31,11 +31,9 @@ class StoryChoiceScreen extends Screen
 
 		var txt = TextResource.MakeText();
 		txt.text = storyline.textReplace(choice.params.prompt);
-		txt.dropShadow = null;
 		txt.x = 32;
 		txt.y = 32;
 		txt.maxWidth = 16 * 32;
-		txt.color = 0x000000.toHxdColor();
 
 		dialog.addChild(box);
 		dialog.addChild(txt);

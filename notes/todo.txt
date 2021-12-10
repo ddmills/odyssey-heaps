@@ -53,6 +53,7 @@
 - [x] storyline "entity dead" trigger
 - [x] cleanup dead entities
 - [x] destroy system
+- [ ] storyline prompt styles (notification/text)
 - [ ] stop player current path on dialog screen popped
 - [ ] storyline button types
 - [ ] dialog component (?)

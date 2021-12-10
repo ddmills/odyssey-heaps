@@ -37,10 +37,8 @@ class StoryRollScreen extends Screen
 		var txt = TextResource.MakeText();
 		txt.text = storyline.textReplace(rollNode.params.prompt);
 		txt.maxWidth = 16 * 32;
-		txt.dropShadow = null;
 		txt.x = 32;
 		txt.y = 32;
-		txt.color = 0x000000.toHxdColor();
 
 		dialog.addChild(box);
 		dialog.addChild(txt);
@@ -83,25 +81,21 @@ class StoryRollScreen extends Screen
 
 		var success = results.exists(((v) -> rollNode.params.faces.contains(v)));
 
-		var nextBtnText = '';
-		var nextBtnColor = 0;
+		var nextBtn = new Button();
 
 		if (success)
 		{
 			storyline.currentNodeKey = rollNode.params.onSuccessNode;
-			nextBtnText = 'Success!';
-			nextBtnColor = 0x57723a;
+			nextBtn.text = 'Success!';
+			nextBtn.type = SUCCESS;
 		}
 		else
 		{
 			storyline.currentNodeKey = rollNode.params.onFailureNode;
-			nextBtnText = 'Failure.';
-			nextBtnColor = 0x804c36;
+			nextBtn.text = 'Failure.';
+			nextBtn.type = DANGER;
 		}
 
-		var nextBtn = new Button();
-		nextBtn.backgroundColor = nextBtnColor;
-		nextBtn.text = nextBtnText;
 		nextBtn.x = 128;
 		nextBtn.y = 128;
 		nextBtn.onClick = (e) -> game.screens.pop();
