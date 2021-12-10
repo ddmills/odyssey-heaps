@@ -1,11 +1,15 @@
 package data.storylines.nodes;
 
+import domain.ui.Button.ButtonType;
+import haxe.EnumTools;
+
 typedef ChoiceNodeOption =
 {
-	var title:String;
 	var key:String;
 	var nextNode:String;
-	var ?resultVar:String;
+	var ?value:String;
+	var ?buttonText:String;
+	var ?buttonType:ButtonType;
 }
 
 typedef ChoiceNodeArgs =
@@ -14,7 +18,7 @@ typedef ChoiceNodeArgs =
 	var type:String;
 	var prompt:String;
 	var options:Array<ChoiceNodeOption>;
-	var ?resultVar:String;
+	var ?resultVariable:String;
 }
 
 class ChoiceNode extends StoryNode
@@ -25,5 +29,29 @@ class ChoiceNode extends StoryNode
 	{
 		super(params.type, params.key);
 		this.params = params;
+	}
+
+	public static function FromJson(json:Dynamic):ChoiceNode
+	{
+		var options = json.options.map((opt) ->
+		{
+			var buttonType = json.buttonType == null ? null : EnumTools.createByName(ButtonType, json.buttonType);
+
+			return {
+				key: opt.key,
+				nextNode: opt.nextNode,
+				buttonText: json.buttonText,
+				buttonType: buttonType,
+				value: json.value,
+			};
+		});
+
+		return new ChoiceNode({
+			key: json.key,
+			type: json.type,
+			prompt: json.prompt,
+			options: options,
+			resultVariable: json.resultVariable,
+		});
 	}
 }

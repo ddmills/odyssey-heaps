@@ -7,19 +7,8 @@
             "type": "ENTITY"
         }
     ],
-    "startNode": "wait",
+    "startNode": "spawn",
     "nodes": [
-        {
-            "key": "wait",
-            "type": "TRIGGER",
-            "triggers": [
-                {
-                    "type": "WAIT",
-                    "turns": 6
-                }
-            ],
-            "nextNode": "spawn"
-        },
         {
             "key": "spawn",
             "type": "EFFECT",
@@ -37,7 +26,7 @@
             "key": "hunt",
             "type": "TEXT",
             "prompt": "A squid has spawned, go kill it!",
-            "actionText": "We shall go forth and vanquish this foe!",
+            "buttonText": "We shall go forth and vanquish this foe!",
             "nextNode": "hunting"
         },
         {
@@ -55,7 +44,8 @@
             "key": "award",
             "type": "TEXT",
             "prompt": "The squid has perished.",
-            "actionText": "Huzzah!",
+            "buttonText": "Huzzah!",
+            "buttonType": "SUCCESS",
             "nextNode": "END"
         }
     ]

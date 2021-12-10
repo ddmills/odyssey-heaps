@@ -5,7 +5,6 @@ import core.Screen;
 import data.storylines.nodes.TextNode;
 import domain.screens.components.SimpleDialog;
 import domain.storylines.Storyline;
-import domain.ui.Button;
 
 class StoryTextScreen extends Screen
 {
@@ -26,8 +25,8 @@ class StoryTextScreen extends Screen
 			height: 400,
 			text: storyline.textReplace(textNode.params.prompt),
 			button: {
-				text: storyline.textReplace(textNode.params.actionText),
-				type: DEFAULT,
+				text: storyline.textReplace(textNode.params.buttonText),
+				type: textNode.params.buttonType,
 				onClick: (e) ->
 				{
 					storyline.currentNodeKey = textNode.params.nextNode;

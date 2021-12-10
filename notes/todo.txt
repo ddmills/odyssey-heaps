@@ -55,7 +55,8 @@
 - [x] destroy system
 - [ ] storyline prompt styles (notification/text)
 - [ ] stop player current path on dialog screen popped
-- [ ] storyline button types
+- [x] storyline button types
+- [ ] dialog title/subtitle
 - [ ] dialog component (?)
 - [ ] push storyline textReplace to StoryParameter class
 - [x] storyline parameter building to StoryParameter class

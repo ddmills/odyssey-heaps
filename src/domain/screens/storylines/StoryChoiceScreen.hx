@@ -42,17 +42,17 @@ class StoryChoiceScreen extends Screen
 		{
 			var btn = new Button();
 			btn.backgroundColor = 0x57723a;
-			btn.text = storyline.textReplace(opt.title);
+			btn.text = storyline.textReplace(opt.buttonText);
 			btn.x = 128;
 			btn.y = 100 + 40 * idx;
 			btn.width = btn.textOb.textWidth.floor() + 64;
 			dialog.addChild(btn);
 			btn.onClick = (e) ->
 			{
-				if (choice.params.resultVar != null)
+				if (choice.params.resultVariable != null)
 				{
-					var data = storyline.getData(opt.resultVar);
-					storyline.setVariable(choice.params.resultVar, data);
+					var data = storyline.getData(opt.value);
+					storyline.setVariable(choice.params.resultVariable, data);
 				}
 
 				game.screens.pop();

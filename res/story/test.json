@@ -18,12 +18,13 @@
             "options": [
                 {
                     "key": "jump",
-                    "title": "Jump!",
+                    "buttonText": "Jump!",
+                    "buttonType": "SUCCESS",
                     "nextNode": "jump"
                 },
                 {
                     "key": "pass",
-                    "title": "It's too risky.",
+                    "buttonText": "It's too risky.",
                     "nextNode": "pass"
                 }
             ]
@@ -53,7 +54,8 @@
             "key": "level-up-text",
             "type": "TEXT",
             "prompt": "[c] successfully jumped the canyon and gained a level.",
-            "actionText": "I knew [c] could do it!",
+            "buttonText": "I knew [c] could do it!",
+            "buttonType": "SUCCESS",
             "nextNode": "END"
         },
         {
@@ -71,14 +73,15 @@
             "key": "death-text",
             "type": "TEXT",
             "prompt": "Oh dear!, [c] slipped and fell, tumbling to their death.",
-            "actionText": "What a tragedy!",
+            "buttonText": "What a tragedy!",
+            "buttonType": "DANGER",
             "nextNode": "END"
         },
         {
             "key": "pass",
             "type": "TEXT",
             "prompt": "[c] is disappointed.",
-            "actionText": "They will have to cope.",
+            "buttonText": "They will have to cope.",
             "nextNode": "END"
         }
     ]

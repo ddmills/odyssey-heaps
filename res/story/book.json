@@ -40,25 +40,26 @@
             "key": "choose",
             "type": "CHOICE",
             "prompt": "You find a dusty old book on the art of navigation. Perhaps one of your crew members could learn something from it?",
-            "resultVar": "c",
+            "resultVariable": "c",
             "options": [
                 {
                     "key": "c1",
-                    "title": "Give the book to [c1]",
+                    "buttonText": "Give the book to [c1]",
                     "nextNode": "given",
-                    "resultVar": "c1"
+                    "value": "c1"
                 },
                 {
                     "key": "c2",
-                    "title": "Give the book to [c2]",
+                    "buttonText": "Give the book to [c2]",
+                    "buttonType": "DANGER",
                     "nextNode": "given",
-                    "resultVar": "c2"
+                    "value": "c2"
                 },
                 {
                     "key": "c3",
-                    "title": "Give the book to [c3]",
+                    "buttonText": "Give the book to [c3]",
                     "nextNode": "given",
-                    "resultVar": "c3"
+                    "value": "c3"
                 }
             ]
         },
@@ -66,7 +67,7 @@
             "key": "given",
             "type": "TEXT",
             "prompt": "[c] takes the book and begins reading.",
-            "actionText": "Okay",
+            "buttonText": "I hope they enjoy it!",
             "nextNode": "reading"
         },
         {
@@ -96,7 +97,7 @@
             "key": "level-up-text",
             "type": "TEXT",
             "prompt": "[c] has finished reading the book and gained a level!",
-            "actionText": "Okay",
+            "buttonText": "Okay",
             "nextNode": "END"
         }
     ]

@@ -7,7 +7,7 @@ class StoryNodeFactory
 		switch json.type
 		{
 			case 'CHOICE':
-				return new ChoiceNode(json);
+				return ChoiceNode.FromJson(json);
 			case 'ROLL':
 				return RollNode.FromJson(json);
 			case 'EFFECT':
@@ -15,7 +15,7 @@ class StoryNodeFactory
 			case 'TRIGGER':
 				return TriggerNode.FromJson(json);
 			case 'TEXT':
-				return new TextNode(json);
+				return TextNode.FromJson(json);
 		}
 
 		trace('StoryNode not found', json);
