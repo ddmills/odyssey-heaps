@@ -15,4 +15,14 @@ package common.struct;
 	{
 		return other.x == x && other.y == y;
 	}
+
+	public function asWorld()
+	{
+		return new Coordinate(x, y, WORLD);
+	}
+
+	public function toString()
+	{
+		return '${x},${y}';
+	}
 }

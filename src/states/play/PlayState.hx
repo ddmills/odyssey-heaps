@@ -32,19 +32,19 @@ class PlayState extends GameState
 		world.storylines.tryAddStory(Stories.TEST_STORY);
 
 		var squid1 = SquidPrefab.Create();
-		squid1.x = 365;
+		squid1.x = 368;
 		squid1.y = 420;
 		world.add(squid1);
 
-		var squid2 = SquidPrefab.Create();
-		squid2.x = 367;
-		squid2.y = 424;
-		world.add(squid2);
+		// var squid2 = SquidPrefab.Create();
+		// squid2.x = 367;
+		// squid2.y = 424;
+		// world.add(squid2);
 
-		var squid3 = SquidPrefab.Create();
-		squid3.x = 362;
-		squid3.y = 424;
-		world.add(squid3);
+		// var squid3 = SquidPrefab.Create();
+		// squid3.x = 362;
+		// squid3.y = 424;
+		// world.add(squid3);
 
 		game.screens.set(new SailScreen());
 	}

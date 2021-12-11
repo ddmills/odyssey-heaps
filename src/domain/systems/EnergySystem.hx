@@ -20,8 +20,9 @@ class EnergySystem extends System
 		});
 	}
 
-	function getNext(entities:Array<Entity>):Entity
+	function getNext():Entity
 	{
+		var entities = query.toArray();
 		world.clock.clearDeltas();
 		var entity = entities.max((e) -> e.get(Energy).value);
 		if (entity == null)
@@ -50,11 +51,13 @@ class EnergySystem extends System
 			return;
 		}
 
-		var entities = query.toArray();
+		// var entities = query.toArray();
 
-		while (entities.length > 0)
+		// while (entities.length > 0)
+		// {
+		while (true)
 		{
-			var entity = getNext(entities);
+			var entity = getNext();
 
 			if (entity.has(IsPlayer))
 			{
