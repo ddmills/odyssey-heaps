@@ -1,5 +1,5 @@
 -cp src
 --macro macros.ResourceMacros.Init()
 -lib heaps
--js build/js/output.js
+-js ./build/js/output.js
 -main Main

@@ -2,6 +2,6 @@
 --macro macros.ResourceMacros.Init()
 -lib heaps
 -lib hldx
--hl build/hl/output.hl
+-hl ./build/hl/output.hl
 -D windowSize=1366x768
 -main Main
