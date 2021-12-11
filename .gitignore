@@ -1,5 +1,5 @@
-*output.js
-*output.hl
-*output.js.map
+build/*/output.js
+build/*/output.hl
+build/*/output.js.map
 *.tmp
 *.dump
