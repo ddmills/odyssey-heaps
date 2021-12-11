@@ -51,10 +51,6 @@ class EnergySystem extends System
 			return;
 		}
 
-		// var entities = query.toArray();
-
-		// while (entities.length > 0)
-		// {
 		while (true)
 		{
 			var entity = getNext();

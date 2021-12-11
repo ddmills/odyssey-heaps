@@ -1,12 +1,13 @@
 package domain.systems;
 
-import common.struct.Coordinate;
 import common.struct.IntPoint;
 import common.util.AStar;
 import common.util.Distance;
 import core.Game;
+import domain.screens.CombatScreen;
 import ecs.Entity;
 import ecs.components.Energy;
+import ecs.components.Mob;
 import ecs.components.Move;
 
 class AI
@@ -17,41 +18,60 @@ class AI
 	{
 		var start = entity.pos.toWorld().ToIntPoint();
 		var goal = Game.instance.world.player.pos.toWorld().ToIntPoint();
+		var distance = Distance.Diagonal(start, goal);
 
-		if (outOfRange(start, goal))
+		if (distance > 10)
 		{
 			entity.get(Energy).consumeEnergy(25);
 			return;
 		}
 
-		var result = astar(start, goal);
-		if (result.success && result.path.length > 2)
+		if (distance <= 2)
 		{
-			if (entity.has(Move))
-			{
-				if (result.path.length > 3)
-				{
-					var next = result.path[2].asWorld();
-					entity.add(new Move(next, .2, LINEAR));
-				}
-			}
-			else
-			{
-				var next = result.path[1].asWorld();
-				entity.add(new Move(next, .2, LINEAR));
-			}
-
-			entity.get(Energy).consumeEnergy(75);
+			startCombat(entity);
 		}
 		else
 		{
-			entity.get(Energy).consumeEnergy(25);
+			move(entity, start, goal);
 		}
 	}
 
-	function outOfRange(start:IntPoint, goal:IntPoint)
+	function move(entity:Entity, start:IntPoint, goal:IntPoint)
 	{
-		return Distance.Diagonal(start, goal) > 10;
+		var result = astar(start, goal);
+
+		if (!result.success)
+		{
+			entity.get(Energy).consumeEnergy(25);
+		}
+
+		if (entity.has(Move))
+		{
+			if (result.path.length > 3)
+			{
+				var next = result.path[2].asWorld();
+				entity.add(new Move(next, .2, LINEAR));
+			}
+		}
+		else
+		{
+			var next = result.path[1].asWorld();
+			entity.add(new Move(next, .2, LINEAR));
+		}
+
+		entity.get(Energy).consumeEnergy(75);
+	}
+
+	function startCombat(entity:Entity)
+	{
+		entity.get(Energy).consumeEnergy(100);
+		var mob = entity.get(Mob);
+
+		if (mob != null)
+		{
+			Game.instance.screens.push(new CombatScreen(entity));
+			return;
+		}
 	}
 
 	function astar(start:IntPoint, goal:IntPoint)

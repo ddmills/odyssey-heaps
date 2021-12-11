@@ -27,8 +27,7 @@ class SailScreen extends Screen
 
 		game.render(FOG_OVERLAY, cursor.get(Sprite).ob);
 
-		game.camera.x = 0;
-		game.camera.y = 0;
+		game.camera.pos = world.player.pos;
 		game.camera.zoom = 2;
 		game.camera.follow = world.player.entity;
 	}
