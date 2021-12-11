@@ -6,8 +6,6 @@ import data.DieRoll;
 
 class Die
 {
-	var r:hxd.Rand;
-
 	public var category(default, null):DiceCategory;
 	public var faces(default, null):Array<DieFace>;
 
@@ -15,12 +13,11 @@ class Die
 	{
 		this.category = category;
 		this.faces = faces;
-		r = new hxd.Rand(0);
 	}
 
 	public inline function roll(seed:Int):DieRoll
 	{
-		r.init(seed);
+		var r = new hxd.Rand(seed);
 
 		return {
 			value: r.pick(faces),
