@@ -1,6 +1,7 @@
 #!/usr/bin/env
 
 git checkout gh-pages
+git reset --hard origin/master
 
 c:/HaxeToolkit/haxe/haxe.exe ./compile-js.hxml
 
