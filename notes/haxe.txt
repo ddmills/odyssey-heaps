@@ -1,2 +1,0 @@
-struct init
-https://code.haxe.org/category/beginner/declare-classes-with-structinit.html

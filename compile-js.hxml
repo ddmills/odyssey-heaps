@@ -1,6 +1,0 @@
--cp src
---macro macros.ResourceMacros.Init()
--lib heaps
-# --debug
--js ./build/js/output.js
--main Main
