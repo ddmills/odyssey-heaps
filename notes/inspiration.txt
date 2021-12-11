@@ -4,6 +4,8 @@
 
 
 
+## FONTS
+- alagard https://www.dafont.com/alagard.font
 
 ## Commodities
 - Buccaneers = Wood Cutters
