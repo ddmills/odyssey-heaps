@@ -29,7 +29,7 @@ class PlayState extends GameState
 		var p4 = PersonPrefab.Create(52);
 		p4.add(new CrewMember());
 
-		world.storylines.tryAddStory(Stories.SQUID_STORY);
+		world.storylines.tryAddStory(Stories.TEST_STORY);
 
 		var squid1 = SquidPrefab.Create();
 		squid1.x = 365;

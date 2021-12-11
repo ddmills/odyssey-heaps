@@ -24,7 +24,7 @@ class StorylineSystem extends System
 
 	public function tryAddStory(story:Story)
 	{
-		var storyline = new Storyline(story, 2);
+		var storyline = new Storyline(story, 0);
 
 		// for each parameter, find a suitable candidate
 		var populated = story.parameters.every((p) -> p.tryPopulate(storyline));

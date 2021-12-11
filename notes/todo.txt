@@ -57,6 +57,8 @@
 - [ ] stop player current path on dialog screen popped
 - [x] storyline button types
 - [ ] dialog title/subtitle
-- [ ] dialog component (?)
+- [ ] dialog component
+- [ ] tooltip component
+- [ ] button tooltip
 - [ ] push storyline textReplace to StoryParameter class
 - [x] storyline parameter building to StoryParameter class

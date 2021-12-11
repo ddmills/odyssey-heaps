@@ -35,14 +35,14 @@ class ChoiceNode extends StoryNode
 	{
 		var options = json.options.map((opt) ->
 		{
-			var buttonType = json.buttonType == null ? null : EnumTools.createByName(ButtonType, json.buttonType);
+			var buttonType = opt.buttonType == null ? null : EnumTools.createByName(ButtonType, opt.buttonType);
 
 			return {
 				key: opt.key,
 				nextNode: opt.nextNode,
-				buttonText: json.buttonText,
+				buttonText: opt.buttonText,
 				buttonType: buttonType,
-				value: json.value,
+				value: opt.value,
 			};
 		});
 

@@ -23,19 +23,8 @@
             "type": "PERSON"
         }
     ],
-    "startNode": "delay",
+    "startNode": "choose",
     "nodes": [
-        {
-            "key": "delay",
-            "type": "TRIGGER",
-            "triggers": [
-                {
-                    "type": "WAIT",
-                    "turns": 5
-                }
-            ],
-            "nextNode": "choose"
-        },
         {
             "key": "choose",
             "type": "CHOICE",
@@ -97,7 +86,8 @@
             "key": "level-up-text",
             "type": "TEXT",
             "prompt": "[c] has finished reading the book and gained a level!",
-            "buttonText": "Okay",
+            "buttonText": "Huzzah!",
+            "buttonType": "SUCCESS",
             "nextNode": "END"
         }
     ]

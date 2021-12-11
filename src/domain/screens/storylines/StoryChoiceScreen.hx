@@ -3,6 +3,8 @@ package domain.screens.storylines;
 import core.Screen;
 import data.TextResource;
 import data.storylines.nodes.ChoiceNode;
+import domain.screens.components.Dialog;
+import domain.screens.components.MultiChoiceDialog;
 import domain.storylines.Storyline;
 import domain.ui.Box;
 import domain.ui.Button;
@@ -10,57 +12,38 @@ import domain.ui.Button;
 class StoryChoiceScreen extends Screen
 {
 	var storyline:Storyline;
-	var dialog:h2d.Object;
-	var choice:ChoiceNode;
+	var dialog:MultiChoiceDialog;
+	var choiceNode:ChoiceNode;
 
 	public function new(storyline:Storyline)
 	{
 		this.storyline = storyline;
-		dialog = new h2d.Object();
-		choice = cast(storyline.currentNode, ChoiceNode);
+		choiceNode = cast(storyline.currentNode, ChoiceNode);
 	}
 
 	public override function onEnter()
 	{
-		var box = new Box({
-			width: 20,
-			height: 10,
-			scale: 2,
-			size: 16,
-		});
-
-		var txt = TextResource.MakeText();
-		txt.text = storyline.textReplace(choice.params.prompt);
-		txt.x = 32;
-		txt.y = 32;
-		txt.maxWidth = 16 * 32;
-
-		dialog.addChild(box);
-		dialog.addChild(txt);
-
-		choice.params.options.each((opt, idx) ->
-		{
-			var btn = new Button();
-			btn.backgroundColor = 0x57723a;
-			btn.text = storyline.textReplace(opt.buttonText);
-			btn.x = 128;
-			btn.y = 100 + 40 * idx;
-			btn.width = btn.textOb.textWidth.floor() + 64;
-			dialog.addChild(btn);
-			btn.onClick = (e) ->
-			{
-				if (choice.params.resultVariable != null)
+		dialog = new MultiChoiceDialog({
+			width: 600,
+			height: 400,
+			text: storyline.textReplace(choiceNode.params.prompt),
+			buttons: choiceNode.params.options.map((option) -> ({
 				{
-					var data = storyline.getData(opt.value);
-					storyline.setVariable(choice.params.resultVariable, data);
+					text: storyline.textReplace(option.buttonText),
+					type: option.buttonType,
+					onClick: (e) ->
+					{
+						if (choiceNode.params.resultVariable != null)
+						{
+							var data = storyline.getData(option.value);
+							storyline.setVariable(choiceNode.params.resultVariable, data);
+						}
+
+						storyline.currentNodeKey = option.nextNode;
+						game.screens.pop();
+					}
 				}
-
-				game.screens.pop();
-				storyline.currentNodeKey = opt.nextNode;
-			};
-
-			dialog.x = 32;
-			dialog.y = 32;
+			}))
 		});
 
 		game.render(HUD, dialog);

@@ -51,7 +51,7 @@ class Button extends h2d.Object
 		interactive.onClick = (e) -> onClick(e);
 
 		width = 128;
-		height = 32;
+		height = 28;
 		backgroundColor = 0x000000;
 		text = '';
 	}
@@ -100,7 +100,9 @@ class Button extends h2d.Object
 
 	function set_type(value:ButtonType):ButtonType
 	{
-		switch value
+		var val = (value == null) ? DEFAULT : value;
+
+		switch val
 		{
 			case DEFAULT:
 				backgroundColor = 0x1c3e4e;
@@ -110,6 +112,6 @@ class Button extends h2d.Object
 				backgroundColor = 0x57723a;
 		}
 
-		return value;
+		return val;
 	}
 }
