@@ -1,13 +1,13 @@
 package domain.systems;
 
 import common.struct.Coordinate;
+import common.struct.IntPoint;
 import common.util.AStar;
 import common.util.Distance;
 import core.Game;
 import ecs.Entity;
 import ecs.components.Energy;
 import ecs.components.Move;
-import ecs.components.Path;
 
 class AI
 {
@@ -15,7 +15,16 @@ class AI
 
 	public function takeAction(entity:Entity)
 	{
-		var result = astar(entity.pos, Game.instance.world.player.pos);
+		var start = entity.pos.toWorld().ToIntPoint();
+		var goal = Game.instance.world.player.pos.toWorld().ToIntPoint();
+
+		if (outOfRange(start, goal))
+		{
+			entity.get(Energy).consumeEnergy(25);
+			return;
+		}
+
+		var result = astar(start, goal);
 		if (result.success && result.path.length > 2)
 		{
 			if (entity.has(Move))
@@ -40,14 +49,19 @@ class AI
 		}
 	}
 
-	function astar(start:Coordinate, goal:Coordinate)
+	function outOfRange(start:IntPoint, goal:IntPoint)
+	{
+		return Distance.Diagonal(start, goal) > 10;
+	}
+
+	function astar(start:IntPoint, goal:IntPoint)
 	{
 		var world = Game.instance.world;
 		var map = world.map;
 
 		return AStar.GetPath({
-			start: start.toWorld().ToIntPoint(),
-			goal: goal.ToIntPoint(),
+			start: start,
+			goal: goal,
 			allowDiagonals: true,
 			cost: function(a, b)
 			{
