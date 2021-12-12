@@ -2,22 +2,26 @@ package domain.screens.components;
 
 import common.struct.FloatPoint;
 import core.Game;
+import data.TextResource;
 import domain.ui.Box;
 
 typedef DialogOptions =
 {
 	width:Int,
 	height:Int,
+	?title:String,
 }
 
 class Dialog extends h2d.Object
 {
 	var box:Box;
 	var opts:DialogOptions;
+	var titleOb:h2d.Text;
 
 	public var width(get, null):Int;
 	public var height(get, null):Int;
 	public var center(get, set):FloatPoint;
+	public var title(get, set):String;
 
 	public function new(opts:DialogOptions)
 	{
@@ -30,6 +34,13 @@ class Dialog extends h2d.Object
 			size: 16,
 		});
 		addChild(box);
+
+		titleOb = TextResource.MakeText();
+		titleOb.x = 40;
+		titleOb.y = 32;
+		this.title = opts.title;
+		addChild(titleOb);
+
 		recenter();
 	}
 
@@ -65,5 +76,18 @@ class Dialog extends h2d.Object
 		y = value.y - height / 2;
 
 		return value;
+	}
+
+	function get_title():String
+	{
+		return titleOb.text;
+	}
+
+	function set_title(value:String):String
+	{
+		var val = value == null ? '' : value;
+		titleOb.text = val;
+
+		return val;
 	}
 }

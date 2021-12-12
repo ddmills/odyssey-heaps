@@ -22,6 +22,10 @@ class MultiChoiceDialog extends Dialog
 
 		text = TextResource.MakeText();
 		text.text = opts.text;
+		text.x = 40;
+		text.y = 32 + 16 + 20;
+		text.maxWidth = width - 80;
+
 		addChild(text);
 
 		var i = 0;
@@ -39,9 +43,5 @@ class MultiChoiceDialog extends Dialog
 			i++;
 			return button;
 		});
-
-		text.x = 40;
-		text.y = 40;
-		text.maxWidth = width - 80;
 	}
 }

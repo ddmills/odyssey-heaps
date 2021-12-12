@@ -1,12 +1,13 @@
 package domain.screens.storylines;
 
+import core.Frame;
 import core.Screen;
 import data.TextResource;
 import data.TileResources;
 import data.storylines.nodes.RollNode;
 import domain.combat.dice.Die;
+import domain.screens.components.SimpleDialog;
 import domain.storylines.Storyline;
-import domain.ui.Box;
 import domain.ui.Button;
 import ecs.components.Combatant;
 import ecs.components.Level;
@@ -14,52 +15,37 @@ import ecs.components.Level;
 class StoryRollScreen extends Screen
 {
 	var storyline:Storyline;
-	var dialog:h2d.Object;
+	var dialog:SimpleDialog;
 	var rollNode:RollNode;
-	var rollBtn:Button;
 
 	public function new(storyline:Storyline)
 	{
 		this.storyline = storyline;
-		dialog = new h2d.Object();
 		rollNode = cast(storyline.currentNode, RollNode);
 	}
 
 	override function onEnter()
 	{
-		var box = new Box({
-			width: 20,
-			height: 10,
-			scale: 2,
-			size: 16,
+		dialog = new SimpleDialog({
+			title: storyline.story.name,
+			width: 600,
+			height: 400,
+			text: storyline.textReplace(rollNode.params.prompt),
+			button: {
+				text: 'Roll',
+				type: DEFAULT,
+				onClick: (e) ->
+				{
+					rollDie();
+				}
+			}
 		});
-
-		var txt = TextResource.MakeText();
-		txt.text = storyline.textReplace(rollNode.params.prompt);
-		txt.maxWidth = 16 * 32;
-		txt.x = 32;
-		txt.y = 32;
-
-		dialog.addChild(box);
-		dialog.addChild(txt);
-
-		rollBtn = new Button();
-		rollBtn.backgroundColor = 0x57723a;
-		rollBtn.text = 'Roll';
-		rollBtn.x = 128;
-		rollBtn.y = 128;
-		rollBtn.onClick = (e) -> rollDie();
-		dialog.addChild(rollBtn);
-
-		dialog.x = 32;
-		dialog.y = 32;
 
 		game.render(HUD, dialog);
 	}
 
 	function rollDie()
 	{
-		rollBtn.visible = false;
 		var entity = storyline.getPerson(rollNode.params.person);
 		var lvl = entity.get(Level).lvl;
 		var dice = entity.get(Combatant).dice.getSet(lvl);
@@ -71,8 +57,8 @@ class StoryRollScreen extends Screen
 
 			var bm = new h2d.Bitmap();
 			bm.scale(3);
-			bm.x = 256 + i++ * 100;
-			bm.y = 150;
+			bm.x = 32 + i++ * 80;
+			bm.y = 128;
 			bm.tile = TileResources.getDie(res.value);
 			dialog.addChild(bm);
 
@@ -81,30 +67,30 @@ class StoryRollScreen extends Screen
 
 		var success = results.exists(((v) -> rollNode.params.faces.contains(v)));
 
-		var nextBtn = new Button();
-
 		if (success)
 		{
 			storyline.currentNodeKey = rollNode.params.onSuccessNode;
-			nextBtn.text = 'Success!';
-			nextBtn.type = SUCCESS;
+			dialog.button.text = 'Success!';
+			dialog.button.type = SUCCESS;
 		}
 		else
 		{
 			storyline.currentNodeKey = rollNode.params.onFailureNode;
-			nextBtn.text = 'Failure.';
-			nextBtn.type = DANGER;
+			dialog.button.text = 'Failure.';
+			dialog.button.type = DANGER;
 		}
 
-		nextBtn.x = 128;
-		nextBtn.y = 128;
-		nextBtn.onClick = (e) -> game.screens.pop();
-		dialog.addChild(nextBtn);
+		dialog.button.onClick = (e) -> game.screens.pop();
 	}
 
 	override function onDestroy()
 	{
 		dialog.removeChildren();
 		dialog.remove();
+	}
+
+	override function update(frame:Frame)
+	{
+		dialog.recenter();
 	}
 }

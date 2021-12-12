@@ -21,6 +21,7 @@ class StoryTextScreen extends Screen
 	public override function onEnter()
 	{
 		dialog = new SimpleDialog({
+			title: storyline.story.name,
 			width: 600,
 			height: 400,
 			text: storyline.textReplace(textNode.params.prompt),

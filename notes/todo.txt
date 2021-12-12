@@ -59,6 +59,7 @@
 - [ ] dialog title/subtitle
 - [ ] dialog component
 - [ ] tooltip component
+- [ ] typography components (bodyText, titleText)
 - [ ] button tooltip
 - [ ] push storyline textReplace to StoryParameter class
 - [x] storyline parameter building to StoryParameter class

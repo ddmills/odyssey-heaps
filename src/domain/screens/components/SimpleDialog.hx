@@ -22,6 +22,9 @@ class SimpleDialog extends Dialog
 
 		text = TextResource.MakeText();
 		text.text = opts.text;
+		text.x = 40;
+		text.y = 32 + 16 + 20;
+		text.maxWidth = width - 80;
 
 		button = new Button();
 		button.text = opts.button.text;
@@ -33,9 +36,5 @@ class SimpleDialog extends Dialog
 
 		button.x = width / 2 - button.width / 2;
 		button.y = height - button.height - 40;
-
-		text.x = 40;
-		text.y = 40;
-		text.maxWidth = width - 40;
 	}
 }

@@ -1,13 +1,9 @@
 package domain.screens.storylines;
 
 import core.Screen;
-import data.TextResource;
 import data.storylines.nodes.ChoiceNode;
-import domain.screens.components.Dialog;
 import domain.screens.components.MultiChoiceDialog;
 import domain.storylines.Storyline;
-import domain.ui.Box;
-import domain.ui.Button;
 
 class StoryChoiceScreen extends Screen
 {
@@ -24,6 +20,7 @@ class StoryChoiceScreen extends Screen
 	public override function onEnter()
 	{
 		dialog = new MultiChoiceDialog({
+			title: storyline.story.name,
 			width: 600,
 			height: 400,
 			text: storyline.textReplace(choiceNode.params.prompt),

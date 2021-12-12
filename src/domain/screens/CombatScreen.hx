@@ -14,6 +14,7 @@ import domain.combat.dice.Die;
 import domain.screens.components.CombatantCard;
 import domain.screens.components.CrewMemberCard;
 import domain.screens.components.EnemyCard;
+import domain.ui.Box;
 import domain.ui.Button;
 import ecs.Entity;
 import ecs.Query;
@@ -58,7 +59,7 @@ class CombatScreen extends Screen
 	var ob:h2d.Object;
 	var diceOb:h2d.Object;
 	var mobDiceOb:h2d.Object;
-	var rollArea:h2d.Object;
+	var rollArea:Box;
 	var gameDice:Array<GameDie>;
 	var crewQuery:Query;
 	var crew:Array<Crew>;
@@ -138,7 +139,12 @@ class CombatScreen extends Screen
 		comboTxt.textAlign = Center;
 		comboDescTxt.textAlign = Center;
 
-		rollArea = new Bitmap(h2d.Tile.fromColor(0x333333, 512, 256));
+		rollArea = new Box({
+			width: ((512 + 64) / 32).floor(),
+			height: ((256 + 64) / 32).floor(),
+			size: 16,
+			scale: 2,
+		});
 
 		rollingPos = new IntPoint(0, 0);
 		mobRollingPos = new IntPoint(0, 0);
@@ -296,7 +302,7 @@ class CombatScreen extends Screen
 		rollsRemaining--;
 		updateBtns();
 
-		var disc = new PoissonDiscSampler(512 - dieSize, 256 - dieSize, dieSize + 4, (Math.random() * 10000).floor());
+		var disc = new PoissonDiscSampler(512 - dieSize * 2, 256 - dieSize * 2, dieSize + 4, (Math.random() * 10000).floor());
 		for (c in crew)
 		{
 			for (gameDie in c.gameDice)
@@ -575,7 +581,7 @@ class CombatScreen extends Screen
 		var rollAreaHeight = 256;
 
 		rollArea.x = (game.window.width / 2) - (rollAreaWidth / 2);
-		rollArea.y = game.window.height - rollAreaHeight - dieSize;
+		rollArea.y = (game.window.height - rollAreaHeight - dieSize) - 32;
 
 		var rx = rollArea.x.floor();
 		var ry = (rollArea.y + rollAreaHeight / 2).floor();
@@ -658,8 +664,8 @@ class CombatScreen extends Screen
 			else
 			{
 				pos = {
-					x: rollArea.x + die.origin.x,
-					y: rollArea.y + die.origin.y,
+					x: rollArea.x + die.origin.x + 32,
+					y: rollArea.y + die.origin.y + 32,
 				};
 			}
 			var cur:FloatPoint = {
@@ -692,8 +698,8 @@ class CombatScreen extends Screen
 			else
 			{
 				pos = {
-					x: rollArea.x + die.origin.x,
-					y: rollArea.y + die.origin.y,
+					x: rollArea.x + die.origin.x + 32,
+					y: rollArea.y + die.origin.y + 32,
 				};
 			}
 			var cur:FloatPoint = {
