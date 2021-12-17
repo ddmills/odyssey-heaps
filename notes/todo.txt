@@ -63,3 +63,4 @@
 - [ ] button tooltip
 - [ ] push storyline textReplace to StoryParameter class
 - [x] storyline parameter building to StoryParameter class
+- [ ] hunger clock (provisions)

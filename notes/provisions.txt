@@ -1,0 +1,34 @@
+# inventory system
+
+- the inventory has a size determined by the size of the ship
+- some items can "stack" a limited time (16)
+- some items are consumable, and provide some benefit on consumption
+- some items are passive bonus
+- some items are quest items
+- some items have a "trade value" and "trade cost"
+    - cost is the amount it costs to purchase
+    - value is how much you would get for selling it
+- (?) not every settlement/NPC uses $, some use a barter system
+- if your inventory size is exceeded, the ship becomes overladened (encumbered)
+= if you are overladened you must get rid of something before you can move
+
+# hunger
+
+- hunger is a number between 0 and 100
+- hunger increases every 12 turns
+- if hunger reaches 100, crew member start losing loyalty
+- hunger can be decreased by consuming foods
+- different foods decrease hunger by different amounts
+    - hard tack is cheap, and doesn't decrease hunger much
+    - animals, like chickens and pigs, can decrease hunger by a lot
+- foods can be purchased at settlements
+
+# Some mechanics
+
+- Killing some enemies will grant "tropies" rather than money
+    - trophies consume inventory space
+- Most basic foods will stack (hard tack, apples), but won't provide as much
+    - some food will not stack (pigs)
+    - some food might provide other bonuses besides reducing hunger
+- In game, an "estimated food" could be determined for travel time to another settlement or location on the map
+- Certain stories may take place when supplies are low
