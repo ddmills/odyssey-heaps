@@ -14,7 +14,8 @@
 - [x] rivers
 - [x] AStar
 - [ ] Markov
-- [ ] haxe console commands
+- [x] haxe console commands
+- [ ] button clickthrough (console over dialogs, nested dialogs)
 - [ ] island names
 - [ ] create input systems
 - [ ] create grid layout for UI

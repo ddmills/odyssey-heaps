@@ -1,11 +1,19 @@
 package data;
 
+import h2d.Font;
+
 class TextResource
 {
+	public static var BIZCAT:Font;
+
+	public static function Init()
+	{
+		BIZCAT = hxd.Res.fnt.bizcat.toFont();
+	}
+
 	public static function MakeText()
 	{
-		var bizcat = hxd.Res.fnt.bizcat.toFont();
-		var text = new h2d.Text(bizcat);
+		var text = new h2d.Text(BIZCAT);
 		text.color = 0xd2d6b6.toHxdColor();
 		text.dropShadow = {
 			dx: 1,

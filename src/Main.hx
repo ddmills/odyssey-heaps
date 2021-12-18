@@ -1,4 +1,8 @@
 import core.Game;
+import data.TextResource;
+import data.TileResources;
+import data.portraits.PortraitData;
+import data.storylines.Stories;
 import states.splash.SplashState;
 
 class Main extends hxd.App
@@ -13,6 +17,10 @@ class Main extends hxd.App
 
 	override function init()
 	{
+		TextResource.Init();
+		TileResources.Init();
+		PortraitData.Init();
+		Stories.Init();
 		hxd.Window.getInstance().title = "Privateers";
 		game = Game.Create(this, new SplashState(1));
 		game.backgroundColor = 0x1b1f23;

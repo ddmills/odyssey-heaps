@@ -2,8 +2,10 @@ package core;
 
 import core.rendering.RenderLayerManager.RenderLayerType;
 import data.DieFace;
+import data.TextResource;
 import domain.World;
 import ecs.Registry;
+import h2d.Console;
 import haxe.EnumTools;
 import hxd.Window;
 import tools.Performance;
@@ -29,6 +31,7 @@ class Game
 	public var registry(default, null):Registry;
 	public var window(get, never):hxd.Window;
 	public var screens(default, null):ScreenManager;
+	public var console(default, null):Console;
 
 	private function new(app:hxd.App, initialState:GameState)
 	{
@@ -40,6 +43,8 @@ class Game
 		states = new GameStateManager();
 		screens = new ScreenManager();
 		camera = new Camera();
+		console = new Console(TextResource.BIZCAT);
+		ConsoleConfig.Config(console);
 		setState(initialState);
 	}
 

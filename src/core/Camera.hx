@@ -2,6 +2,8 @@ package core;
 
 import common.struct.Coordinate;
 import common.util.Projection;
+import data.Keybindings.Keybinding;
+import domain.screens.ConsoleScreen;
 import ecs.Entity;
 import ecs.EntityRef;
 import h2d.Object;
@@ -72,8 +74,17 @@ class Camera
 
 		if (event.kind == EKeyUp)
 		{
-			Game.instance.state.onKeyUp(event.keyCode);
-			Game.instance.screens.current.onKeyUp(event.keyCode);
+			var inConsole = Std.isOfType(Game.instance.screens.current, ConsoleScreen);
+
+			if (!inConsole && Keybinding.CONSOLE_SCREEN.is(event.keyCode))
+			{
+				Game.instance.screens.push(new ConsoleScreen());
+			}
+			else
+			{
+				Game.instance.state.onKeyUp(event.keyCode);
+				Game.instance.screens.current.onKeyUp(event.keyCode);
+			}
 		}
 	}
 
