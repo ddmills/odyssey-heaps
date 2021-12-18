@@ -28,6 +28,11 @@ class DiceSet
 
 	public function getSet(level:Int):Array<Die>
 	{
+		if (level > dice.length)
+		{
+			return dice[dice.length - 1];
+		}
+
 		return dice[level - 1];
 	}
 }
