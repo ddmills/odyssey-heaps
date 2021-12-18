@@ -22,6 +22,19 @@ class FloatExtensions
 		return Math.round(n);
 	}
 
+	static public inline function clamp(n:Float, min:Float, max:Float):Float
+	{
+		if (n > max)
+		{
+			return max;
+		}
+		if (n < min)
+		{
+			return min;
+		}
+		return n;
+	}
+
 	static public inline function lerp(n:Float, target:Float, time:Float, snap:Float = 0):Float
 	{
 		var pos = n + time * (target - n);

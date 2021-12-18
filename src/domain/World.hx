@@ -12,6 +12,7 @@ import domain.systems.DestroySystem;
 import domain.systems.EnergySystem;
 import domain.systems.MovementSystem;
 import domain.systems.PathFollowSystem;
+import domain.systems.ResourceSystem;
 import domain.systems.StatsSystem;
 import domain.systems.StorylineSystem;
 import domain.systems.VisionSystem;
@@ -36,8 +37,9 @@ class World
 	public var clock(default, null):Clock;
 	public var ai(default, null):AI;
 	public var storylines(default, null):StorylineSystem;
-	public var movement(default, null):MovementSystem;
 	public var energy(default, null):EnergySystem;
+	public var movement(default, null):MovementSystem;
+	public var resources(default, null):ResourceSystem;
 	public var vision(default, null):VisionSystem;
 	public var camera(default, null):CameraSystem;
 	public var pathing(default, null):PathFollowSystem;
@@ -68,9 +70,11 @@ class World
 
 		clock = new Clock();
 		ai = new AI();
+
 		storylines = new StorylineSystem();
 		energy = new EnergySystem();
 		movement = new MovementSystem();
+		resources = new ResourceSystem();
 		vision = new VisionSystem();
 		camera = new CameraSystem();
 		pathing = new PathFollowSystem();
@@ -198,6 +202,7 @@ class World
 		storylines.update(frame);
 		energy.update(frame);
 		movement.update(frame);
+		resources.update(frame);
 		vision.update(frame);
 		camera.update(frame);
 		pathing.update(frame);

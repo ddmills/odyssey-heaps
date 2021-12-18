@@ -23,7 +23,6 @@ class EnergySystem extends System
 	function getNext():Entity
 	{
 		var entities = query.toArray();
-		world.clock.clearDeltas();
 		var entity = entities.max((e) -> e.get(Energy).value);
 		if (entity == null)
 		{
@@ -46,6 +45,7 @@ class EnergySystem extends System
 
 	override function update(frame:Frame)
 	{
+		world.clock.clearDeltas();
 		if (isPlayersTurn && world.player.entity.get(Energy).hasEnergy)
 		{
 			return;

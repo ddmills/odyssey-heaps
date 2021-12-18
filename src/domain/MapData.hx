@@ -4,19 +4,11 @@ import common.struct.Grid;
 import common.struct.IntPoint;
 import common.util.FloodFill;
 import core.Game;
-import data.Gender;
-import data.Professions;
 import domain.terrain.TerrainType;
-import ecs.Entity;
 import ecs.components.InSettlement;
-import ecs.components.Level;
-import ecs.components.Nationality;
-import ecs.components.Person;
-import ecs.components.Profession;
 import ecs.prefabs.PersonPrefab;
 import hxd.Rand;
 import rand.PoissonDiscSampler;
-import rand.names.SpanishNameGenerator;
 import tools.Performance;
 
 class MapData

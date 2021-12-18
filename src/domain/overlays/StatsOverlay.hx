@@ -39,12 +39,14 @@ class StatsOverlay extends h2d.Object
 		var w = p.toWorld().floor();
 		var c = p.toChunk().floor();
 		var clock = world.clock;
+		var food = world.resources.food;
 
 		var island = world.map.getIsland(w.x, w.y);
 
 		var txt = '';
 		txt += '\n' + game.frame.fps.round().toString();
 		txt += '\nturn ${clock.toString()}';
+		txt += '\nfood ${food.toString()}';
 		txt += '\nfocus ${f.toString()}';
 		txt += '\ncamera ${cam.toString()}';
 		txt += '\npixel ${p.toString()}';
