@@ -3,9 +3,13 @@ package states.play;
 import core.GameState;
 import data.storylines.Stories;
 import domain.screens.SailScreen;
+import ecs.Entity;
 import ecs.components.CrewMember;
+import ecs.components.Inventory;
+import ecs.components.IsInventoried;
 import ecs.prefabs.PersonPrefab;
 import ecs.prefabs.SquidPrefab;
+import ecs.spawnables.Spawner;
 
 class PlayState extends GameState
 {
@@ -29,7 +33,7 @@ class PlayState extends GameState
 		var p4 = PersonPrefab.Create(52);
 		p4.add(new CrewMember());
 
-		world.storylines.tryAddStory(Stories.TEST_STORY);
+		// world.storylines.tryAddStory(Stories.TEST_STORY);
 
 		var squid1 = SquidPrefab.Create();
 		squid1.x = 368;
@@ -45,6 +49,11 @@ class PlayState extends GameState
 		squid3.x = 362;
 		squid3.y = 424;
 		world.add(squid3);
+
+		var i = world.player.entity.get(Inventory);
+		var apple = Spawner.Spawn(APPLE);
+
+		i.addItem(apple);
 
 		game.screens.set(new SailScreen());
 	}

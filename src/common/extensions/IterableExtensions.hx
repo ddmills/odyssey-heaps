@@ -106,6 +106,11 @@ class IterableExtensions
 		return Lambda.find(it, fn);
 	}
 
+	public static inline function findIdx<T>(it:Iterable<T>, fn:(value:T) -> Bool):Int
+	{
+		return Lambda.findIndex(it, fn);
+	}
+
 	public static inline function fold<A, B>(it:Iterable<A>, fn:(item:A, result:B) -> B, first:B):B
 	{
 		return Lambda.fold(it, fn, first);

@@ -2,6 +2,9 @@ package core;
 
 import data.storylines.Stories;
 import data.storylines.Story;
+import ecs.Entity;
+import ecs.components.Inventory;
+import ecs.components.Moniker;
 import h2d.Console;
 
 class ConsoleConfig
@@ -36,6 +39,8 @@ class ConsoleConfig
 
 		console.addCommand('stories', 'List all stories', [], () -> storiesCommand(console));
 		console.addAlias('storylines', 'stories');
+
+		console.addCommand('inventory', 'List player inventory', [], () -> inventoryCommand(console));
 	}
 
 	static function foodCommand(console:Console, value:Null<Int>)
@@ -43,6 +48,16 @@ class ConsoleConfig
 		var food = value == null ? Game.instance.world.resources.food.max : value;
 		console.log('Setting food to ${food}');
 		Game.instance.world.resources.food.value = food;
+	}
+
+	static function inventoryCommand(console:Console)
+	{
+		console.log('Player inventory:');
+		var i = Game.instance.world.player.entity.get(Inventory);
+		i.content.each((e:Entity) ->
+		{
+			console.log(e.get(Moniker).displayName);
+		});
 	}
 
 	static function storiesCommand(console:Console)

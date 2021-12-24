@@ -4,4 +4,5 @@ enum SpawnableType
 {
 	TENTACLE;
 	SQUID;
+	APPLE;
 }

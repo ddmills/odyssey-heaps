@@ -6,6 +6,8 @@ class Spawner
 	{
 		switch type
 		{
+			case APPLE:
+				return new SpawnableApple();
 			case TENTACLE:
 				return new SpawnableTentacle();
 			case SQUID:

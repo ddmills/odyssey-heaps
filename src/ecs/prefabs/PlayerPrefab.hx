@@ -5,6 +5,7 @@ import data.TileResources;
 import ecs.components.Direction;
 import ecs.components.Energy;
 import ecs.components.Health;
+import ecs.components.Inventory;
 import ecs.components.IsPlayer;
 import ecs.components.Moniker;
 import ecs.components.Sprite;
@@ -22,6 +23,7 @@ class PlayerPrefab
 		e.add(new Health(8, 8));
 		e.add(new Vision(10, 1));
 		e.add(new Energy());
+		e.add(new Inventory());
 		e.add(new IsPlayer());
 
 		return e;

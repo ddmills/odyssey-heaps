@@ -126,6 +126,11 @@ class Entity
 
 	public function add(component:Component)
 	{
+		if (has(Type.getClass(component)))
+		{
+			throw 'Entity already has instance of component';
+		}
+
 		cbits = BitUtil.addBit(cbits, component.bit);
 		components.set(component.type, component);
 		component._attach(this);
