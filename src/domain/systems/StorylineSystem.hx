@@ -40,6 +40,11 @@ class StorylineSystem extends System
 		return null;
 	}
 
+	public function hasStoryline(story:Story)
+	{
+		return active.exists((a) -> a.story == story);
+	}
+
 	override function update(frame:Frame)
 	{
 		active.each((s:Storyline) ->
