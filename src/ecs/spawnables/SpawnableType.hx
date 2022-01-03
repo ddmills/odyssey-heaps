@@ -5,4 +5,5 @@ enum SpawnableType
 	TENTACLE;
 	SQUID;
 	APPLE;
+	TELESCOPE;
 }

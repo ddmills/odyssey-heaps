@@ -2,6 +2,7 @@ package ecs;
 
 import common.struct.Coordinate;
 import common.util.BitUtil;
+import common.util.Serial;
 import common.util.UniqueId;
 import core.Game;
 import domain.World;
@@ -31,9 +32,15 @@ class Entity
 	{
 		_x = 0;
 		_y = 0;
-		id = UniqueId.Create();
 		cbits = 0;
 		components = new Map();
+		genId();
+	}
+
+	@:allow(ecs.Entity)
+	function genId()
+	{
+		id = UniqueId.Create();
 		registry.registerEntity(this);
 	}
 
@@ -199,5 +206,14 @@ class Entity
 	inline function get_registry():Registry
 	{
 		return Game.instance.registry;
+	}
+
+	public function clone():Entity
+	{
+		var output = Serial.Serialize(this);
+		var clone:Entity = Serial.Deserialize(output);
+		clone.genId();
+
+		return clone;
 	}
 }

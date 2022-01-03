@@ -5,6 +5,7 @@ import data.storylines.Story;
 import ecs.Entity;
 import ecs.components.Inventory;
 import ecs.components.Moniker;
+import ecs.components.Stackable;
 import h2d.Console;
 
 class ConsoleConfig
@@ -52,11 +53,19 @@ class ConsoleConfig
 
 	static function inventoryCommand(console:Console)
 	{
-		console.log('Player inventory:');
 		var i = Game.instance.world.player.entity.get(Inventory);
+		console.log('Player inventory ${i.content.length}/${i.size}');
 		i.content.each((e:Entity) ->
 		{
-			console.log(e.get(Moniker).displayName);
+			var stackable = e.get(Stackable);
+			if (stackable != null)
+			{
+				console.log('    ${e.get(Moniker).displayName} x${stackable.quantity}');
+			}
+			else
+			{
+				console.log('    ${e.get(Moniker).displayName}');
+			}
 		});
 	}
 

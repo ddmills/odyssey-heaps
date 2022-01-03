@@ -1,6 +1,7 @@
 package ecs.spawnables;
 
 import ecs.components.Moniker;
+import ecs.components.Stackable;
 
 class SpawnableApple extends Spawnable
 {
@@ -11,6 +12,10 @@ class SpawnableApple extends Spawnable
 		var apple = new Entity();
 
 		apple.add(new Moniker('apple'));
+		apple.add(new Stackable({
+			spawnable: APPLE,
+			quantity: 1,
+		}));
 
 		return apple;
 	}

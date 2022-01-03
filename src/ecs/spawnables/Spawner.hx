@@ -12,6 +12,8 @@ class Spawner
 				return new SpawnableTentacle();
 			case SQUID:
 				return new SpawnableSquid();
+			case TELESCOPE:
+				return new SpawnableTelescope();
 		}
 	}
 

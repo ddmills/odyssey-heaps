@@ -101,7 +101,7 @@ class World
 
 		if (sprite != null)
 		{
-			layers.render(OBJECTS, sprite.ob);
+			game.render(OBJECTS, sprite.ob);
 		}
 	}
 

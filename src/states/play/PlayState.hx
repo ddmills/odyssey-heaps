@@ -6,7 +6,9 @@ import domain.screens.SailScreen;
 import ecs.Entity;
 import ecs.components.CrewMember;
 import ecs.components.Inventory;
+import ecs.components.IsDestroying;
 import ecs.components.IsInventoried;
+import ecs.components.Stackable;
 import ecs.prefabs.PersonPrefab;
 import ecs.prefabs.SquidPrefab;
 import ecs.spawnables.Spawner;
@@ -40,20 +42,30 @@ class PlayState extends GameState
 		squid1.y = 420;
 		world.add(squid1);
 
-		var squid2 = SquidPrefab.Create();
-		squid2.x = 367;
-		squid2.y = 424;
-		world.add(squid2);
+		// var squid2 = SquidPrefab.Create();
+		// squid2.x = 367;
+		// squid2.y = 424;
+		// world.add(squid2);
 
-		var squid3 = SquidPrefab.Create();
-		squid3.x = 362;
-		squid3.y = 424;
-		world.add(squid3);
+		// var squid3 = SquidPrefab.Create();
+		// squid3.x = 362;
+		// squid3.y = 424;
+		// world.add(squid3);
 
 		var i = world.player.entity.get(Inventory);
-		var apple = Spawner.Spawn(APPLE);
 
-		i.addItem(apple);
+		var apple1 = Spawner.Spawn(APPLE);
+		i.addItem(apple1);
+		i.addItem(Spawner.Spawn(APPLE));
+		i.addItem(Spawner.Spawn(APPLE));
+		i.addItem(Spawner.Spawn(APPLE));
+		i.addItem(Spawner.Spawn(TELESCOPE));
+		i.addItem(Spawner.Spawn(TELESCOPE));
+
+		var stack = apple1.get(Stackable);
+		var others = stack.split(2);
+		// others.add(new IsDestroying());
+		others.get(Stackable).stack(apple1);
 
 		game.screens.set(new SailScreen());
 	}
