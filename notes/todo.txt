@@ -65,13 +65,15 @@
 - [ ] push storyline textReplace to StoryParameter class
 - [x] storyline parameter building to StoryParameter class
 - [ ] hunger clock (provisions)
-- [ ] simple inventory interface
+- [x] simple inventory interface
 - [ ] item icons
 - [ ] inventory size limit
 - [x] item stackable
 - [x] item inventoried
 - [ ] item stack limits
 - [x] item inventory location
+- [ ] inventory UI drag/move
+= [ ] inventory UI drag/stack
 - [ ] item actions (consume food)
 - [ ] item weight (?)
 - [ ] passive item boons (vision ?)
