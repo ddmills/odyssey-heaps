@@ -6,6 +6,7 @@ import data.storylines.Story;
 import ecs.Entity;
 import ecs.EntityRef;
 import ecs.components.Inventory;
+import ecs.components.IsInventoried;
 import ecs.components.Moniker;
 import ecs.components.Stackable;
 import h2d.Console;
@@ -67,11 +68,9 @@ class ConsoleConfig
 				return;
 			}
 
-			var name = entity.get(Moniker).displayName;
-			var stackable = entity.get(Stackable);
-			var quantity = stackable == null ? '' : ' x ${stackable.quantity}';
+			var name = entity.get(IsInventoried).display;
 
-			console.log('   (${v.x},${v.y}) ${name} ${quantity}');
+			console.log('   (${v.x},${v.y}) ${name}');
 		});
 	}
 
