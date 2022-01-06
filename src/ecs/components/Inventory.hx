@@ -1,26 +1,31 @@
 package ecs.components;
 
+import common.struct.Grid;
+import common.struct.IntPoint;
 import ecs.spawnables.SpawnableType;
 
 class Inventory extends Component
 {
-	public var size:Int;
-
-	var contentRefs:Array<EntityRef>;
-
-	public var content(get, null):Array<Entity>;
+	public var contentRefs:Grid<EntityRef>;
 
 	public function new()
 	{
-		contentRefs = new Array();
-		size = 8;
+		contentRefs = new Grid<EntityRef>(8, 4);
+		contentRefs.fillFn(idx -> new EntityRef());
 	}
 
 	public function getSpawnable(spawnable:SpawnableType):Entity
 	{
-		return content.find((e) ->
+		var res = contentRefs.find((e) ->
 		{
-			var stack = e.get(Stackable);
+			var entity = e.value.entity;
+
+			if (entity == null)
+			{
+				return false;
+			}
+
+			var stack = entity.get(Stackable);
 
 			if (stack == null)
 			{
@@ -29,6 +34,25 @@ class Inventory extends Component
 
 			return stack.spawnable == spawnable;
 		});
+
+		if (res != null)
+		{
+			return res.value.entity;
+		}
+
+		return null;
+	}
+
+	public function findFreeSpot():IntPoint
+	{
+		var idx = contentRefs.findIdx((v) -> v.value.entity == null);
+
+		if (idx < 0)
+		{
+			return null;
+		}
+
+		return contentRefs.coord(idx);
 	}
 
 	public function addItem(item:Entity, stack:Bool = true)
@@ -44,32 +68,32 @@ class Inventory extends Component
 				return;
 			}
 		}
+		var freeSpot = findFreeSpot();
+		if (freeSpot == null)
+		{
+			throw "TODO: inventory full";
+		}
 
 		item.add(new IsInventoried({
 			owner: entity
 		}));
-		contentRefs.push(new EntityRef(item.id));
+
+		contentRefs.set(freeSpot.x, freeSpot.y, new EntityRef(item.id));
 	}
 
 	public function removeItem(item:Entity)
 	{
-		var idx = contentRefs.findIdx((c) -> c.entity == item);
+		var idx = contentRefs.findIdx((c) -> c.value != null && c.value.entity == item);
 
 		if (idx < 0)
 		{
 			return false;
 		}
 
-		contentRefs.splice(idx, 1);
+		contentRefs.getAt(idx).entity = null;
 
 		item.remove(IsInventoried);
 
 		return true;
-	}
-
-	function get_content():Array<Entity>
-	{
-		// TODO remove dead refs
-		return contentRefs.map((e) -> e.entity).filter((e) -> e != null);
 	}
 }

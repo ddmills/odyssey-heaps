@@ -64,7 +64,6 @@ class PlayState extends GameState
 
 		var stack = apple1.get(Stackable);
 		var others = stack.split(2);
-		// others.add(new IsDestroying());
 		others.get(Stackable).stack(apple1);
 
 		game.screens.set(new SailScreen());

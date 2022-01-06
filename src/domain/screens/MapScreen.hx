@@ -124,7 +124,7 @@ class MapScreen extends Screen
 
 	override function onKeyUp(key:Int)
 	{
-		if (key == Keybinding.BACK || key == Keybinding.MAP_SCREEN)
+		if (Keybinding.BACK.is(key) || Keybinding.MAP_SCREEN.is(key))
 		{
 			game.screens.pop();
 		}

@@ -72,6 +72,10 @@ class SailScreen extends Screen
 
 	override function onKeyUp(keyCode:Int)
 	{
+		if (Keybinding.INVENTORY_SCREN.is(keyCode))
+		{
+			game.screens.push(new InventoryScreen());
+		}
 		if (Keybinding.MAP_SCREEN.is(keyCode))
 		{
 			game.screens.push(new MapScreen());

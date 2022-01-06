@@ -6,19 +6,19 @@ class EntityRef
 {
 	var entityId:String;
 
-	public var entity(get, set):Entity;
+	public var entity(get, set):Null<Entity>;
 
 	public function new(id:String = '')
 	{
 		entityId = id;
 	}
 
-	inline function get_entity():Entity
+	inline function get_entity():Null<Entity>
 	{
 		return Game.instance.registry.getEntity(entityId);
 	}
 
-	inline function set_entity(value:Entity):Entity
+	inline function set_entity(value:Entity):Null<Entity>
 	{
 		entityId = value == null ? '' : value.id;
 

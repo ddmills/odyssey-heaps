@@ -71,7 +71,7 @@
 - [x] item stackable
 - [x] item inventoried
 - [ ] item stack limits
-- [ ] item inventory location
+- [x] item inventory location
 - [ ] item actions (consume food)
 - [ ] item weight (?)
 - [ ] passive item boons (vision ?)

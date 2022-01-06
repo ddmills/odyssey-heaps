@@ -1,8 +1,10 @@
 package core;
 
+import common.struct.Grid.GridItem;
 import data.storylines.Stories;
 import data.storylines.Story;
 import ecs.Entity;
+import ecs.EntityRef;
 import ecs.components.Inventory;
 import ecs.components.Moniker;
 import ecs.components.Stackable;
@@ -54,18 +56,22 @@ class ConsoleConfig
 	static function inventoryCommand(console:Console)
 	{
 		var i = Game.instance.world.player.entity.get(Inventory);
-		console.log('Player inventory ${i.content.length}/${i.size}');
-		i.content.each((e:Entity) ->
+		console.log('Player inventory ${i.contentRefs.width}x${i.contentRefs.height}');
+
+		i.contentRefs.each((v) ->
 		{
-			var stackable = e.get(Stackable);
-			if (stackable != null)
+			var entity:Entity = v.value.entity;
+
+			if (entity == null)
 			{
-				console.log('    ${e.get(Moniker).displayName} x${stackable.quantity}');
+				return;
 			}
-			else
-			{
-				console.log('    ${e.get(Moniker).displayName}');
-			}
+
+			var name = entity.get(Moniker).displayName;
+			var stackable = entity.get(Stackable);
+			var quantity = stackable == null ? '' : ' x ${stackable.quantity}';
+
+			console.log('   (${v.x},${v.y}) ${name} ${quantity}');
 		});
 	}
 

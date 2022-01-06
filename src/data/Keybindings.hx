@@ -3,6 +3,7 @@ package data;
 enum abstract Keybinding(Int)
 {
 	var BACK = 27; // esc
+	var INVENTORY_SCREN = 73; // i
 	var MAP_SCREEN = 77; // m
 	var CREW_SCREEN = 67; // c
 	var CONSOLE_SCREEN = 188; // ,

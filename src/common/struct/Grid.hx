@@ -169,6 +169,14 @@ package common.struct;
 	}
 }
 
+typedef GridItem<T> =
+{
+	idx:Int,
+	x:Int,
+	y:Int,
+	value:T,
+};
+
 @:generic
 class GridIterator<T>
 {
@@ -186,13 +194,12 @@ class GridIterator<T>
 		return i < grid.size;
 	}
 
-	public inline function next()
+	public inline function next():GridItem<T>
 	{
 		var idx = i;
 		var t = grid.getAt(i);
 		var pos = grid.coord(i);
 		i++;
-
 		return {
 			idx: idx,
 			x: pos.x,
