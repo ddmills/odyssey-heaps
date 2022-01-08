@@ -53,11 +53,12 @@ class TileResources
 
 		var terrainSheet = hxd.Res.img.iso40.toTile();
 		var terrains = terrainSheet.divide(4, 4);
+		var grass = hxd.Res.img.grass40.toTile();
 
 		GROUND_WATER = terrains[0][1];
 		GROUND_SHALLOWS = terrains[0][0];
 		GROUND_SAND = terrains[0][2];
-		GROUND_GRASS = terrains[0][3];
+		GROUND_GRASS = grass; // terrains[0][3];
 		CURSOR = terrains[1][0];
 
 		var treeSheet = hxd.Res.img.trees.toTile();

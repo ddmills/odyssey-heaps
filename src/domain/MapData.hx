@@ -72,6 +72,18 @@ class MapData
 		return data.get(wx.floor(), wy.floor()).terrain;
 	}
 
+	public function getTileHeight(wx:Float, wy:Float):Int
+	{
+		var terrain = getTerrain(wx, wy);
+
+		if (terrain == SAND || terrain == GRASS)
+		{
+			return 20;
+		}
+
+		return 0;
+	}
+
 	public function getIsland(wx:Float, wy:Float):IslandData
 	{
 		var tile = data.get(wx.floor(), wy.floor());

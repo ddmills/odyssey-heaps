@@ -3,6 +3,7 @@ package domain.screens;
 import common.struct.Coordinate;
 import common.util.AStar;
 import common.util.Distance;
+import common.util.Projection;
 import core.Frame;
 import core.Screen;
 import data.Keybindings.Keybinding;
@@ -40,7 +41,9 @@ class SailScreen extends Screen
 	override function update(frame:Frame)
 	{
 		world.updateSystems();
-		cursor.pos = camera.mouse.toWorld().floor();
+		// cursor.pos = camera.mouse.toWorld().floor();
+		var w = camera.mouse.toWorld();
+		cursor.pos = Projection.tileReal(w.x, w.y).floor();
 	}
 
 	function astar(goal:Coordinate)

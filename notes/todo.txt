@@ -77,3 +77,4 @@
 - [ ] item actions (consume food)
 - [ ] item weight (?)
 - [ ] passive item boons (vision ?)
+- [ ] iso tile height

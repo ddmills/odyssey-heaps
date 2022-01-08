@@ -12,7 +12,7 @@ import shaders.ShroudShader;
 
 class Chunk
 {
-	var tiles:h2d.Object; // TODO: switch to h2d.SpriteBatch
+	var tiles:h2d.Layers; // TODO: switch to h2d.SpriteBatch
 	var shroud:ShroudShader;
 
 	public var exploration(default, null):Grid<Null<Bool>>;
@@ -116,7 +116,7 @@ class Chunk
 
 	function buildTiles()
 	{
-		tiles = new h2d.Object();
+		tiles = new h2d.Layers();
 
 		for (t in bitmaps)
 		{
@@ -132,8 +132,10 @@ class Chunk
 			var offsetX = pix.x - Game.instance.TILE_W_HALF;
 			var offsetY = pix.y;
 
+			var tileHeight = Game.instance.world.map.getTileHeight(wx, wy);
+
 			bm.x = offsetX;
-			bm.y = offsetY;
+			bm.y = offsetY - tileHeight;
 
 			tiles.addChildAt(bm, t.idx);
 			bitmaps.set(t.x, t.y, bm);

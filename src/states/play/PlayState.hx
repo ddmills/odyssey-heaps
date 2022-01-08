@@ -1,13 +1,9 @@
 package states.play;
 
 import core.GameState;
-import data.storylines.Stories;
 import domain.screens.SailScreen;
-import ecs.Entity;
 import ecs.components.CrewMember;
 import ecs.components.Inventory;
-import ecs.components.IsDestroying;
-import ecs.components.IsInventoried;
 import ecs.components.Stackable;
 import ecs.prefabs.PersonPrefab;
 import ecs.prefabs.SquidPrefab;

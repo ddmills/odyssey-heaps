@@ -133,9 +133,12 @@ class Entity
 
 	public function add(component:Component)
 	{
-		if (has(Type.getClass(component)))
+		var type = Type.getClass(component);
+
+		if (has(type))
 		{
-			throw 'Entity already has instance of component';
+			remove(type);
+			trace('REMOVING EXISTING TYPE ${type}');
 		}
 
 		cbits = BitUtil.addBit(cbits, component.bit);

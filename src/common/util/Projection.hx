@@ -102,4 +102,22 @@ class Projection
 		var px = chunkToPx(cx, cy);
 		return pxToScreen(px.x, px.y);
 	}
+
+	public static function tileReal(wx:Float, wy:Float):Coordinate
+	{
+		var column = new Array<Coordinate>();
+		column.push(new Coordinate(wx + 1, wy + 1, WORLD));
+		column.push(new Coordinate(wx, wy, WORLD));
+		column.push(new Coordinate(wx - 1, wy - 1, WORLD));
+
+		// is Wx/wy on left or right?
+		var remX = wx - wx.floor();
+		var remY = wy - wy.floor();
+
+		var isLeft = remX < remY;
+
+		trace(isLeft);
+
+		return column[1];
+	}
 }
