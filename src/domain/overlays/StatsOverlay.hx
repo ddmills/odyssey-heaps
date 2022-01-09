@@ -43,8 +43,18 @@ class StatsOverlay extends h2d.Object
 
 		var island = world.map.getIsland(w.x, w.y);
 
+		var neighbors = Game.instance.world.map.data.getNeighbors(w.x.floor(), w.y.floor());
+		var idx = 0;
+		var mask = neighbors.fold((cell, sum) ->
+		{
+			var s = cell != null && cell.isWater ? sum : sum + Math.pow(2, idx);
+			idx++;
+			return s;
+		}, 0);
+
 		var txt = '';
 		txt += '\n' + game.frame.fps.round().toString();
+		txt += '\nmask ${mask}';
 		txt += '\nturn ${clock.toString()}';
 		txt += '\nfood ${food.toString()}';
 		txt += '\nfocus ${f.toString()}';

@@ -2,8 +2,10 @@ package domain.terrain;
 
 import common.struct.Grid;
 import common.struct.GridMap;
+import common.struct.IntPoint;
 import common.util.Projection;
 import core.Game;
+import data.BitmaskMap;
 import data.TileResources;
 import ecs.Entity;
 import h2d.Bitmap;
@@ -124,7 +126,7 @@ class Chunk
 			var wy = cy * size + t.y;
 
 			var terrain = Game.instance.world.map.getTerrain(wx, wy);
-			var tile = getTerrainTile(terrain);
+			var tile = getTerrainTile(wx, wy, terrain);
 			var bm = new h2d.Bitmap(tile);
 			bm.visible = false;
 
@@ -140,8 +142,24 @@ class Chunk
 		}
 	}
 
-	function getTerrainTile(type:TerrainType):Tile
+	function getTerrainTile(wx:Float, wy:Float, type:TerrainType):Tile
 	{
+		if (type == GRASS || type == SAND)
+		{
+			// get neighbors
+			var neighbors = Game.instance.world.map.data.getNeighbors(wx.floor(), wy.floor());
+			var idx = 0;
+			var mask = neighbors.fold((cell, sum) ->
+			{
+				var s = cell != null && cell.isWater ? sum : sum + Math.pow(2, idx);
+				idx++;
+				return s;
+			}, 0);
+			var idx = BitmaskMap.getTilePos(mask.floor());
+
+			return TileResources.GROUND_GRASS_WANG[idx.y][idx.x];
+		}
+
 		switch (type)
 		{
 			case WATER:

@@ -9,6 +9,7 @@ class TileResources
 	public static var GROUND_SHALLOWS:h2d.Tile;
 	public static var GROUND_SAND:h2d.Tile;
 	public static var GROUND_GRASS:h2d.Tile;
+	public static var GROUND_GRASS_WANG:Array<Array<h2d.Tile>>;
 	public static var CURSOR:h2d.Tile;
 	public static var TREE:h2d.Tile;
 	public static var SLOOP:h2d.Tile;
@@ -59,6 +60,8 @@ class TileResources
 		GROUND_SAND = terrains[0][2];
 		GROUND_GRASS = terrains[0][3];
 		CURSOR = terrains[1][0];
+
+		GROUND_GRASS_WANG = hxd.Res.img.wang_grass_40.toTile().divide(7, 7);
 
 		var treeSheet = hxd.Res.img.trees.toTile();
 		var trees = treeSheet.divide(2, 1);
